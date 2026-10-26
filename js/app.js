@@ -1,3 +1,9 @@
+/**
+ * Laboratorio del Anteproyecto - Módulo Principal y Orquestador
+ * Archivo: js/app.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
 
 import { updateI18nUI } from "./i18n.js";
 import { setupFacultySelects, evaluateCoherenceChain, renderCoherenceChainUI } from "./coherenceChain.js";
@@ -433,30 +439,53 @@ function triggerGoogleTranslate(lang) {
 }
 
 // ==========================================
-// NAVEGACIÓN POR PESTAÑAS
+// NAVEGACIÓN POR PESTAÑAS (SIDEBAR & SKELETON LOADER)
 // ==========================================
 function initTabs() {
   const buttons = document.querySelectorAll("[role='tab']");
   const panels = document.querySelectorAll("[role='tabpanel']");
+  const skeleton = document.getElementById("skeleton-loader");
 
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("aria-controls");
 
+      // Actualizar estados visuales de los botones en el Sidebar
       buttons.forEach(b => {
         b.setAttribute("aria-selected", "false");
-        b.className = "tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/50 cursor-pointer";
+        b.className = "tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer";
       });
 
-      panels.forEach(p => p.classList.add("hidden"));
-
       btn.setAttribute("aria-selected", "true");
-      btn.className = "tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white border-t-2 border-nexo-gold cursor-pointer";
+      btn.className = "tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white border-l-4 border-nexo-gold shadow-sm cursor-pointer";
 
-      const activePanel = document.getElementById(targetId);
-      if (activePanel) activePanel.classList.remove("hidden");
+      // Colapsar menú móvil automáticamente si se está en pantalla pequeña
+      if (window.innerWidth < 768) {
+        const sidebarMenu = document.getElementById("sidebar-menu");
+        if (sidebarMenu) sidebarMenu.classList.add("hidden");
+      }
 
-      refreshAllViews();
+      // Mostrar Skeleton Loader durante la transición
+      if (skeleton) {
+        skeleton.classList.remove("hidden");
+      }
+
+      panels.forEach(p => {
+        p.classList.add("hidden");
+        p.classList.remove("tab-pane-animate");
+      });
+
+      setTimeout(() => {
+        if (skeleton) skeleton.classList.add("hidden");
+
+        const activePanel = document.getElementById(targetId);
+        if (activePanel) {
+          activePanel.classList.remove("hidden");
+          activePanel.classList.add("tab-pane-animate");
+        }
+
+        refreshAllViews();
+      }, 150);
     });
   });
 }

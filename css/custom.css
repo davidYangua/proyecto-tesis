@@ -1,8 +1,11 @@
 /* ==========================================
-   OCULTAR BARRA SUPERIOR Y DIÁLOGOS DE GOOGLE TRANSLATE
+   LABORATORIO DEL ANTEPROGRAMA - ESTILOS PERSONALIZADOS
+   Archivo: css/custom.css
    ========================================== */
 
-/* 1. Ocultar iframes, banners y clases ofuscadas modernas de Google */
+/* ------------------------------------------
+   1. OCULTAR ELEMENTOS DE GOOGLE TRANSLATE
+   ------------------------------------------ */
 .goog-te-banner-frame,
 .goog-te-banner,
 .goog-te-balloon-frame,
@@ -16,43 +19,48 @@ iframe.goog-te-banner-frame {
   opacity: 0 !important;
 }
 
-/* 2. Ocultar la barra inyectada excepto nuestro contenedor del widget */
 .skiptranslate:not(#google_translate_element) {
   display: none !important;
 }
 
-/* 3. Evitar que Google empuje la página 40px hacia abajo */
 html, body {
   top: 0px !important;
   position: static !important;
 }
 
-/* 4. Desactivar el resaltado amarillo cuando se pasa el cursor sobre el texto traducido */
 .goog-text-highlight {
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
-
+/* ------------------------------------------
+   2. CUSTOM SCROLLBARS
+   ------------------------------------------ */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-main);
+  background: rgba(15, 23, 42, 0.05);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--line-strong);
-  border-radius: var(--radius-full);
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--ink-muted);
+  background: rgba(197, 160, 89, 0.8);
 }
 
-/* --- Animaciones de Modales y Notificaciones --- */
+/* ------------------------------------------
+   3. ANIMACIONES: MODALES, TOASTS Y SKELETONS
+   ------------------------------------------ */
 @keyframes backdropFadeIn {
   from {
     opacity: 0;
@@ -60,14 +68,14 @@ html, body {
   }
   to {
     opacity: 1;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
   }
 }
 
 @keyframes modalScaleIn {
   from {
     opacity: 0;
-    transform: scale(0.95) translateY(10px);
+    transform: scale(0.95) translateY(12px);
   }
   to {
     opacity: 1;
@@ -78,7 +86,27 @@ html, body {
 @keyframes toastSlideIn {
   from {
     opacity: 0;
-    transform: translateY(100%);
+    transform: translateY(100%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeInTab {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -87,18 +115,58 @@ html, body {
 }
 
 .modal-backdrop {
-  animation: backdropFadeIn var(--transition-normal) forwards;
+  animation: backdropFadeIn 0.25s ease-out forwards;
 }
 
 .modal-content {
-  animation: modalScaleIn var(--transition-normal) forwards;
+  animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .toast-item {
-  animation: toastSlideIn var(--transition-fast) forwards;
+  animation: toastSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* --- Diagrama Sankey / Flujo SVG (D3.js) --- */
+.tab-pane-animate {
+  animation: fadeInTab 0.25s ease-out forwards;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 240, 0.4) 25%,
+    rgba(241, 245, 249, 0.9) 50%,
+    rgba(226, 232, 240, 0.4) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.4) 25%,
+    rgba(51, 65, 85, 0.8) 50%,
+    rgba(30, 41, 59, 0.4) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ------------------------------------------
+   4. TRANSICIONES DEL SIDEBAR COLAPSABLE
+   ------------------------------------------ */
+#sidebar-menu {
+  will-change: width;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-text {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ------------------------------------------
+   5. DIAGRAMA SANKEY / FLUJO SVG (D3.JS)
+   ------------------------------------------ */
 #nx-sankey-svg {
   width: 100%;
   height: 100%;
@@ -109,7 +177,7 @@ html, body {
   cursor: pointer;
   rx: 6px;
   ry: 6px;
-  transition: opacity var(--transition-fast), filter var(--transition-fast);
+  transition: opacity 0.15s ease, filter 0.15s ease;
 }
 
 .sankey-node rect:hover {
@@ -117,17 +185,21 @@ html, body {
 }
 
 .sankey-node text {
-  font-family: var(--font-display);
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
-  fill: var(--ink-primary);
+  fill: #1e293b;
   pointer-events: none;
+}
+
+.dark .sankey-node text {
+  fill: #f8fafc;
 }
 
 .sankey-link {
   fill: none;
   stroke-opacity: 0.45;
-  transition: stroke-opacity var(--transition-fast), stroke var(--transition-fast);
+  transition: stroke-opacity 0.15s ease, stroke 0.15s ease;
 }
 
 .sankey-link:hover {
@@ -137,19 +209,27 @@ html, body {
 .sankey-tooltip {
   position: absolute;
   padding: 8px 12px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  font-family: var(--font-body);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  font-family: 'Source Sans 3', sans-serif;
   font-size: 13px;
-  color: var(--ink-primary);
+  color: #0f172a;
   pointer-events: none;
   z-index: 50;
-  transition: opacity var(--transition-fast);
+  transition: opacity 0.15s ease;
 }
 
-/* --- Mapa de Calor (Heatmap Metodológico) --- */
+.dark .sankey-tooltip {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+/* ------------------------------------------
+   6. MAPA DE CALOR (HEATMAP METODOLÓGICO)
+   ------------------------------------------ */
 .heatmap-grid {
   display: grid;
   gap: 8px;
@@ -157,63 +237,84 @@ html, body {
 
 .heatmap-cell {
   padding: 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line);
-  background: var(--surface-2);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dark .heatmap-cell {
+  border-color: #1e293b;
+  background: #0f172a;
 }
 
 .heatmap-cell:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .hm-good {
-  background-color: var(--status-ok-soft);
-  border-color: var(--status-ok);
-  color: var(--status-ok);
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+  color: #059669;
 }
 
 .hm-mid {
-  background-color: var(--status-warn-soft);
-  border-color: var(--status-warn);
-  color: var(--status-warn);
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  color: #d97706;
 }
 
 .hm-low {
-  background-color: var(--status-bad-soft);
-  border-color: var(--status-bad);
-  color: var(--status-bad);
+  background-color: rgba(244, 63, 94, 0.1);
+  border-color: #f43f5e;
+  color: #e11d48;
 }
 
-/* --- Cajas de Código y Prompts --- */
+/* ------------------------------------------
+   7. CAJAS DE CÓDIGO Y PROMPTS
+   ------------------------------------------ */
 pre.tpl {
   white-space: pre-wrap;
   word-break: break-word;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
   line-height: 1.6;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   padding: 14px;
   max-height: 360px;
   overflow-y: auto;
 }
 
+.dark pre.tpl {
+  background: #020617;
+  border-color: #1e293b;
+  color: #cbd5e1;
+}
+
 pre.decl {
   white-space: pre-wrap;
-  background: var(--surface-hover);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   padding: 16px;
-  font-family: var(--font-body);
-  font-size: 14px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13.5px;
   line-height: 1.6;
 }
 
-/* Focus visible accesible */
+.dark pre.decl {
+  background: #020617;
+  border-color: #1e293b;
+  color: #cbd5e1;
+}
+
+/* ------------------------------------------
+   8. ENFOQUE Y ACCESIBILIDAD
+   ------------------------------------------ */
 :focus-visible {
-  outline: 2px solid var(--brand-gold);
+  outline: 2px solid #C5A059;
   outline-offset: 2px;
 }

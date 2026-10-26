@@ -1,3 +1,10 @@
+/**
+ * Laboratorio del Anteproyecto - Motor de Recomendación y Gestión de Marcos Teóricos
+ * Archivo: js/theoriesEngine.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
+
 import { THEORIES_DATA } from "../data/theoriesData.js";
 import { buildTheoryQueryPrompt, formatPromptForChatGPT, isEnglish } from "./aiPrompts.js";
 

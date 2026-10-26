@@ -1,3 +1,10 @@
+/**
+ * Laboratorio del Anteproyecto - Simulador de Jurado Evaluador y Defensa Oral
+ * Archivo: js/jurySimulator.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
+
 import { SECTIONS_DATA } from "../data/sectionsData.js";
 
 /**

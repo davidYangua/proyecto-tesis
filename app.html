@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Laboratorio de Anteproyecto | Universidad Señor de Sipán</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Source Sans 3"', 'sans-serif'],
+            body: ['"Source Sans 3"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace']
+          },
+          colors: {
+            nexo: {
+              navy: 'rgb(var(--rail-rgb) / <alpha-value>)',
+              gold: 'rgb(var(--ac-rgb) / <alpha-value>)',
+              'gold-hover': 'rgb(var(--ac-hover-rgb) / <alpha-value>)',
+              soft: '#F5F6F7'
+            },
+            slate: {
+              50:'#F5F6F7',100:'#EBEDEF',200:'#D9DDE2',300:'#B6BDC6',400:'#8A94A1',500:'#5B6573',
+              600:'#444C57',700:'#343B45',800:'#2A313A',900:'#171C22',950:'#0F1317'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Tipografías de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Íconos Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Librerías Externas (Google Charts loader y Docx.js) -->
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+
+  <!-- Hojas de Estilos Locales -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/custom.css">
+  <script>
+    try {
+      var t = localStorage.getItem("rls_site_t") || localStorage.getItem("nexo_theme");
+      if (t) document.documentElement.dataset.theme = t;
+    } catch(e) {}
+  </script>
+
+  <style>
+    /* Ocultar barra flotante e iframes de Google Translate */
+    .goog-te-banner-frame, 
+    .goog-te-balloon-frame, 
+    #goog-gt-tt, 
+    .VIpgJd-Z441Uc-OJanTX,
+    .VIpgJd-Z441Uc-OJanTX-iATh2e {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    body {
+      top: 0px !important;
+    }
+
+    :root {
+      --ac-rgb: 233 113 28;
+      --ac-hover-rgb: 200 92 14;
+      --rail-rgb: 26 31 38;
+      --bg: #FFFFFF;
+      --pn: #F5F6F7;
+      --ln: #D9DDE2;
+      --tx: #212529;
+      --mt: #5B6573;
+      --ac: rgb(var(--ac-rgb));
+    }
+    [data-theme="dark"] {
+      --rail-rgb: 17 21 26;
+      --bg: #0F1317;
+      --pn: #171C22;
+      --ln: #2A313A;
+      --tx: #E6E8EB;
+      --mt: #9AA4B2;
+    }
+    body {
+      padding-top: 64px;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible {
+      outline: 2px solid var(--ac);
+      outline-offset: 2px;
+    }
+
+    /* Navbar Header */
+    .nv {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 64px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 20px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--ln);
+      color: var(--tx);
+      backdrop-filter: blur(8px);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      min-width: 0;
+    }
+    .mk {
+      width: 38px;
+      height: 38px;
+      flex: none;
+      display: block;
+    }
+    .mk .bg { fill: rgb(var(--rail-rgb)); }
+    .mk .ln { stroke: #FFF; stroke-opacity: .5; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+    .mk .nd { fill: #FFF; }
+    .mk .ac { fill: var(--ac); }
+    .mk .rg { fill: none; stroke: var(--ac); stroke-opacity: .45; stroke-width: 1.2; }
+    
+    .bt b {
+      display: block;
+      font-size: 16.5px;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      white-space: nowrap;
+    }
+    .bt small {
+      display: block;
+      margin-top: 2px;
+      color: var(--mt);
+      font-size: 10.5px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .nv-r {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nvb {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 600 13px 'Source Sans 3';
+      cursor: pointer;
+      border: 1px solid var(--ln);
+      background: var(--bg);
+      color: var(--tx);
+      border-radius: 4px;
+      padding: 7px 11px;
+      text-decoration: none;
+      transition: border-color .15s, color .15s;
+    }
+    .nvb:hover {
+      border-color: var(--ac);
+      color: var(--ac);
+    }
+    #load-bar {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      height: 2px;
+      width: 0;
+      background: var(--ac);
+      animation: ld 1.1s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+    @keyframes ld {
+      0% { width: 0; opacity: 1; }
+      80% { width: 100%; opacity: 1; }
+      100% { width: 100%; opacity: 0; }
+    }
+
+    /* Barra de contexto */
+    .ctx {
+      background: var(--bg);
+      border-bottom: 1px solid var(--ln);
+      font-size: 13px;
+      color: var(--mt);
+    }
+    .ctx .in {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 9px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ctx b { color: var(--tx); font-weight: 600; }
+    .ctx .tag {
+      display: inline-block;
+      font: 600 11px 'IBM Plex Mono', monospace;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      border: 1px solid var(--ac);
+      color: var(--ac);
+      border-radius: 3px;
+      padding: 1px 7px;
+      margin-right: 8px;
+    }
+
+    /* Rail lateral */
+    #sidebar-menu { top: 64px !important; }
+    @media(min-width: 768px) {
+      #sidebar-menu { height: calc(100vh - 64px) !important; }
+    }
+
+    /* REGLAS EN MODO COLAPSADO (is-collapsed) */
+    #sidebar-menu.is-collapsed {
+      width: 5rem !important;
+    }
+    #sidebar-menu.is-collapsed .sidebar-text,
+    #sidebar-menu.is-collapsed .sidebar-num {
+      display: none !important;
+    }
+    #sidebar-menu.is-collapsed .sidebar-header-box {
+      justify-content: center !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    #sidebar-menu.is-collapsed .tab-btn {
+      justify-content: center !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      gap: 0 !important;
+      border-left-width: 0px !important;
+      position: relative;
+    }
+    #sidebar-menu.is-collapsed .tab-btn[aria-selected="true"] {
+      background-color: rgba(233, 113, 28, 0.15) !important;
+      color: #E9711C !important;
+    }
+    #sidebar-menu.is-collapsed .tab-btn[aria-selected="true"]::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 15%;
+      bottom: 15%;
+      width: 4px;
+      background-color: var(--ac);
+      border-radius: 0 4px 4px 0;
+    }
+    #sidebar-menu.is-collapsed .footer-return-btn {
+      justify-content: center !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    /* CORRECCIÓN DE LEGIBILIDAD EN "MODELO METODOLÓGICO / FÓRMULA PLANTILLA" (#mbody) */
+    #mbody {
+      color: var(--tx) !important;
+    }
+    #mbody pre, 
+    #mbody code, 
+    #mbody .tpl, 
+    #mbody p,
+    #mbody div {
+      color: #1E293B !important;
+    }
+    #mbody pre,
+    #mbody code,
+    #mbody .tpl {
+      background-color: #F8FAFC !important;
+      border: 1px solid var(--ln) !important;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Modo oscuro para #mbody */
+    [data-theme="dark"] #mbody pre,
+    [data-theme="dark"] #mbody code,
+    [data-theme="dark"] #mbody .tpl,
+    [data-theme="dark"] #mbody p,
+    [data-theme="dark"] #mbody div {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] #mbody pre,
+    [data-theme="dark"] #mbody code,
+    [data-theme="dark"] #mbody .tpl {
+      background-color: #0F1317 !important;
+      border-color: #2A313A !important;
+    }
+
+    .rounded-2xl { border-radius: 8px !important; }
+    .rounded-xl { border-radius: 6px !important; }
+    .rounded-lg { border-radius: 4px !important; }
+    [role="tabpanel"] > .bg-white { border-top: 2px solid var(--ac); }
+    [role="tabpanel"]:not(.hidden) { animation: rise .35s ease both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+    textarea, input[type="text"], select { font-family: 'Source Sans 3', sans-serif; }
+
+    /* PIE INSTITUCIONAL EXACTO DE INDEX (GRID 4 COLUMNAS) */
+    .ft {
+      background: var(--pn);
+      border-top: 1px solid var(--ln);
+      color: var(--mt);
+      font-size: 13px;
+      margin-top: 48px;
+    }
+    .ft .g {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 36px 24px 28px;
+      display: grid;
+      grid-template-columns: 2.2fr 1fr 1fr 1fr;
+      gap: 32px;
+    }
+    .ft h4 {
+      margin: 0 0 14px;
+      font: 700 11px 'Source Sans 3';
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--tx);
+    }
+    .ft p { margin: 0; line-height: 1.55; font-size: 12.5px; }
+    .ft .nm {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--tx);
+      margin-bottom: 10px;
+    }
+    .ft .nm .mk { width: 34px; height: 34px; }
+    .ft .nm b { font-size: 15px; line-height: 1.15; display: block; }
+    .ft .nm small { font-size: 11px; color: var(--mt); font-weight: 400; display: block; }
+    .ft ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .ft li { line-height: 1.4; font-size: 12.5px; }
+    .ft li a { color: var(--mt); text-decoration: none; transition: color .15s; }
+    .ft li a:hover { color: var(--ac); }
+    .ft .bar { border-top: 1px solid var(--ln); background: var(--bg); }
+    .ft .bar .in {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--mt);
+    }
+    @media(max-width: 900px) {
+      .ft .g {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+    }
+    @media(max-width: 600px) {
+      .ft .g {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media(max-width: 767px) { .bt small { display: none; } .bt b { font-size: 14px; } }
+    @media(prefers-reduced-motion: reduce) {
+      #load-bar { animation: none; opacity: 0; }
+      [role="tabpanel"]:not(.hidden) { animation: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-body min-h-screen antialiased transition-colors duration-200 flex flex-col md:flex-row">
+
+  <!-- Contenedor sincrónico para Google Translate -->
+  <div id="google_translate_element" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;"></div>
+
+  <!-- NAVBAR UNIFICADO -->
+  <header class="nv" role="banner">
+    <button id="mobile-sidebar-toggle" class="nvb md:hidden" aria-label="Menú de estaciones"><i data-lucide="menu" class="w-4 h-4"></i></button>
+    <a class="brand" href="index.html" title="Ir al artículo original">
+      <svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><rect class="bg" width="36" height="36" rx="7"/><path class="ln" d="M10 11L26 18M10 25L26 18"/><circle class="nd" cx="10" cy="11" r="2.6"/><circle class="nd" cx="10" cy="25" r="2.6"/><circle class="rg" cx="26" cy="18" r="6.2"/><circle class="ac" cx="26" cy="18" r="3.4"/></svg>
+      <span class="bt"><b>Laboratorio de Anteproyecto</b><small>Diseño y auditoría metodológica</small></span>
+    </a>
+    <div class="nv-r">
+      <button id="btn-new-project" class="nvb" title="Reiniciar todo e iniciar un nuevo proyecto"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Nuevo Proyecto</span></button>
+      <button id="lang-toggle" class="nvb" title="Cambiar idioma / Switch language"><i data-lucide="globe" class="w-3.5 h-3.5"></i><span id="lang-text">ES</span></button>
+      <button id="theme-toggle" class="nvb" title="Cambiar tema">
+        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+      </button>
+    </div>
+    <div id="load-bar"></div>
+  </header>
+
+  <!-- SIDEBAR LATERAL NAVEGACIÓN -->
+  <aside id="sidebar-menu" class="w-full md:w-64 bg-nexo-navy text-white border-r border-slate-800 flex-shrink-0 flex flex-col justify-between transition-all duration-300 z-40 sticky top-0 md:h-screen">
+    <div>
+      <div class="sidebar-header-box p-4 border-b border-slate-800/80 flex items-center justify-between">
+        <div class="sidebar-text truncate">
+          <span class="font-mono text-[10px] uppercase tracking-widest text-nexo-gold block">Laboratorio</span>
+          <h1 class="font-display font-bold text-sm leading-tight text-white">Estaciones metodológicas</h1>
+        </div>
+        <button id="sidebar-toggle" class="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition cursor-pointer hidden md:block" title="Colapsar / Expandir menú">
+          <i data-lucide="panel-left-close" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <nav class="p-3 space-y-1.5" role="tablist" aria-label="Estaciones Metodológicas">
+        <button role="tab" id="tab-hilo" aria-controls="p-hilo" aria-selected="true" title="01 - Hilo de Coherencia"
+          class="tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white border-l-4 border-nexo-gold shadow-sm cursor-pointer">
+          <span class="sidebar-num font-mono text-xs text-nexo-gold">01</span>
+          <i data-lucide="git-merge" class="w-4.5 h-4.5 flex-shrink-0"></i>
+          <span data-i18n="tab1" class="sidebar-text truncate">Hilo de Coherencia</span>
+        </button>
+
+        <button role="tab" id="tab-est" aria-controls="p-est" aria-selected="false" title="02 - Estación de Redacción"
+          class="tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer">
+          <span class="sidebar-num font-mono text-xs opacity-75">02</span>
+          <i data-lucide="pen-tool" class="w-4.5 h-4.5 flex-shrink-0"></i>
+          <span data-i18n="tab2" class="sidebar-text truncate">Estación de Redacción</span>
+        </button>
+
+        <button role="tab" id="tab-teo" aria-controls="p-teo" aria-selected="false" title="03 - Marcos Teóricos por Facultad"
+          class="tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer">
+          <span class="sidebar-num font-mono text-xs opacity-75">03</span>
+          <i data-lucide="book-open" class="w-4.5 h-4.5 flex-shrink-0"></i>
+          <span data-i18n="tab3" class="sidebar-text truncate">Marcos Teóricos por Facultad</span>
+        </button>
+
+        <button role="tab" id="tab-jur" aria-controls="p-jur" aria-selected="false" title="04 - Jurado Simulado"
+          class="tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer">
+          <span class="sidebar-num font-mono text-xs opacity-75">04</span>
+          <i data-lucide="users" class="w-4.5 h-4.5 flex-shrink-0"></i>
+          <span data-i18n="tab4" class="sidebar-text truncate">Jurado Simulado</span>
+        </button>
+
+        <button role="tab" id="tab-inf" aria-controls="p-inf" aria-selected="false" title="05 - Bitácora e Informe"
+          class="tab-btn w-full px-3.5 py-3 font-display text-xs font-semibold rounded-xl transition flex items-center gap-3 text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer">
+          <span class="sidebar-num font-mono text-xs opacity-75">05</span>
+          <i data-lucide="file-check-2" class="w-4.5 h-4.5 flex-shrink-0"></i>
+          <span data-i18n="tab5" class="sidebar-text truncate">Bitácora e Informe</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="p-3 border-t border-slate-800/80">
+      <a href="index.html" title="Volver al Artículo (Index)" class="footer-return-btn w-full px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/60 text-xs font-mono transition flex items-center gap-2.5 justify-start">
+        <i data-lucide="arrow-left-circle" class="w-4.5 h-4.5 text-nexo-gold flex-shrink-0"></i>
+        <span class="sidebar-text truncate">Volver al Artículo</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ÁREA PRINCIPAL -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <div class="ctx"><div class="in">
+      <div><span class="tag">USS 2026-II</span><b>Metodología de la Investigación</b>
+        <span class="hidden sm:inline" data-i18n="subtitle"> Plataforma multidisciplinaria de diseño metodológico y auditoría científica.</span></div>
+      <div class="hidden lg:flex items-center gap-2 font-mono text-xs bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-emerald-800 dark:text-emerald-300 font-semibold">Tutor IA Conectado</span>
+      </div>
+    </div></div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full relative">
+
+      <!-- SKELETON LOADER OVERLAY -->
+      <div id="skeleton-loader" class="hidden absolute inset-x-4 top-8 z-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4 animate-pulse">
+        <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/3"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="h-24 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+          <div class="h-24 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+          <div class="h-24 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+        </div>
+        <div class="h-40 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+      </div>
+
+      <div id="exflag"
+        class="hidden mb-6 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-amber-900 dark:text-amber-200 shadow-sm">
+        <div class="flex items-center gap-3">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0"></i>
+          <p class="text-sm">
+            <strong>Modo Ejemplo Cargado:</strong> Estudiando el caso de <em>Burnout y Satisfacción Laboral</em>. Explórelo libremente o inicie su propio proyecto desde cero.
+          </p>
+        </div>
+        <div id="resetzone">
+          <button id="startmine"
+            class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium text-xs rounded-lg transition shadow-sm whitespace-nowrap cursor-pointer">
+            Empezar mi proyecto libre
+          </button>
+        </div>
+      </div>
+
+      <!-- PESTAÑA 01: HILO DE COHERENCIA -->
+      <section id="p-hilo" role="tabpanel" aria-labelledby="tab-hilo" class="space-y-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4 text-nexo-gold"></i> Identificación y Afiliación Académica USS
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label for="st-nom" class="block text-xs font-semibold mb-1">Estudiante / Investigador</label>
+              <input type="text" id="st-nom" data-st="nombre" autocomplete="name"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
+            </div>
+
+            <div>
+              <label for="st-fac" class="block text-xs font-semibold mb-1" data-i18n="faculty">Facultad USS</label>
+              <select id="st-fac" data-st="facultad"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
+                <option value="">Seleccione Facultad…</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="st-esc" class="block text-xs font-semibold mb-1" data-i18n="school">Escuela Profesional</label>
+              <select id="st-esc" data-st="escuela"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
+                <option value="">Seleccione Escuela…</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="st-sec" class="block text-xs font-semibold mb-1">Sección de Clase</label>
+              <select id="st-sec" data-st="seccion"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
+                <option value="">Elija grupo…</option>
+                <option>Sección A · lunes</option>
+                <option>Sección B · martes</option>
+                <option>Sección C · miércoles</option>
+                <option>Sección D · jueves</option>
+                <option>Sección E · viernes</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <label for="st-tit" class="block text-xs font-semibold mb-1" data-i18n="title_label">Título preliminar del trabajo de investigación</label>
+            <input type="text" id="st-tit" data-st="titulo"
+              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+              <i data-lucide="layers" class="w-4 h-4 text-nexo-gold"></i> Elementos Núcleo del Anteproyecto
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="f-v1" class="block text-xs font-semibold mb-1" data-i18n="v1_label">Variable 1 (Asociada / Independiente)</label>
+                <input type="text" id="f-v1" data-k="v1"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+              </div>
+              <div>
+                <label for="f-v2" class="block text-xs font-semibold mb-1" data-i18n="v2_label">Variable 2 (De resultado / Dependiente)</label>
+                <input type="text" id="f-v2" data-k="v2"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+              </div>
+              <div>
+                <label for="f-pob" class="block text-xs font-semibold mb-1">Población objetivo</label>
+                <input type="text" id="f-pob" data-k="pob"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+              </div>
+              <div>
+                <label for="f-amb" class="block text-xs font-semibold mb-1">Ámbito geográfico / institucional</label>
+                <input type="text" id="f-amb" data-k="amb"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label for="f-enf" class="block text-xs font-semibold mb-1" data-i18n="approach">Enfoque Metodológico</label>
+                <select id="f-enf" data-k="enf"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+                  <option value="cuanti">Cuantitativo</option>
+                  <option value="cuali">Cualitativo</option>
+                  <option value="mixto">Mixto (Cualitativo-Cuantitativo)</option>
+                </select>
+              </div>
+              <div>
+                <label for="f-per" class="block text-xs font-semibold mb-1">Periodo temporal</label>
+                <input type="text" id="f-per" data-k="per"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+              </div>
+              <div>
+                <label for="f-dis" class="block text-xs font-semibold mb-1">Alcance y diseño (2.1)</label>
+                <select id="f-dis" data-k="dis"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+                  <option value="">Elija el alcance…</option>
+                  <option value="desc">Descriptivo simple</option>
+                  <option value="corr">Correlacional / Asociativo</option>
+                  <option value="comp">Comparativo entre grupos</option>
+                  <option value="expl">Explicativo / Causal</option>
+                  <option value="exp">Cuasiexperimental</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="f-preg" class="block text-xs font-semibold mb-1">Pregunta general de investigación (1.3)</label>
+              <textarea id="f-preg" rows="2" data-k="preg"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
+            </div>
+
+            <div>
+              <label for="f-teo" class="block text-xs font-semibold mb-1">Teoría principal o Modelo conceptual (1.4)</label>
+              <select id="f-teo" data-k="teo"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
+              </select>
+            </div>
+
+            <div>
+              <label for="f-obj" class="block text-xs font-semibold mb-1">Objetivo general (1.5)</label>
+              <textarea id="f-obj" rows="2" data-k="obj"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
+            </div>
+
+            <div>
+              <label for="f-hip" class="block text-xs font-semibold mb-1">Hipótesis alterna, Hi (1.6)</label>
+              <textarea id="f-hip" rows="2" data-k="hip"
+                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="f-i1" class="block text-xs font-semibold mb-1">Instrumento Variable 1 (Total Ítems)</label>
+                <input type="text" id="f-i1" data-k="i1"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"
+                  placeholder="Ej. Cuestionario de 12 ítems">
+              </div>
+              <div>
+                <label for="f-i2" class="block text-xs font-semibold mb-1">Instrumento Variable 2 (Total Ítems)</label>
+                <input type="text" id="f-i2" data-k="i2"
+                  class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"
+                  placeholder="Ej. Escala de 12 ítems">
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
+                <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> Auditoría de Cadena de Coherencia
+                </h2>
+                <span id="chainsum" class="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  0 de 6 eslabones firmes
+                </span>
+              </div>
+
+              <div id="scorebar" class="scorebar flex gap-1 mb-6"></div>
+              <div id="chain" class="space-y-4"></div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6 space-y-3">
+              <div class="flex flex-wrap items-center gap-3">
+                <a id="gpt-hilo" href="https://chatgpt.com/" target="_blank" rel="noopener"
+                  class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition flex items-center gap-2"
+                  data-i18n="audit_chatgpt">
+                  <i data-lucide="bot" class="w-4 h-4"></i> Auditar Coherencia en ChatGPT
+                </a>
+                <button id="copymatrix"
+                  class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl transition flex items-center gap-2 cursor-pointer">
+                  <i data-lucide="copy" class="w-4 h-4"></i> Copiar Matriz
+                </button>
+              </div>
+
+              <p id="msg-hilo" class="text-xs font-mono text-slate-500"></p>
+
+              <details class="text-xs text-slate-500 dark:text-slate-400">
+                <summary class="cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 font-medium">Ver prompt estructurado para la IA</summary>
+                <pre id="pv-hilo" class="tpl mt-2 p-3 bg-slate-50 dark:bg-slate-950 rounded-lg text-xs font-mono overflow-x-auto"></pre>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4 mt-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-nexo-navy text-white">Trazabilidad Sustantiva</span>
+                <h3 class="text-base font-bold font-display text-slate-900 dark:text-white" data-i18n="sankey_title">
+                  Matriz de Operacionalización y Conservación de Flujo
+                </h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" data-i18n="sankey_subtitle">
+                Desagregación proporcional: Variables / Categorías ➔ Dimensiones / Subcategorías ➔ Ítems / Indicadores
+              </p>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-mono text-emerald-800 dark:text-emerald-300 self-start md:self-auto">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
+              <span>Masa de Flujo Conservada</span>
+            </div>
+          </div>
+
+          <div id="sankey-wrapper"
+            class="notranslate w-full min-h-[320px] flex items-center justify-center bg-slate-50/50 dark:bg-slate-950/30 rounded-xl p-2 border border-slate-100 dark:border-slate-800/80"
+            translate="no">
+            <div class="animate-pulse text-xs font-mono text-slate-400">
+              Cargando Diagrama de Trazabilidad...
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-[11px] text-slate-600 dark:text-slate-400 font-mono border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#0A2540] inline-block"></span>
+              <span><strong>Nivel Macro:</strong> Variables / Categorías</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#C5A059] inline-block"></span>
+              <span><strong>Nivel Meso:</strong> Dimensiones / Subcategorías</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#0284C7] inline-block"></span>
+              <span><strong>Nivel Micro:</strong> Ítems del Instrumento</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PESTAÑA 02: ESTACIÓN DE REDACCIÓN -->
+      <section id="p-est" role="tabpanel" aria-labelledby="tab-est" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+          <aside class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm lg:col-span-1 h-fit sticky top-20">
+            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-nexo-gold"></i> Ruta del Anteproyecto (16 Semanas)
+            </h2>
+            <ol id="routelist" class="space-y-1 max-h-[70vh] overflow-y-auto pr-1 text-xs"></ol>
+            <select id="routeselect" class="w-full mt-3 p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs hidden sm:block md:hidden"></select>
+          </aside>
+
+          <div class="lg:col-span-3 space-y-6">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-4 gap-2">
+                <div>
+                  <span id="s-wk" class="text-xs font-mono font-bold text-nexo-gold uppercase"></span>
+                  <h2 id="s-title" class="text-xl font-bold font-display text-slate-900 dark:text-white"></h2>
+                </div>
+                <span id="s-ext" class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-mono text-slate-600 dark:text-slate-300 w-fit"></span>
+              </div>
+
+              <p id="s-prod" class="text-sm text-slate-600 dark:text-slate-300 mb-4"></p>
+
+              <div class="bg-amber-50 dark:bg-amber-950/30 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6">
+                <span class="text-xs font-mono uppercase font-bold text-amber-700 dark:text-amber-400 block mb-1">Prueba Crítica de Validación</span>
+                <p id="s-prueba" class="text-xs text-amber-900 dark:text-amber-200 italic"></p>
+              </div>
+
+              <div id="model" class="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 p-4 mb-6">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-slate-700 pb-2">
+                  <span class="text-xs font-mono uppercase font-semibold text-slate-500">Modelo Metodológico de Redacción</span>
+                  <div class="flex gap-1 bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+                    <button type="button" data-mv="orden" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 aria-pressed:bg-nexo-navy aria-pressed:text-white">Orden de Párrafos</button>
+                    <button type="button" data-mv="ejemplo" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 aria-pressed:bg-nexo-navy aria-pressed:text-white">Ejemplo Anotado</button>
+                    <button type="button" data-mv="plantilla" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 aria-pressed:bg-nexo-navy aria-pressed:text-white">Fórmula / Plantilla</button>
+                  </div>
+                </div>
+                <div id="mbody" class="text-xs text-slate-800 dark:text-slate-200"></div>
+              </div>
+
+              <div class="space-y-2 mb-6">
+                <div class="flex items-center justify-between">
+                  <label for="draft" class="text-sm font-semibold">Su borrador editable</label>
+                  <span class="text-xs text-slate-400">Guardado automático en navegador</span>
+                </div>
+                <textarea id="draft" rows="10"
+                  class="w-full p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl font-body text-sm outline-none focus:ring-2 focus:ring-nexo-gold leading-relaxed"
+                  placeholder="Pegue o redacte aquí el texto de su sección..."></textarea>
+                <div id="signals" class="flex flex-wrap gap-2 pt-2"></div>
+              </div>
+
+              <div class="border-t border-slate-100 dark:border-slate-800 pt-6 space-y-3">
+                <h3 class="text-xs font-mono uppercase tracking-wider text-slate-500">Criterios de Autoevaluación</h3>
+                <ul id="checks" class="space-y-2 text-xs"></ul>
+              </div>
+
+              <div class="mt-8 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-5 space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
+                    <h3 class="text-sm font-bold font-display text-emerald-950 dark:text-emerald-200">Auditoría con Tutor IA (ChatGPT)</h3>
+                  </div>
+                  <span id="tutorstate" class="px-3 py-1 bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 text-xs font-mono rounded-full text-emerald-700 dark:text-emerald-300">Sin dictamen</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <a id="gpt-sec" href="https://chatgpt.com/" target="_blank" rel="noopener"
+                    class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition flex items-center gap-2">
+                    <i data-lucide="external-link" class="w-4 h-4"></i> Auditar esta sección en ChatGPT
+                  </a>
+                </div>
+
+                <p id="msg-sec" class="text-xs font-mono text-slate-500"></p>
+
+                <details class="text-xs text-slate-500">
+                  <summary class="cursor-pointer hover:text-slate-700 font-medium">Ver prompt de sección</summary>
+                  <pre id="pv-sec" class="tpl mt-2 p-3 bg-white dark:bg-slate-950 rounded-lg text-xs font-mono overflow-x-auto"></pre>
+                </details>
+
+                <div class="space-y-2 pt-2">
+                  <label for="tresp" class="text-xs font-semibold block">Respuesta / Dictamen devuelto por la IA</label>
+                  <textarea id="tresp" rows="4"
+                    class="w-full p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-mono outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Pegue aquí la respuesta de ChatGPT, incluyendo la línea final DICTAMEN: 1=C; 2=P; 3=N..."></textarea>
+                  <div class="flex items-center gap-3">
+                    <button id="readdict" class="px-4 py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold rounded-xl transition cursor-pointer">Leer y Calibrar Dictamen</button>
+                    <span id="dictmsg" class="text-xs font-mono"></span>
+                  </div>
+                </div>
+
+                <div id="dictout"></div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PESTAÑA 03: MARCOS TEÓRICOS POR FACULTAD -->
+      <section id="p-teo" role="tabpanel" aria-labelledby="tab-teo" class="hidden space-y-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <div class="space-y-6 lg:col-span-1">
+
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+              <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                <i data-lucide="search" class="w-4 h-4 text-nexo-gold"></i> Recomendador de Teorías
+              </h2>
+
+              <div>
+                <label for="thfacultad" class="block text-xs font-semibold mb-1">Filtrar por Facultad USS</label>
+                <select id="thfacultad"
+                  class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold">
+                  <option value="">Todas las Facultades</option>
+                  <option value="f-salud">Ciencias de la Salud</option>
+                  <option value="f-ingenieria">Ingeniería, Arquitectura y Urbanismo</option>
+                  <option value="f-empresariales">Ciencias Empresariales</option>
+                  <option value="f-derecho">Derecho y Humanidades</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="thvar" class="block text-xs font-semibold mb-1">Variable de Resultado</label>
+                <input type="text" id="thvar"
+                  class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
+                  placeholder="Ej. Adherencia, Productividad, Motivación">
+              </div>
+
+              <div id="thmatch" class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800"></div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500">Búsqueda en Catálogo</h2>
+              <input type="search" id="thq"
+                class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
+                placeholder="Buscar autor, teoría o palabras clave...">
+              <div id="thtipos" class="flex flex-wrap gap-1.5 pt-2"></div>
+              <p id="thcount" class="text-xs font-mono text-slate-400 pt-1"></p>
+            </div>
+
+          </div>
+
+          <div class="lg:col-span-2">
+            <div id="thlist" class="space-y-4"></div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PESTAÑA 04: JURADO SIMULADO -->
+      <section id="p-jur" role="tabpanel" aria-labelledby="tab-jur" class="hidden space-y-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i data-lucide="award" class="w-4 h-4 text-nexo-gold"></i> Configuración de la Defensa Oral
+            </h2>
+
+            <p class="text-xs text-slate-600 dark:text-slate-300">
+              El simulador instruye a ChatGPT para que asuma el rol de un jurado metodológico estricto que interrogará la consistencia de su propuesta durante tres rondas evaluativas.
+            </p>
+
+            <div>
+              <label for="jfocus" class="block text-xs font-semibold mb-1">Sección o Foco de Evaluación</label>
+              <select id="jfocus" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"></select>
+            </div>
+
+            <div>
+              <label for="jlevel" class="block text-xs font-semibold mb-1">Nivel de Exigencia del Jurado</label>
+              <select id="jlevel" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold">
+                <option value="formativo">Formativo (Pregunta, evalúa y orienta)</option>
+                <option value="exigente" selected>Exigente (Defensa real de grado)</option>
+              </select>
+            </div>
+
+            <div class="pt-2">
+              <a id="gpt-jur" href="https://chatgpt.com/" target="_blank" rel="noopener"
+                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition inline-flex items-center gap-2">
+                <i data-lucide="bot" class="w-4 h-4"></i> Iniciar Sesión del Jurado en ChatGPT
+              </a>
+            </div>
+
+            <p id="msg-jur" class="text-xs font-mono text-slate-500"></p>
+
+            <details class="text-xs text-slate-500">
+              <summary class="cursor-pointer hover:text-slate-700 font-medium">Ver prompt del jurado</summary>
+              <pre id="pv-jur" class="tpl mt-2 p-3 bg-slate-50 dark:bg-slate-950 rounded-lg text-xs font-mono overflow-x-auto"></pre>
+            </details>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i data-lucide="clipboard-list" class="w-4 h-4 text-nexo-gold"></i> Bitácora de Respuestas de Sustentación
+            </h2>
+
+            <div>
+              <label for="jq" class="block text-xs font-semibold mb-1">Pregunta formulada por el Jurado</label>
+              <textarea id="jq" rows="2" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
+            </div>
+
+            <div>
+              <label for="ja" class="block text-xs font-semibold mb-1">Su respuesta formulada</label>
+              <textarea id="ja" rows="3"
+                class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
+                placeholder="Fundamente su respuesta en base a sus fuentes e instrumentos..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="jv" class="block text-xs font-semibold mb-1">Valoración obtenida</label>
+                <select id="jv" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold">
+                  <option value="">Seleccione…</option>
+                  <option value="Sólida">Sólida</option>
+                  <option value="Parcial">Parcial</option>
+                  <option value="Débil">Débil</option>
+                </select>
+              </div>
+              <div>
+                <label for="jl" class="block text-xs font-semibold mb-1">Plan de refuerzo pre-defensa</label>
+                <input type="text" id="jl"
+                  class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
+                  placeholder="Qué revisará...">
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 pt-2">
+              <button id="jsave" class="px-4 py-2 bg-nexo-navy hover:bg-nexo-navy/90 text-white font-semibold text-xs rounded-xl transition cursor-pointer">
+                Registrar en Bitácora
+              </button>
+              <span id="jmsg" class="text-xs font-mono"></span>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PESTAÑA 05: BITÁCORA E INFORME -->
+      <section id="p-inf" role="tabpanel" aria-labelledby="tab-inf" class="hidden space-y-6">
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 gap-4">
+            <div>
+              <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">Informe Consolidado de Avance</h2>
+              <p class="text-xs text-slate-500">Resumen ejecutivo del estado de coherencia, volumen redactado e interacciones registradas.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <button id="exportdocx"
+                class="px-4 py-2 bg-nexo-navy hover:bg-nexo-navy/90 text-white font-semibold text-xs rounded-xl transition flex items-center gap-2 shadow-sm cursor-pointer"
+                data-i18n="export_docx">
+                <i data-lucide="file-text" class="w-4 h-4 text-nexo-gold"></i> Exportar Informe en Word (.docx)
+              </button>
+              <a id="gpt-inf" href="https://chatgpt.com/" target="_blank" rel="noopener"
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-2">
+                <i data-lucide="bot" class="w-4 h-4"></i> Auditar Informe Completo
+              </a>
+            </div>
+          </div>
+
+          <p id="infmsg" class="text-xs font-mono text-slate-500"></p>
+
+          <div id="stats" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+
+          <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-nexo-gold"></i> Progreso de Redacción del Anteproyecto
+              </h3>
+              <div class="flex items-center gap-3 text-[10px] font-mono">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> Completo</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span> En proceso</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span> Sin iniciar</span>
+              </div>
+            </div>
+
+            <div id="heatmap-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2.5"></div>
+          </div>
+
+          <div id="plan" class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800"></div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
+              <i data-lucide="history" class="w-4 h-4 text-nexo-gold"></i> Bitácora de Declaración de Inteligencia Artificial
+            </h2>
+            <span id="logcount" class="text-xs font-mono px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-600 dark:text-slate-300">0 registros</span>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800/80 font-mono text-slate-500 uppercase border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="p-3">Fecha</th>
+                  <th class="p-3">Sección</th>
+                  <th class="p-3">Herramienta</th>
+                  <th class="p-3">Dictamen IA</th>
+                  <th class="p-3">Decisión & Justificación</th>
+                </tr>
+              </thead>
+              <tbody id="logbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500">Borrador para Anexo 5 (Declaración de Uso de IA)</h2>
+            <button id="copydecl" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-semibold rounded-lg transition cursor-pointer">Copiar Texto</button>
+          </div>
+          <pre id="decl" class="decl text-xs font-mono bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 overflow-x-auto"></pre>
+          <p id="declmsg" class="text-xs font-mono text-slate-500"></p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500">Gestión de Respaldo Local (JSON)</h2>
+          <p class="text-xs text-slate-500">Guarde una copia de seguridad en su computadora para continuar en otra PC o restaurar sus avances.</p>
+          <div class="flex items-center gap-3">
+            <button id="savejson" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs rounded-xl transition cursor-pointer">Descargar Respaldo (.json)</button>
+            <label for="loadjson" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl transition cursor-pointer">Restaurar desde (.json)</label>
+            <input type="file" id="loadjson" accept=".json,application/json" class="hidden">
+            <span id="bkmsg" class="text-xs font-mono"></span>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- PIE INSTITUCIONAL EXACTO DE INDEX -->
+    <footer class="ft" role="contentinfo">
+      <div class="g">
+        <div>
+          <div class="nm">
+            <svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><rect class="bg" width="36" height="36" rx="7"/><path class="ln" d="M10 11L26 18M10 25L26 18"/><circle class="nd" cx="10" cy="11" r="2.6"/><circle class="nd" cx="10" cy="25" r="2.6"/><circle class="rg" cx="26" cy="18" r="6.2"/><circle class="ac" cx="26" cy="18" r="3.4"/></svg>
+            <div>
+              <b>Laboratorio de Anteproyecto</b>
+              <small>Universidad Señor de Sipán</small>
+            </div>
+          </div>
+          <p>Plataforma web multidisciplinaria para la estructuración metodológica, la auditoría de coherencia y el acompañamiento en la investigación universitaria.</p>
+        </div>
+
+        <div>
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="index.html#app">Laboratorio Interactivo</a></li>
+            <li><a href="index.html#abstract">Resumen Científico</a></li>
+            <li><a href="index.html#meta">Ficha del Proyecto</a></li>
+            <li><a href="index.html#cite">Cómo Citar (APA 7)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Facultades USS</h4>
+          <ul>
+            <li><a href="index.html#s2">Ciencias de la Salud</a></li>
+            <li><a href="index.html#s2">Ingeniería, Arq. y Urb.</a></li>
+            <li><a href="index.html#s2">Ciencias Empresariales</a></li>
+            <li><a href="index.html#s2">Derecho y Humanidades</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Transparencia</h4>
+          <ul>
+            <li><a href="index.html#s6">Declaración de Ética e IA</a></li>
+            <li><a href="index.html#meta">Código Abierto (Licencia MIT)</a></li>
+            <li><a href="index.html#meta">Privacidad Local (Client-Side)</a></li>
+            <li><a href="index.html#cite">Contacto con el Autor</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="bar">
+        <div class="in">
+          <span>© 2026 Universidad Señor de Sipán</span>
+          <span>Chiclayo, Perú · Edición v2026.2.0</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL GLOBAL -->
+  <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-200 flex items-center justify-center p-4">
+    <div id="modal-box" class="modal-content bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-lg w-full p-6 space-y-4 transform scale-95 opacity-0 transition-all duration-200">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 id="modal-title" class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center gap-2"></h3>
+        <button id="modal-close" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="modal-body" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed"></div>
+      <div id="modal-footer" class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800"></div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- SCRIPT INTEGRADO Y CONTROLADOR GENERAL DE EVENTOS -->
+  <script>
+    // Función para alternar el botón a ¡Copiada! y restaurarlo
+    function setBtnCopiedState(btn) {
+      if (!btn) return;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> ¡Copiada!`;
+      if (window.lucide) lucide.createIcons();
+      setTimeout(function() {
+        btn.innerHTML = originalHTML;
+        if (window.lucide) lucide.createIcons();
+      }, 1800);
+    }
+
+    // Copia al portapapeles con fallback
+    function copyTextToClipboard(text, btn) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          setBtnCopiedState(btn);
+        }).catch(function() {
+          fallbackCopyText(text, btn);
+        });
+      } else {
+        fallbackCopyText(text, btn);
+      }
+    }
+
+    function fallbackCopyText(text, btn) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setBtnCopiedState(btn);
+      } catch (err) {
+        console.error('Error al copiar:', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // Generar y Copiar Matriz de Coherencia
+    function handleCopyMatrix(btn) {
+      const getVal = id => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+
+      const nom = getVal('st-nom');
+      const fac = getVal('st-fac');
+      const esc = getVal('st-esc');
+      const sec = getVal('st-sec');
+      const tit = getVal('st-tit');
+
+      const v1 = getVal('f-v1');
+      const v2 = getVal('f-v2');
+      const pob = getVal('f-pob');
+      const amb = getVal('f-amb');
+      const enf = getVal('f-enf');
+      const per = getVal('f-per');
+      const dis = getVal('f-dis');
+      const preg = getVal('f-preg');
+      const teo = getVal('f-teo');
+      const obj = getVal('f-obj');
+      const hip = getVal('f-hip');
+      const i1 = getVal('f-i1');
+      const i2 = getVal('f-i2');
+
+      const matrixText = `=== MATRIZ DE COHERENCIA METODOLÓGICA ===
+Investigador: ${nom || 'N/A'}
+Facultad / Escuela: ${fac || 'N/A'} - ${esc || 'N/A'}
+Sección: ${sec || 'N/A'}
+Título: ${tit || 'N/A'}
+
+1. PREGUNTA GENERAL DE INVESTIGACIÓN:
+${preg || '(No especificada)'}
+
+2. OBJETIVO GENERAL:
+${obj || '(No especificado)'}
+
+3. HIPÓTESIS ALTERNA (Hi):
+${hip || '(No especificada)'}
+
+4. VARIABLES E INSTRUMENTOS:
+- Variable 1: ${v1 || 'N/A'} | Instrumento: ${i1 || 'N/A'}
+- Variable 2: ${v2 || 'N/A'} | Instrumento: ${i2 || 'N/A'}
+
+5. METODOLOGÍA Y DISEÑO:
+- Enfoque Metodológico: ${enf || 'N/A'}
+- Alcance y Diseño: ${dis || 'N/A'}
+- Población Objetivo: ${pob || 'N/A'}
+- Ámbito Geográfico/Institucional: ${amb || 'N/A'}
+- Periodo Temporal: ${per || 'N/A'}
+- Teoría / Modelo Base: ${teo || 'N/A'}
+========================================`;
+
+      copyTextToClipboard(matrixText, btn);
+    }
+
+    // Listener global de clics
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('#theme-toggle')) {
+        setTimeout(function() {
+          try {
+            const currentTheme = document.documentElement.dataset.theme;
+            localStorage.setItem('rls_site_t', currentTheme);
+            localStorage.setItem('nexo_theme', currentTheme);
+          } catch(x) {}
+        }, 60);
+      }
+
+      // Manejador para el botón #copymatrix
+      const matrixBtn = e.target.closest('#copymatrix');
+      if (matrixBtn) {
+        handleCopyMatrix(matrixBtn);
+      }
+    });
+
+    // Control del Menú Lateral Colapsable
+    document.addEventListener("DOMContentLoaded", () => {
+      const sidebarMenu = document.getElementById("sidebar-menu");
+      const sidebarToggle = document.getElementById("sidebar-toggle");
+      const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
+
+      if (sidebarToggle && sidebarMenu) {
+        sidebarToggle.addEventListener("click", () => {
+          sidebarMenu.classList.toggle("md:w-64");
+          sidebarMenu.classList.toggle("is-collapsed");
+
+          const icon = sidebarToggle.querySelector("i");
+          if (icon) {
+            if (sidebarMenu.classList.contains("is-collapsed")) {
+              icon.setAttribute("data-lucide", "panel-left-open");
+            } else {
+              icon.setAttribute("data-lucide", "panel-left-close");
+            }
+            if (window.lucide) lucide.createIcons();
+          }
+        });
+      }
+
+      if (mobileSidebarToggle && sidebarMenu) {
+        mobileSidebarToggle.addEventListener("click", () => {
+          sidebarMenu.classList.toggle("hidden");
+        });
+      }
+    });
+
+    // Inicialización de Google Translate
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'es',
+        includedLanguages: 'en,es',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+
+  <!-- Google Translate y Lógica de Negocio de la App -->
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

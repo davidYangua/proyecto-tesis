@@ -1,787 +1,641 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Laboratorio del Anteproyecto | Universidad Señor de Sipán</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratorio de Anteproyecto · Universidad Señor de Sipán</title>
+<meta name="description" content="Plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades.">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: ['class', '[data-theme="dark"]'],
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['"Plus Jakarta Sans"', 'sans-serif'],
-            body: ['"Source Sans 3"', 'sans-serif'],
-            mono: ['"IBM Plex Mono"', 'monospace']
-          },
-          colors: {
-            nexo: {
-              navy: '#0A2540',
-              gold: '#C5A059',
-              'gold-hover': '#B38E46',
-              soft: '#F8FAFC'
-            }
-          }
-        }
-      }
-    }
-  </script>
+<meta name="citation_title" content="Laboratorio de Anteproyecto: plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades">
+<meta name="citation_author" content="Castro Mejía, Percy">
+<meta name="citation_publication_date" content="2026">
+<meta name="citation_journal_title" content="Revista de Investigación y Software Científico USS">
+<meta name="citation_technical_report_institution" content="Universidad Señor de Sipán">
 
-  <!-- Tipografías de Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
-    rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Íconos Lucide -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --pn: #F5F6F7;
+  --tx: #212529;
+  --mt: #5B6573;
+  --ln: #D9DDE2;
+  --ac: #E9711C;
+  --ac-hover: #D4600F;
+  --lk: #00629B;
+  --ok: #2E8B57;
+  --rk: #D99A00;
+  --bd: #C23B3B;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-sans: 'Source Sans 3', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
 
-  <!-- Librerías Externas (Google Charts loader y Docx.js) -->
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+[data-theme="dark"] {
+  --bg: #0F1317;
+  --pn: #171C22;
+  --tx: #E6E8EB;
+  --mt: #9AA4B2;
+  --ln: #2A313A;
+  --lk: #6DB6E8;
+  --ac: #E9711C;
+  --ac-hover: #FF8533;
+}
 
-  <!-- Hojas de Estilos Locales -->
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/custom.css">
+#gt {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
 
-  <style>
-    /* Ocultar barra flotante de Google Translate sin romper layout */
-    .goog-te-banner-frame, .goog-te-balloon-frame, #goog-gt-tt {
-      display: none !important;
-    }
-    body {
-      top: 0px !important;
-    }
-  </style>
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-te-spinner-pos,
+.VIpgJd-Z441Uc-OJanTX,
+.VIpgJd-Z441Uc-OJanTX-iATh2e,
+iframe[id*=":1.container"],
+iframe[id*=":2.container"],
+iframe[class*="goog-te-banner-frame"],
+.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+}
+
+html {
+  top: 0px !important;
+  position: static !important;
+}
+body {
+  top: 0px !important;
+  margin-top: 0px !important;
+  position: static !important;
+  background: var(--bg);
+  color: var(--tx);
+  font: 16px/1.6 var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.goog-text-highlight,
+font[style*="background-color"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+a { color: var(--lk); transition: color 0.15s ease; }
+a:hover { color: var(--ac); }
+code { font-family: var(--font-mono); font-size: 0.9em; background: var(--pn); padding: 2px 6px; border-radius: 3px; border: 1px solid var(--ln); color: var(--tx); }
+
+#skeleton-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+#skeleton-overlay.hidden { opacity: 0; visibility: hidden; }
+.sk-anim {
+  background: linear-gradient(90deg, var(--pn) 25%, var(--ln) 50%, var(--pn) 75%);
+  background-size: 200% 100%;
+  animation: skShimmer 1.4s infinite;
+  border-radius: 4px;
+}
+@keyframes skShimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+.nav { position: sticky; top: 0; z-index: 50; background: var(--bg); border-bottom: 1px solid var(--ln); backdrop-filter: blur(8px); transition: background-color 0.2s ease, border-color 0.2s ease; }
+.in { max-width: 1220px; margin: 0 auto; padding: 0 20px; }
+.nav .in { display: flex; align-items: center; gap: 20px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--tx); }
+
+/* ESTILO E IDENTIDAD DEL LOGO SVG (.mk) */
+.mk { width: 38px; height: 38px; flex: none; display: block; }
+.mk .bg { fill: #1A1F26; }
+[data-theme="dark"] .mk .bg { fill: #11151A; }
+.mk .ln { stroke: #fff; stroke-opacity: .5; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.mk .nd { fill: #fff; }
+.mk .ac { fill: var(--ac); }
+.mk .rg { fill: none; stroke: var(--ac); stroke-opacity: .45; stroke-width: 1.2; }
+
+.brand b { display: block; font-size: 16px; line-height: 1.15; color: var(--tx); }
+.brand small { color: var(--mt); font-size: 12px; }
+
+.links { display: flex; gap: 18px; margin-left: auto; font-size: 14px; font-weight: 600; }
+.links a { color: var(--tx); text-decoration: none; }
+.links a:hover { color: var(--ac); }
+
+button, .btn {
+  font: 600 14px var(--font-sans); cursor: pointer; border: 1px solid var(--ln);
+  background: var(--bg); color: var(--tx); border-radius: 4px; padding: 7px 14px;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.15s ease;
+}
+button:hover, .btn:hover { border-color: var(--mt); }
+.btn.p { background: var(--ac); border-color: var(--ac); color: #FFF; }
+.btn.p:hover { background: var(--ac-hover); border-color: var(--ac-hover); }
+
+:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
+
+.crumb { background: var(--pn); border-bottom: 1px solid var(--ln); font-size: 13px; color: var(--mt); }
+.crumb .in { padding-top: 8px; padding-bottom: 8px; }
+.hero { padding: 34px 0 22px; border-bottom: 1px solid var(--ln); }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; border: 1px solid var(--ln); border-radius: 3px; padding: 2px 8px; margin: 0 6px 6px 0; color: var(--mt); }
+.tag.o { border-color: var(--ac); color: var(--ac); background: rgba(233,113,28,0.06); }
+
+h1 { font: 600 clamp(26px, 3.6vw, 38px)/1.2 var(--font-serif); margin: 8px 0 16px; max-width: 960px; color: var(--tx); }
+.au { font-size: 17px; font-weight: 600; color: var(--tx); }
+.au sup, .af sup { color: var(--ac); }
+.af { font-size: 14px; color: var(--mt); }
+.meta { margin-top: 14px; font-size: 13px; color: var(--mt); font-family: var(--font-mono); }
+.hero .row { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+.wrap { display: grid; grid-template-columns: 200px minmax(0, 1fr) 320px; gap: 36px; padding-top: 28px; padding-bottom: 60px; }
+.toc { position: sticky; top: 84px; align-self: start; font-size: 14px; }
+.toc h4, .side h3 { margin: 0 0 8px; font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--mt); }
+.toc a { display: block; padding: 4px 0 4px 10px; border-left: 2px solid var(--ln); color: var(--mt); text-decoration: none; }
+.toc a.on { border-color: var(--ac); color: var(--tx); font-weight: 600; }
+
+article { font-family: var(--font-serif); font-size: 17.5px; line-height: 1.75; max-width: 760px; color: var(--tx); }
+article h2 { font: 700 22px var(--font-sans); margin: 38px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--ln); color: var(--tx); }
+article h3 { font: 700 17px var(--font-sans); margin: 22px 0 4px; color: var(--tx); }
+article h2 span { color: var(--ac); margin-right: 8px; font-family: var(--font-mono); }
+
+.box { background: var(--pn); border-left: 4px solid var(--ac); padding: 14px 18px; margin: 0 0 22px; font-family: var(--font-sans); font-size: 16px; line-height: 1.55; border-radius: 0 6px 6px 0; color: var(--tx); }
+.box h2 { border: 0; margin: 0 0 6px; padding: 0; font-size: 14px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--ac); }
+.box ul { margin: 0; padding-left: 20px; }
+.kw { font: 14px var(--font-sans); color: var(--mt); margin-top: 10px; } .kw b { color: var(--tx); }
+
+.kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 1px; background: var(--ln); border: 1px solid var(--ln); margin: 24px 0; font-family: var(--font-sans); border-radius: 6px; overflow: hidden; }
+.kpi div { background: var(--bg); padding: 12px; text-align: center; }
+.kpi b { display: block; font-size: 28px; line-height: 1.1; color: var(--ac); font-family: var(--font-mono); }
+.kpi small { color: var(--mt); font-size: 12px; }
+
+figure { margin: 24px 0; padding: 16px; border: 1px solid var(--ln); border-radius: 6px; font-family: var(--font-sans); background: var(--pn); }
+figcaption { font-size: 14px; color: var(--mt); margin-top: 8px; line-height: 1.45; } figcaption b { color: var(--tx); }
+figure svg { width: 100%; height: auto; display: block; }
+
+.hm { display: grid; gap: 6px; font-size: 14px; font-family: var(--font-sans); }
+.hm div { display: flex; gap: 10px; align-items: center; border: 1px solid var(--ln); padding: 8px 10px; border-radius: 4px; background: var(--bg); color: var(--tx); }
+.hm i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+
+table { border-collapse: collapse; width: 100%; font: 14.5px/1.45 var(--font-sans); margin: 12px 0; color: var(--tx); }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ln); vertical-align: top; }
+th { color: var(--mt); font-weight: 600; white-space: nowrap; font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; background: var(--pn); }
+
+.side { display: grid; gap: 18px; align-self: start; font-size: 14.5px; font-family: var(--font-sans); }
+.card { border: 1px solid var(--ln); border-radius: 6px; padding: 16px; background: var(--bg); color: var(--tx); }
+.card.d { background: var(--pn); }
+.card p { margin: 0 0 10px; line-height: 1.5; }
+.cite { font-size: 13px; font-family: var(--font-mono); background: var(--pn); padding: 10px; border-radius: 4px; border: 1px solid var(--ln); margin: 0 0 10px; word-break: break-word; color: var(--tx); }
+
+.author-profile { display: flex; gap: 12px; align-items: center; }
+.av-box { width: 48px; height: 48px; border-radius: 50%; background: var(--ac); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-sans); flex-shrink: 0; font-size: 16px; }
+
+ol.ref { font-size: 15.5px; padding-left: 22px; font-family: var(--font-sans); }
+ol.ref li { margin-bottom: 8px; }
+
+footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5px; color: var(--mt); padding: 40px 0 28px; font-family: var(--font-sans); }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 28px; margin-bottom: 28px; }
+.footer-col h5 { font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--tx); margin: 0 0 12px; letter-spacing: 0.05em; }
+.footer-col ul { list-style: none; padding: 0; margin: 0; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul a { text-decoration: none; color: var(--mt); transition: color 0.15s ease; }
+.footer-col ul a:hover { color: var(--ac); }
+.footer-bottom { border-top: 1px solid var(--ln); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12.5px; }
+
+@media(max-width: 1020px) { .wrap { grid-template-columns: minmax(0,1fr); } .toc { display: none; } .links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width: 640px) { .footer-grid { grid-template-columns: 1fr; } }
+@media print { .nav, .toc, .side .btn, footer { display: none; } .wrap { display: block; } }
+</style>
 </head>
+<body>
 
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-body min-h-screen antialiased transition-colors duration-200">
+<div id="gt"></div>
 
-  <!-- Elemento oculto para inicializar Google Translate fuera de pantalla -->
-  <div id="google_translate_element" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;"></div>
-
-  <!-- HEADER PRINCIPAL & BANDA DE IDENTIDAD -->
-  <header class="bg-nexo-navy text-white border-b border-slate-800 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-0">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <div class="flex items-center gap-2 text-xs font-mono tracking-widest text-nexo-gold uppercase mb-1">
-            <i data-lucide="graduation-cap" class="w-4 h-4"></i>
-            <span>Metodología de la Investigación Científica · USS 2026-II</span>
-          </div>
-
-          <h1 class="text-2xl sm:text-3xl font-extrabold font-display tracking-tight text-white flex items-center gap-3">
-            Laboratorio del Anteproyecto
-          </h1>
-
-          <p class="text-sm text-slate-300 max-w-2xl mt-1" data-i18n="subtitle">
-            Plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap">
-          <!-- Botón Global Nuevo Proyecto -->
-          <button id="btn-new-project"
-            class="px-3.5 py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-200 border border-rose-500/30 text-xs font-mono font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
-            title="Reiniciar todo e iniciar un nuevo proyecto">
-            <i data-lucide="rotate-ccw" class="w-4 h-4 text-rose-400"></i>
-            <span>Nuevo Proyecto</span>
-          </button>
-
-          <!-- Conmutador de Tema Claro/Oscuro -->
-          <button id="theme-toggle"
-            class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer"
-            title="Cambiar tema">
-            <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400"></i>
-            <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-slate-300"></i>
-          </button>
-
-          <!-- Selector de Idioma -->
-          <button id="lang-toggle"
-            class="px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-mono font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
-            title="Cambiar idioma / Switch language">
-            <i data-lucide="globe" class="w-4 h-4 text-nexo-gold"></i>
-            <span id="lang-text">ES</span>
-          </button>
-
-          <!-- Status Badge IA -->
-          <div class="hidden sm:flex items-center gap-2 font-mono text-xs bg-slate-800/90 border border-slate-700 px-3.5 py-2 rounded-full shadow-inner">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="text-slate-200">Tutor IA Conectado</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- NAVEGACIÓN POR PESTAÑAS -->
-      <nav class="flex gap-2 mt-6 overflow-x-auto no-scrollbar border-b border-slate-700/60" role="tablist" aria-label="Estaciones Metodológicas">
-        <button role="tab" id="tab-hilo" aria-controls="p-hilo" aria-selected="true"
-          class="tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white border-t-2 border-nexo-gold">
-          <span class="font-mono text-xs text-nexo-gold">01</span>
-          <i data-lucide="git-merge" class="w-4 h-4"></i>
-          <span data-i18n="tab1">Hilo de Coherencia</span>
-        </button>
-
-        <button role="tab" id="tab-est" aria-controls="p-est" aria-selected="false"
-          class="tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/50">
-          <span class="font-mono text-xs opacity-75">02</span>
-          <i data-lucide="pen-tool" class="w-4 h-4"></i>
-          <span data-i18n="tab2">Estación de Redacción</span>
-        </button>
-
-        <button role="tab" id="tab-teo" aria-controls="p-teo" aria-selected="false"
-          class="tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/50">
-          <span class="font-mono text-xs opacity-75">03</span>
-          <i data-lucide="book-open" class="w-4 h-4"></i>
-          <span data-i18n="tab3">Marcos Teóricos por Facultad</span>
-        </button>
-
-        <button role="tab" id="tab-jur" aria-controls="p-jur" aria-selected="false"
-          class="tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/50">
-          <span class="font-mono text-xs opacity-75">04</span>
-          <i data-lucide="users" class="w-4 h-4"></i>
-          <span data-i18n="tab4">Jurado Simulado</span>
-        </button>
-
-        <button role="tab" id="tab-inf" aria-controls="p-inf" aria-selected="false"
-          class="tab-btn px-4 py-3 font-display text-sm font-semibold rounded-t-xl transition flex items-center gap-2 whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/50">
-          <span class="font-mono text-xs opacity-75">05</span>
-          <i data-lucide="file-check-2" class="w-4 h-4"></i>
-          <span data-i18n="tab5">Bitácora e Informe</span>
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <!-- CONTENEDOR PRINCIPAL -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-    <!-- CASO DE EJEMPLO FLAG BANNER -->
-    <div id="exflag"
-      class="hidden mb-6 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-amber-900 dark:text-amber-200 shadow-sm">
-      <div class="flex items-center gap-3">
-        <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0"></i>
-        <p class="text-sm">
-          <strong>Modo Ejemplo Cargado:</strong> Estudiando el caso de <em>Burnout y Satisfacción Laboral</em>. Explórelo libremente o inicie su propio proyecto desde cero.
-        </p>
-      </div>
-      <div id="resetzone">
-        <button id="startmine"
-          class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium text-xs rounded-lg transition shadow-sm whitespace-nowrap cursor-pointer">
-          Empezar mi proyecto libre
-        </button>
-      </div>
-    </div>
-
-    <!-- PESTAÑA 01: HILO DE COHERENCIA -->
-    <section id="p-hilo" role="tabpanel" aria-labelledby="tab-hilo" class="space-y-6">
-
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
-        <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
-          <i data-lucide="user-check" class="w-4 h-4 text-nexo-gold"></i> Identificación y Afiliación Académica USS
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label for="st-nom" class="block text-xs font-semibold mb-1">Estudiante / Investigador</label>
-            <input type="text" id="st-nom" data-st="nombre" autocomplete="name"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
-          </div>
-
-          <div>
-            <label for="st-fac" class="block text-xs font-semibold mb-1" data-i18n="faculty">Facultad USS</label>
-            <select id="st-fac" data-st="facultad"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
-              <option value="">Seleccione Facultad…</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="st-esc" class="block text-xs font-semibold mb-1" data-i18n="school">Escuela Profesional</label>
-            <select id="st-esc" data-st="escuela"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
-              <option value="">Seleccione Escuela…</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="st-sec" class="block text-xs font-semibold mb-1">Sección de Clase</label>
-            <select id="st-sec" data-st="seccion"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
-              <option value="">Elija grupo…</option>
-              <option>Sección A · lunes</option>
-              <option>Sección B · martes</option>
-              <option>Sección C · miércoles</option>
-              <option>Sección D · jueves</option>
-              <option>Sección E · viernes</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="mt-4">
-          <label for="st-tit" class="block text-xs font-semibold mb-1" data-i18n="title_label">Título preliminar del trabajo de investigación</label>
-          <input type="text" id="st-tit" data-st="titulo"
-            class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-nexo-gold outline-none">
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-            <i data-lucide="layers" class="w-4 h-4 text-nexo-gold"></i> Elementos Núcleo del Anteproyecto
-          </h2>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label for="f-v1" class="block text-xs font-semibold mb-1" data-i18n="v1_label">Variable 1 (Asociada / Independiente)</label>
-              <input type="text" id="f-v1" data-k="v1"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-            </div>
-            <div>
-              <label for="f-v2" class="block text-xs font-semibold mb-1" data-i18n="v2_label">Variable 2 (De resultado / Dependiente)</label>
-              <input type="text" id="f-v2" data-k="v2"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-            </div>
-            <div>
-              <label for="f-pob" class="block text-xs font-semibold mb-1">Población objetivo</label>
-              <input type="text" id="f-pob" data-k="pob"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-            </div>
-            <div>
-              <label for="f-amb" class="block text-xs font-semibold mb-1">Ámbito geográfico / institucional</label>
-              <input type="text" id="f-amb" data-k="amb"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label for="f-enf" class="block text-xs font-semibold mb-1" data-i18n="approach">Enfoque Metodológico</label>
-              <select id="f-enf" data-k="enf"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-                <option value="cuanti">Cuantitativo</option>
-                <option value="cuali">Cualitativo</option>
-                <option value="mixto">Mixto (Cualitativo-Cuantitativo)</option>
-              </select>
-            </div>
-            <div>
-              <label for="f-per" class="block text-xs font-semibold mb-1">Periodo temporal</label>
-              <input type="text" id="f-per" data-k="per"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-            </div>
-            <div>
-              <label for="f-dis" class="block text-xs font-semibold mb-1">Alcance y diseño (2.1)</label>
-              <select id="f-dis" data-k="dis"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-                <option value="">Elija el alcance…</option>
-                <option value="desc">Descriptivo simple</option>
-                <option value="corr">Correlacional / Asociativo</option>
-                <option value="comp">Comparativo entre grupos</option>
-                <option value="expl">Explicativo / Causal</option>
-                <option value="exp">Cuasiexperimental</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label for="f-preg" class="block text-xs font-semibold mb-1">Pregunta general de investigación (1.3)</label>
-            <textarea id="f-preg" rows="2" data-k="preg"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
-          </div>
-
-          <div>
-            <label for="f-teo" class="block text-xs font-semibold mb-1">Teoría principal o Modelo conceptual (1.4)</label>
-            <select id="f-teo" data-k="teo"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold">
-            </select>
-            <p class="text-xs text-slate-500 mt-1">¿No encuentra su marco teórico? Explore la Pestaña 03 o ingrese una teoría personalizada.</p>
-          </div>
-
-          <div>
-            <label for="f-obj" class="block text-xs font-semibold mb-1">Objetivo general (1.5)</label>
-            <textarea id="f-obj" rows="2" data-k="obj"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
-          </div>
-
-          <div>
-            <label for="f-hip" class="block text-xs font-semibold mb-1">Hipótesis alterna, Hi (1.6)</label>
-            <textarea id="f-hip" rows="2" data-k="hip"
-              class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label for="f-i1" class="block text-xs font-semibold mb-1">Instrumento Variable 1 (Total Ítems)</label>
-              <input type="text" id="f-i1" data-k="i1"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"
-                placeholder="Ej. Cuestionario de 12 ítems">
-            </div>
-            <div>
-              <label for="f-i2" class="block text-xs font-semibold mb-1">Instrumento Variable 2 (Total Ítems)</label>
-              <input type="text" id="f-i2" data-k="i2"
-                class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-nexo-gold"
-                placeholder="Ej. Escala de 12 ítems">
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
-              <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> Auditoría de Cadena de Coherencia
-              </h2>
-              <span id="chainsum" class="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                0 de 6 eslabones firmes
-              </span>
-            </div>
-
-            <div id="scorebar" class="scorebar flex gap-1 mb-6"></div>
-            <div id="chain" class="space-y-4"></div>
-          </div>
-
-          <div class="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6 space-y-3">
-            <div class="flex flex-wrap items-center gap-3">
-              <a id="gpt-hilo" href="https://chatgpt.com/" target="_blank" rel="noopener"
-                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition flex items-center gap-2"
-                data-i18n="audit_chatgpt">
-                <i data-lucide="bot" class="w-4 h-4"></i> Auditar Coherencia en ChatGPT
-              </a>
-              <button id="copymatrix"
-                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl transition flex items-center gap-2">
-                <i data-lucide="copy" class="w-4 h-4"></i> Copiar Matriz
-              </button>
-            </div>
-
-            <p id="msg-hilo" class="text-xs font-mono text-slate-500"></p>
-
-            <details class="text-xs text-slate-500 dark:text-slate-400">
-              <summary class="cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 font-medium">Ver prompt estructurado para la IA</summary>
-              <pre id="pv-hilo" class="tpl mt-2 p-3 bg-slate-50 dark:bg-slate-950 rounded-lg text-xs font-mono overflow-x-auto"></pre>
-            </details>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4 mt-6">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-nexo-navy text-white">Trazabilidad Sustantiva</span>
-              <h3 class="text-base font-bold font-display text-slate-900 dark:text-white" data-i18n="sankey_title">
-                Matriz de Operacionalización y Conservación de Flujo
-              </h3>
-            </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" data-i18n="sankey_subtitle">
-              Desagregación proporcional: Variables / Categorías ➔ Dimensiones / Subcategorías ➔ Ítems / Indicadores
-            </p>
-          </div>
-
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-mono text-emerald-800 dark:text-emerald-300 self-start md:self-auto">
-            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
-            <span>Masa de Flujo Conservada</span>
-          </div>
-        </div>
-
-        <!-- Canvas del Gráfico Sankey (Protegido contra mutaciones SVG de Google Translate) -->
-<div id="sankey-wrapper"
-  class="notranslate w-full min-h-[320px] flex items-center justify-center bg-slate-50/50 dark:bg-slate-950/30 rounded-xl p-2 border border-slate-100 dark:border-slate-800/80"
-  translate="no">
-  <div class="animate-pulse text-xs font-mono text-slate-400">
-    Cargando Diagrama de Trazabilidad...
-  </div>
+<div id="skeleton-overlay">
+  <div class="sk-anim" style="height: 55px; width: 100%;"></div>
+  <div class="sk-anim" style="height: 100px; width: 80%;"></div>
+  <div class="sk-anim" style="height: 380px; width: 100%;"></div>
 </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-[11px] text-slate-600 dark:text-slate-400 font-mono border-t border-slate-100 dark:border-slate-800">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-[#0A2540] inline-block"></span>
-            <span><strong>Nivel Macro:</strong> Variables / Categorías</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-[#C5A059] inline-block"></span>
-            <span><strong>Nivel Meso:</strong> Dimensiones / Subcategorías</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-[#0284C7] inline-block"></span>
-            <span><strong>Nivel Micro:</strong> Ítems del Instrumento</span>
-          </div>
-        </div>
-      </div>
+<header class="nav"><div class="in">
+  <a class="brand" href="#top" id="top">
+    <svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><rect class="bg" width="36" height="36" rx="7"/><path class="ln" d="M10 11L26 18M10 25L26 18"/><circle class="nd" cx="10" cy="11" r="2.6"/><circle class="nd" cx="10" cy="25" r="2.6"/><circle class="rg" cx="26" cy="18" r="6.2"/><circle class="ac" cx="26" cy="18" r="3.4"/></svg>
+    <span><b>Laboratorio de Anteproyecto</b><small>Universidad Señor de Sipán</small></span>
+  </a>
+  <nav class="links">
+    <a href="#abstract">Resumen</a>
+    <a href="#s1">Motivación</a>
+    <a href="#s2">Software</a>
+    <a href="#s3">Ejemplo</a>
+    <a href="#s4">Impacto</a>
+    <a href="#meta">Ficha</a>
+  </nav>
+  <div class="tools" style="display:flex; gap:8px; align-items:center;">
+    <button id="lg" aria-label="Cambiar idioma" title="Cambiar Idioma ES/EN">ES</button>
+    <button id="th" aria-label="Cambiar tema" title="Modo Claro/Oscuro">☾</button>
+    <a class="btn p" href="app.html">Abrir laboratorio</a>
+  </div>
+</div></header>
 
-    </section>
+<div class="crumb"><div class="in">Inicio › Publicación original de software › Laboratorio de Anteproyecto (USS)</div></div>
 
-    <!-- PESTAÑA 02: ESTACIÓN DE REDACCIÓN -->
-    <section id="p-est" role="tabpanel" aria-labelledby="tab-est" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+<section class="hero"><div class="in">
+  <span class="tag o">Publicación original de software</span>
+  <span class="tag">Metodología de la investigación</span>
+  <span class="tag">Código abierto · MIT</span>
+  
+  <h1>Laboratorio de Anteproyecto: plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades</h1>
+  
+  <div class="au">Percy Castro Mejía<sup>a,*</sup></div>
+  <div class="af"><sup>a</sup> Universidad Señor de Sipán, Perú</div>
+  <div class="meta">*  Autor de correspondencia</div>
+  
+  <div class="row">
+    <a class="btn p" href="app.html">Ejecutar el software</a>
+    <a class="btn" href="#cite">Cómo citar</a>
+    <a class="btn" href="#meta">Ficha del proyecto</a>
+  </div>
+</div></section>
 
-        <aside class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm lg:col-span-1 h-fit sticky top-6">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center gap-2">
-            <i data-lucide="map-pin" class="w-4 h-4 text-nexo-gold"></i> Ruta del Anteproyecto (16 Semanas)
-          </h2>
-          <ol id="routelist" class="space-y-1 max-h-[70vh] overflow-y-auto pr-1 text-xs"></ol>
-          <select id="routeselect" class="w-full mt-3 p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs hidden sm:block md:hidden"></select>
-        </aside>
+<div class="in wrap">
 
-        <div class="lg:col-span-3 space-y-6">
-          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+<nav class="toc" aria-label="Contenido">
+  <h4>En este artículo</h4>
+  <a href="#abstract">Resumen</a>
+  <a href="#s1">1. Motivación</a>
+  <a href="#s2">2. Descripción del software</a>
+  <a href="#s3">3. Ejemplo ilustrativo</a>
+  <a href="#s4">4. Impacto</a>
+  <a href="#s5">5. Conclusiones</a>
+  <a href="#s6">Ética de IA</a>
+  <a href="#refs">Referencias</a>
+</nav>
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-4 gap-2">
-              <div>
-                <span id="s-wk" class="text-xs font-mono font-bold text-nexo-gold uppercase"></span>
-                <h2 id="s-title" class="text-xl font-bold font-display text-slate-900 dark:text-white"></h2>
-              </div>
-              <span id="s-ext" class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-mono text-slate-600 dark:text-slate-300 w-fit"></span>
-            </div>
+<article>
+<div class="box">
+  <h2>Aspectos destacados</h2>
+  <ul>
+    <li>Plataforma web abierta para estructurar anteproyectos en cualquier disciplina.</li>
+    <li>Diagnóstico de diseños de investigación según Hernández-Sampieri et al. (2014).</li>
+    <li>Auditoría visual de coherencia con diagrama Sankey y mapa de calor.</li>
+    <li>Ejecución local en el navegador: sin servidor y sin envío de datos.</li>
+    <li>Soporte bilingüe estructurado y exportación a Word (.docx) y .json.</li>
+  </ul>
+</div>
 
-            <p id="s-prod" class="text-sm text-slate-600 dark:text-slate-300 mb-4"></p>
+<section id="abstract">
+  <h2 style="margin-top:0">Resumen</h2>
+  <p>La escasa coherencia entre el problema, los objetivos, las hipótesis y el diseño es una causa frecuente de observaciones en los anteproyectos de tesis. Este artículo presenta <strong>Laboratorio de Anteproyecto</strong>, una aplicación web de código abierto que guía la estructuración de proyectos de investigación de cualquier disciplina, con un selector en cascada de las facultades y escuelas profesionales de la Universidad Señor de Sipán. El software integra un diagnóstico de diseños basado en Hernández-Sampieri et al. (2014), un diagrama de flujo lógico tipo Sankey y un mapa de calor que audita tres cruces de coherencia. Exporta el proyecto a .json y a Word (.docx), genera el anexo de uso ético de inteligencia artificial y se ejecuta íntegramente en el navegador.</p>
+  <p class="kw"><b>Palabras clave:</b> metodología de la investigación; coherencia metodológica; diseño de investigación; visualización de datos; software científico; educación superior</p>
+</section>
 
-            <div class="bg-amber-50 dark:bg-amber-950/30 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6">
-              <span class="text-xs font-mono uppercase font-bold text-amber-700 dark:text-amber-400 block mb-1">Prueba Crítica de Validación</span>
-              <p id="s-prueba" class="text-xs text-amber-900 dark:text-amber-200 italic"></p>
-            </div>
+<div class="kpi" role="group" aria-label="Alcance funcional">
+  <div><b>4</b><small>facultades</small></div>
+  <div><b>18</b><small>escuelas profesionales</small></div>
+  <div><b>9</b><small>diseños diagnosticables</small></div>
+  <div><b>3</b><small>cruces de coherencia</small></div>
+  <div><b>3</b><small>enfoques</small></div>
+  <div><b>2</b><small>idiomas</small></div>
+</div>
 
-            <div id="model" class="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 p-4 mb-6">
-              <div class="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-slate-700 pb-2">
-                <span class="text-xs font-mono uppercase font-semibold text-slate-500">Modelo Metodológico de Redacción</span>
-                <div class="flex gap-1 bg-white dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold">
-                  <button type="button" data-mv="orden" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 aria-pressed:bg-nexo-navy aria-pressed:text-white">Orden de Párrafos</button>
-                  <button type="button" data-mv="ejemplo" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 aria-pressed:bg-nexo-navy aria-pressed:text-white">Ejemplo Anotado</button>
-                  <button type="button" data-mv="plantilla" class="px-2.5 py-1 rounded-md text-slate-600 dark:text-slate-300 aria-pressed:bg-nexo-navy aria-pressed:text-white">Fórmula / Plantilla</button>
-                </div>
-              </div>
-              <div id="mbody" class="text-xs text-slate-700 dark:text-slate-300"></div>
-            </div>
+<section id="s1">
+  <h2><span>1.</span>Motivación y significancia</h2>
+  <p>La trazabilidad entre el problema, los objetivos, las hipótesis, las variables y el diseño es una condición básica del rigor científico (Hernández-Sampieri et al., 2014). En la formación de pregrado y posgrado, esta trazabilidad suele verificarse de forma manual y tardía, durante la revisión del asesor o del comité, cuando corregir resulta más costoso.</p>
+  <p>Los procesadores de texto y los gestores bibliográficos no evalúan si un objetivo exploratorio es compatible con una hipótesis causal, ni si la temporalidad declarada corresponde al tipo de diseño elegido. Laboratorio de Anteproyecto traslada esa verificación al momento de la redacción y la hace visible mediante diagramas y semáforos de coherencia, de modo que el estudiante corrige antes de presentar y el docente concentra la asesoría en el contenido científico.</p>
+</section>
 
-            <div class="space-y-2 mb-6">
-              <div class="flex items-center justify-between">
-                <label for="draft" class="text-sm font-semibold">Su borrador editable</label>
-                <span class="text-xs text-slate-400">Guardado automático en navegador</span>
-              </div>
-              <textarea id="draft" rows="10"
-                class="w-full p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl font-body text-sm outline-none focus:ring-2 focus:ring-nexo-gold leading-relaxed"
-                placeholder="Pegue o redacte aquí el texto de su sección..."></textarea>
-              <div id="signals" class="flex flex-wrap gap-2 pt-2"></div>
-            </div>
+<section id="s2">
+  <h2><span>2.</span>Descripción del software</h2>
+  <h3>2.1. Arquitectura</h3>
+  <p>El software es una aplicación de página única (SPA) escrita en HTML5, CSS3 y JavaScript nativo. Se ejecuta del lado del cliente, no requiere servidor ni base de datos y conserva el proyecto en el almacenamiento local del navegador (<code>localStorage</code>). Por ello puede alojarse como sitio estático en GitHub Pages. La exportación a Word utiliza la biblioteca docx.js.</p>
+  
+  <figure>
+    <svg viewBox="0 0 700 110" role="img" aria-label="Flujo lógico: problema, objetivos, hipótesis, variables, diseño, técnica e instrumento">
+      <g fill="none" stroke="var(--ac)" stroke-opacity=".55" stroke-width="5">
+        <path d="M90 55C106 55 106 55 122 55"/>
+        <path d="M212 55C228 55 228 55 244 55"/>
+        <path d="M334 55C350 55 350 55 366 55"/>
+        <path d="M456 55C472 55 472 55 488 55"/>
+        <path d="M578 55C594 55 594 55 610 55"/>
+      </g>
+      <g fill="var(--bg)" stroke="var(--ln)">
+        <rect x="0" y="30" width="90" height="50" rx="4"/>
+        <rect x="122" y="30" width="90" height="50" rx="4"/>
+        <rect x="244" y="30" width="90" height="50" rx="4"/>
+        <rect x="366" y="30" width="90" height="50" rx="4"/>
+        <rect x="488" y="30" width="90" height="50" rx="4"/>
+        <rect x="610" y="30" width="90" height="50" rx="4"/>
+      </g>
+      <g fill="var(--tx)" font-size="12" text-anchor="middle" font-family="Source Sans 3">
+        <text x="45" y="59">Problema</text>
+        <text x="167" y="59">Objetivos</text>
+        <text x="289" y="59">Hipótesis</text>
+        <text x="411" y="59">Variables</text>
+        <text x="533" y="59">Diseño</text>
+        <text x="655" y="59">Técnica</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 1.</b> Flujo lógico metodológico que el software representa como diagrama tipo Sankey: del problema principal a la técnica e instrumento.</figcaption>
+  </figure>
 
-            <div class="border-t border-slate-100 dark:border-slate-800 pt-6 space-y-3">
-              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-500">Criterios de Autoevaluación</h3>
-              <ul id="checks" class="space-y-2 text-xs"></ul>
-            </div>
+  <h3>2.2. Funcionalidades</h3>
+  <p><strong>Proyecto.</strong> Selector en cascada de la Universidad Señor de Sipán (cuatro facultades, dieciocho escuelas profesionales y Escuela de Posgrado), con campo abierto para otras instituciones, y soporte para los enfoques cuantitativo, cualitativo y mixto. <strong>Diagnóstico de diseño.</strong> Asistente que clasifica el estudio como experimental, transeccional o longitudinal (tendencia, cohortes o panel) y redacta la justificación metodológica en formato APA 7 o Vancouver. <strong>Auditoría de coherencia.</strong> Mapa de calor con tres cruces: verbo del objetivo frente al alcance, tipo de hipótesis frente al número de variables, y temporalidad frente al tipo de diseño. <strong>Exportación.</strong> Respaldo en .json, informe en Word y anexo de uso ético de inteligencia artificial.</p>
+</section>
 
-            <div class="mt-8 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-5 space-y-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
-                  <h3 class="text-sm font-bold font-display text-emerald-950 dark:text-emerald-200">Auditoría con Tutor IA (ChatGPT)</h3>
-                </div>
-                <span id="tutorstate" class="px-3 py-1 bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 text-xs font-mono rounded-full text-emerald-700 dark:text-emerald-300">Sin dictamen</span>
-              </div>
+<section id="s3">
+  <h2><span>3.</span>Ejemplo ilustrativo</h2>
+  <p>La Tabla 1 muestra, con un caso hipotético, cómo el mapa de calor distingue consistencia, riesgo e incoherencia.</p>
+  
+  <figure>
+    <table>
+      <thead>
+        <tr>
+          <th>Cruce auditado</th>
+          <th>Datos ingresados</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Verbo vs. alcance</td>
+          <td>“Determinar el efecto…”; alcance explicativo</td>
+          <td><span class="hm"><div style="border:0;padding:0"><i style="background:var(--ok)"></i>Consistente</div></span></td>
+        </tr>
+        <tr>
+          <td>Hipótesis vs. variables</td>
+          <td>Hipótesis causal; dos variables; diseño no experimental</td>
+          <td><span class="hm"><div style="border:0;padding:0"><i style="background:var(--rk)"></i>Riesgo</div></span></td>
+        </tr>
+        <tr>
+          <td>Temporalidad vs. diseño</td>
+          <td>Varios momentos; diseño transeccional</td>
+          <td><span class="hm"><div style="border:0;padding:0"><i style="background:var(--bd)"></i>Incoherencia</div></span></td>
+        </tr>
+      </tbody>
+    </table>
+    <figcaption><b>Tabla 1.</b> Caso hipotético de auditoría de coherencia. Los datos son ilustrativos y no provienen de un estudio empírico.</figcaption>
+  </figure>
+</section>
 
-              <div class="flex items-center gap-3">
-                <a id="gpt-sec" href="https://chatgpt.com/" target="_blank" rel="noopener"
-                  class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition flex items-center gap-2">
-                  <i data-lucide="external-link" class="w-4 h-4"></i> Auditar esta sección en ChatGPT
-                </a>
-              </div>
+<section id="s4">
+  <h2><span>4.</span>Impacto</h2>
+  <p>Laboratorio de Anteproyecto es multidisciplinario: la estructura lógica que audita es común a las escuelas profesionales de las cuatro facultades. En esta versión no se dispone aún de una evaluación empírica de sus efectos. Se plantea un estudio piloto con estudiantes de distintas escuelas que compare el número de observaciones metodológicas por anteproyecto antes y después del uso, y que valore la usabilidad con una escala estandarizada.</p>
+</section>
 
-              <p id="msg-sec" class="text-xs font-mono text-slate-500"></p>
+<section id="s5">
+  <h2><span>5.</span>Conclusiones</h2>
+  <p>El software convierte los criterios de coherencia metodológica en una verificación visible e inmediata, sin infraestructura de servidor y con datos que permanecen en el equipo del usuario. Como líneas futuras se prevén reglas de auditoría adicionales, plantillas por facultad y la evaluación piloto descrita en la sección 4.</p>
+</section>
 
-              <details class="text-xs text-slate-500">
-                <summary class="cursor-pointer hover:text-slate-700 font-medium">Ver prompt de sección</summary>
-                <pre id="pv-sec" class="tpl mt-2 p-3 bg-white dark:bg-slate-950 rounded-lg text-xs font-mono overflow-x-auto"></pre>
-              </details>
+<section id="s6">
+  <h2>Declaración de uso ético de inteligencia artificial</h2>
+  <p>El software genera un anexo de uso ético de IA que el autor debe completar con las herramientas y usos reales. La responsabilidad sobre el contenido, la interpretación y las decisiones metodológicas es exclusiva del autor.</p>
+</section>
 
-              <div class="space-y-2 pt-2">
-                <label for="tresp" class="text-xs font-semibold block">Respuesta / Dictamen devuelto por la IA</label>
-                <textarea id="tresp" rows="4"
-                  class="w-full p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-mono outline-none focus:ring-2 focus:ring-emerald-500"
-                  placeholder="Pegue aquí la respuesta de ChatGPT, incluyendo la línea final DICTAMEN: 1=C; 2=P; 3=N..."></textarea>
-                <div class="flex items-center gap-3">
-                  <button id="readdict" class="px-4 py-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold rounded-xl transition">Leer y Calibrar Dictamen</button>
-                  <span id="dictmsg" class="text-xs font-mono"></span>
-                </div>
-              </div>
+<section id="refs">
+  <h2>Referencias</h2>
+  <ol class="ref">
+    <li>American Psychological Association. (2020). <em>Publication manual of the American Psychological Association</em> (7th ed.). https://doi.org/10.1037/0000165-000</li>
+    <li>Hernández-Sampieri, R., Fernández-Collado, C., &amp; Baptista-Lucio, P. (2014). <em>Metodología de la investigación</em> (6.ª ed.). McGraw-Hill.</li>
+  </ol>
+</section>
+</article>
 
-              <div id="dictout"></div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- PESTAÑA 03: MARCOS TEÓRICOS POR FACULTAD -->
-    <section id="p-teo" role="tabpanel" aria-labelledby="tab-teo" class="hidden space-y-6">
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <div class="space-y-6 lg:col-span-1">
-
-          <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
-              <i data-lucide="search" class="w-4 h-4 text-nexo-gold"></i> Recomendador de Teorías
-            </h2>
-
-            <div>
-              <label for="thfacultad" class="block text-xs font-semibold mb-1">Filtrar por Facultad USS</label>
-              <select id="thfacultad"
-                class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold">
-                <option value="">Todas las Facultades</option>
-                <option value="f-salud">Ciencias de la Salud</option>
-                <option value="f-ingenieria">Ingeniería, Arquitectura y Urbanismo</option>
-                <option value="f-empresariales">Ciencias Empresariales</option>
-                <option value="f-derecho">Derecho y Humanidades</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="thvar" class="block text-xs font-semibold mb-1">Variable de Resultado</label>
-              <input type="text" id="thvar"
-                class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
-                placeholder="Ej. Adherencia, Productividad, Motivación">
-            </div>
-
-            <div id="thmatch" class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800"></div>
-          </div>
-
-          <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-            <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500">Búsqueda en Catálogo</h2>
-            <input type="search" id="thq"
-              class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
-              placeholder="Buscar autor, teoría o palabras clave...">
-            <div id="thtipos" class="flex flex-wrap gap-1.5 pt-2"></div>
-            <p id="thcount" class="text-xs font-mono text-slate-400 pt-1"></p>
-          </div>
-
-        </div>
-
-        <div class="lg:col-span-2">
-          <div id="thlist" class="space-y-4"></div>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- PESTAÑA 04: JURADO SIMULADO -->
-    <section id="p-jur" role="tabpanel" aria-labelledby="tab-jur" class="hidden space-y-6">
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
-            <i data-lucide="award" class="w-4 h-4 text-nexo-gold"></i> Configuración de la Defensa Oral
-          </h2>
-
-          <p class="text-xs text-slate-600 dark:text-slate-300">
-            El simulador instruye a ChatGPT para que asuma el rol de un jurado metodológico estricto que interrogará la consistencia de su propuesta durante tres rondas evaluativas.
-          </p>
-
-          <div>
-            <label for="jfocus" class="block text-xs font-semibold mb-1">Sección o Foco de Evaluación</label>
-            <select id="jfocus" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"></select>
-          </div>
-
-          <div>
-            <label for="jlevel" class="block text-xs font-semibold mb-1">Nivel de Exigencia del Jurado</label>
-            <select id="jlevel" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold">
-              <option value="formativo">Formativo (Pregunta, evalúa y orienta)</option>
-              <option value="exigente" selected>Exigente (Defensa real de grado)</option>
-            </select>
-          </div>
-
-          <div class="pt-2">
-            <a id="gpt-jur" href="https://chatgpt.com/" target="_blank" rel="noopener"
-              class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition inline-flex items-center gap-2">
-              <i data-lucide="bot" class="w-4 h-4"></i> Iniciar Sesión del Jurado en ChatGPT
-            </a>
-          </div>
-
-          <p id="msg-jur" class="text-xs font-mono text-slate-500"></p>
-
-          <details class="text-xs text-slate-500">
-            <summary class="cursor-pointer hover:text-slate-700 font-medium">Ver prompt del jurado</summary>
-            <pre id="pv-jur" class="tpl mt-2 p-3 bg-slate-50 dark:bg-slate-950 rounded-lg text-xs font-mono overflow-x-auto"></pre>
-          </details>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
-            <i data-lucide="clipboard-list" class="w-4 h-4 text-nexo-gold"></i> Bitácora de Respuestas de Sustentación
-          </h2>
-
-          <div>
-            <label for="jq" class="block text-xs font-semibold mb-1">Pregunta formulada por el Jurado</label>
-            <textarea id="jq" rows="2" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"></textarea>
-          </div>
-
-          <div>
-            <label for="ja" class="block text-xs font-semibold mb-1">Su respuesta formulada</label>
-            <textarea id="ja" rows="3"
-              class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
-              placeholder="Fundamente su respuesta en base a sus fuentes e instrumentos..."></textarea>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label for="jv" class="block text-xs font-semibold mb-1">Valoración obtenida</label>
-              <select id="jv" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold">
-                <option value="">Seleccione…</option>
-                <option value="Sólida">Sólida</option>
-                <option value="Parcial">Parcial</option>
-                <option value="Débil">Débil</option>
-              </select>
-            </div>
-            <div>
-              <label for="jl" class="block text-xs font-semibold mb-1">Plan de refuerzo pre-defensa</label>
-              <input type="text" id="jl"
-                class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-2 focus:ring-nexo-gold"
-                placeholder="Qué revisará...">
-            </div>
-          </div>
-
-          <div class="flex items-center gap-3 pt-2">
-            <button id="jsave" class="px-4 py-2 bg-nexo-navy hover:bg-nexo-navy/90 text-white font-semibold text-xs rounded-xl transition cursor-pointer">
-              Registrar en Bitácora
-            </button>
-            <span id="jmsg" class="text-xs font-mono"></span>
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- PESTAÑA 05: BITÁCORA E INFORME -->
-    <section id="p-inf" role="tabpanel" aria-labelledby="tab-inf" class="hidden space-y-6">
-
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 gap-4">
-          <div>
-            <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">Informe Consolidado de Avance</h2>
-            <p class="text-xs text-slate-500">Resumen ejecutivo del estado de coherencia, volumen redactado e interacciones registradas.</p>
-          </div>
-          <div class="flex flex-wrap items-center gap-3">
-            <button id="exportdocx"
-              class="px-4 py-2 bg-nexo-navy hover:bg-nexo-navy/90 text-white font-semibold text-xs rounded-xl transition flex items-center gap-2 shadow-sm cursor-pointer"
-              data-i18n="export_docx">
-              <i data-lucide="file-text" class="w-4 h-4 text-nexo-gold"></i> Exportar Informe en Word (.docx)
-            </button>
-            <a id="gpt-inf" href="https://chatgpt.com/" target="_blank" rel="noopener"
-              class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition flex items-center gap-2">
-              <i data-lucide="bot" class="w-4 h-4"></i> Auditar Informe Completo
-            </a>
-          </div>
-        </div>
-
-        <p id="infmsg" class="text-xs font-mono text-slate-500"></p>
-
-        <div id="stats" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
-
-        <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-mono uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-              <i data-lucide="layout-grid" class="w-4 h-4 text-nexo-gold"></i> Progreso de Redacción del Anteproyecto
-            </h3>
-            <div class="flex items-center gap-3 text-[10px] font-mono">
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> Completo</span>
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span> En proceso</span>
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span> Sin iniciar</span>
-            </div>
-          </div>
-
-          <div id="heatmap-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2.5"></div>
-        </div>
-
-        <div id="plan" class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800"></div>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500 flex items-center gap-2">
-            <i data-lucide="history" class="w-4 h-4 text-nexo-gold"></i> Bitácora de Declaración de Inteligencia Artificial
-          </h2>
-          <span id="logcount" class="text-xs font-mono px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-600 dark:text-slate-300">0 registros</span>
-        </div>
-
-        <div class="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-slate-50 dark:bg-slate-800/80 font-mono text-slate-500 uppercase border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th class="p-3">Fecha</th>
-                <th class="p-3">Sección</th>
-                <th class="p-3">Herramienta</th>
-                <th class="p-3">Dictamen IA</th>
-                <th class="p-3">Decisión & Justificación</th>
-              </tr>
-            </thead>
-            <tbody id="logbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500">Borrador para Anexo 5 (Declaración de Uso de IA)</h2>
-          <button id="copydecl" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-semibold rounded-lg transition cursor-pointer">Copiar Texto</button>
-        </div>
-        <pre id="decl" class="decl text-xs font-mono bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 overflow-x-auto"></pre>
-        <p id="declmsg" class="text-xs font-mono text-slate-500"></p>
-      </div>
-
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-        <h2 class="text-xs font-mono uppercase tracking-wider text-slate-500">Gestión de Respaldo Local (JSON)</h2>
-        <p class="text-xs text-slate-500">Guarde una copia de seguridad en su computadora para continuar en otra PC o restaurar sus avances.</p>
-        <div class="flex items-center gap-3">
-          <button id="savejson" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs rounded-xl transition cursor-pointer">Descargar Respaldo (.json)</button>
-          <label for="loadjson" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-xl transition cursor-pointer">Restaurar desde (.json)</label>
-          <input type="file" id="loadjson" accept=".json,application/json" class="hidden">
-          <span id="bkmsg" class="text-xs font-mono"></span>
-        </div>
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- MODAL GLOBAL -->
-  <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-200 flex items-center justify-center p-4">
-    <div id="modal-box" class="modal-content bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-lg w-full p-6 space-y-4 transform scale-95 opacity-0 transition-all duration-200">
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-        <h3 id="modal-title" class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center gap-2"></h3>
-        <button id="modal-close" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <div id="modal-body" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed"></div>
-      <div id="modal-footer" class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800"></div>
-    </div>
+<aside class="side">
+  <div class="card d">
+    <h3>Software</h3>
+    <p>Abre el laboratorio y estructura tu anteproyecto desde cero.</p>
+    <a class="btn p" href="app.html" style="width:100%; text-align:center; justify-content:center;">Abrir laboratorio</a>
   </div>
 
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+  <div class="card" id="meta">
+    <h3>Ficha del proyecto</h3>
+    <table>
+      <tbody>
+        <tr><th>Qué es</th><td>Aplicación web para diseñar y revisar anteproyectos de investigación</td></tr>
+        <tr><th>Para quién</th><td>Estudiantes, asesores y docentes de todas las facultades</td></tr>
+        <tr><th>Cómo se usa</th><td>Desde el navegador, sin instalar nada</td></tr>
+        <tr><th>Costo</th><td>Gratuita y de código abierto (licencia MIT)</td></tr>
+        <tr><th>Privacidad</th><td>Tus datos se guardan en tu propio equipo</td></tr>
+        <tr><th>Idiomas</th><td>Español e inglés</td></tr>
+        <tr><th>Versión</th><td>v2026.2.0</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-  <!-- Inicialización del Callback de Google Translate antes de cargar el script -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'es',
-        includedLanguages: 'en,es',
-        autoDisplay: false
-      }, 'google_translate_element');
+  <div class="card" id="cite">
+    <h3>Cómo citar</h3>
+    <p class="cite" id="ct">Castro Mejía, P. (2026). <em>Laboratorio de Anteproyecto: plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades</em> (v2026.2.0) [Software]. Universidad Señor de Sipán.</p>
+    <button id="cp" style="width:100%;">Copiar cita</button>
+  </div>
+
+  <div class="card">
+    <h3>Autor</h3>
+    <div class="author-profile">
+      <div class="av-box">PC</div>
+      <div>
+        <strong>Ing. Percy Castro Mejía</strong>
+        <div style="font-size:12px; color:var(--mt);">Jefe de Innovación Educativa</div>
+      </div>
+    </div>
+    <table style="margin-top:12px; width:100%;">
+      <tbody>
+        <tr><th>Cargo</th><td>Jefe de Innovación Educativa</td></tr>
+        <tr><th>Institución</th><td>Universidad Señor de Sipán</td></tr>
+        <tr><th>Correo</th><td><a href="mailto:percy.castro@uss.edu.pe" style="word-break:break-all;">percy.castro@uss.edu.pe</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</aside>
+
+</div>
+
+<footer>
+  <div class="in">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a class="brand" href="#top" style="margin-bottom: 12px; display: inline-flex;">
+          <svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><rect class="bg" width="36" height="36" rx="7"/><path class="ln" d="M10 11L26 18M10 25L26 18"/><circle class="nd" cx="10" cy="11" r="2.6"/><circle class="nd" cx="10" cy="25" r="2.6"/><circle class="rg" cx="26" cy="18" r="6.2"/><circle class="ac" cx="26" cy="18" r="3.4"/></svg>
+          <span><b>Laboratorio de Anteproyecto</b><small>Universidad Señor de Sipán</small></span>
+        </a>
+        <p style="margin: 0; font-size: 13px; line-height: 1.6;">
+          Plataforma web multidisciplinaria para la estructuración metodológica, la auditoría de coherencia y el acompañamiento en la investigación universitaria.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Recursos</h5>
+        <ul>
+          <li><a href="app.html">Laboratorio Interactivo</a></li>
+          <li><a href="#abstract">Resumen Científico</a></li>
+          <li><a href="#meta">Ficha del Proyecto</a></li>
+          <li><a href="#cite">Cómo Citar (APA 7)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Facultades USS</h5>
+        <ul>
+          <li><a href="#s2">Ciencias de la Salud</a></li>
+          <li><a href="#s2">Ingeniería, Arq. y Urb.</a></li>
+          <li><a href="#s2">Ciencias Empresariales</a></li>
+          <li><a href="#s2">Derecho y Humanidades</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Transparencia</h5>
+        <ul>
+          <li><a href="#s6">Declaración de Ética e IA</a></li>
+          <li><a href="#meta">Código Abierto (Licencia MIT)</a></li>
+          <li><a href="#meta">Privacidad Local (Client-Side)</a></li>
+          <li><a href="mailto:percy.castro@uss.edu.pe">Contacto con el Autor</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Universidad Señor de Sipán .</p>
+      <p>Chiclayo, Perú · Edición v2026.2.0</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const R = document.documentElement;
+
+function purgeTranslateBanner() {
+  document.body.style.top = '0px';
+  document.body.style.position = 'static';
+  document.body.style.marginTop = '0px';
+  document.documentElement.style.top = '0px';
+}
+
+const translateObserver = new MutationObserver(() => {
+  if (document.body.style.top !== '0px' && document.body.style.top !== '') {
+    document.body.style.top = '0px';
+  }
+  purgeTranslateBanner();
+});
+translateObserver.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
+
+window.addEventListener('load', () => {
+  const sk = $('#skeleton-overlay');
+  if (sk) {
+    setTimeout(() => sk.classList.add('hidden'), 200);
+  }
+  purgeTranslateBanner();
+});
+
+const setT = t => {
+  R.setAttribute('data-theme', t);
+  const thBtn = $('#th');
+  if (thBtn) thBtn.textContent = t === 'dark' ? '☀' : '☾';
+  try {
+    localStorage.setItem('nexo_theme', t);
+    localStorage.setItem('rls_site_t', t);
+  } catch(e) {}
+};
+
+const savedTheme = (() => {
+  try {
+    return localStorage.getItem('nexo_theme') || localStorage.getItem('rls_site_t');
+  } catch(e) {}
+})() || 'light';
+
+setT(savedTheme);
+
+if ($('#th')) {
+  $('#th').onclick = () => {
+    const current = R.getAttribute('data-theme') || 'light';
+    setT(current === 'dark' ? 'light' : 'dark');
+  };
+}
+
+function changeLanguage(targetLang) {
+  document.cookie = `googtrans=/es/${targetLang}; path=/;`;
+  document.cookie = `googtrans=/es/${targetLang}; domain=${window.location.hostname}; path=/;`;
+  try { localStorage.setItem('nexo_lang', targetLang); } catch(e) {}
+
+  const lgBtn = $('#lg');
+  if (lgBtn) lgBtn.textContent = targetLang.toUpperCase();
+
+  const combo = document.querySelector('.goog-te-combo');
+  if (combo) {
+    combo.value = targetLang;
+    combo.dispatchEvent(new Event('change'));
+    setTimeout(purgeTranslateBanner, 50);
+    setTimeout(purgeTranslateBanner, 300);
+  } else {
+    location.reload();
+  }
+}
+
+const lgBtn = $('#lg');
+if (lgBtn) {
+  const initLang = (document.cookie.match(/googtrans=\/es\/(\w+)/) || [])[1] || localStorage.getItem('nexo_lang') || 'es';
+  lgBtn.textContent = initLang.toUpperCase();
+
+  lgBtn.onclick = () => {
+    const curLang = (document.cookie.match(/googtrans=\/es\/(\w+)/) || [])[1] || localStorage.getItem('nexo_lang') || 'es';
+    const nextLang = curLang === 'es' ? 'en' : 'es';
+    changeLanguage(nextLang);
+  };
+}
+
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'es',
+    includedLanguages: 'en,es',
+    autoDisplay: false
+  }, 'gt');
+  setTimeout(purgeTranslateBanner, 100);
+}
+
+if ($('#cp')) {
+  $('#cp').onclick = () => {
+    navigator.clipboard.writeText($('#ct').textContent.trim()).then(() => {
+      $('#cp').textContent = '¡Copiada!';
+      setTimeout(() => $('#cp').textContent = 'Copiar cita', 1500);
+    });
+  };
+}
+
+const L = [...document.querySelectorAll('.toc a')];
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      L.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
     }
-  </script>
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
 
-  <!-- Script oficial HTTPS del Widget de Google Translate -->
-  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-  <!-- Inicializador Módulo Principal -->
-  <script type="module" src="js/app.js"></script>
-
+L.forEach(a => {
+  const target = document.querySelector(a.getAttribute('href'));
+  if (target) io.observe(target);
+});
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
-
 </html>
