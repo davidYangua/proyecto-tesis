@@ -1,3 +1,10 @@
+/**
+ * Proyecto Tesis - Evaluador de la Cadena de Coherencia Epistemológica
+ * Archivo: js/coherenceChain.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
+
 import { FACULTIES_DATA } from "../data/facultiesData.js";
 import { THEORIES_DATA } from "../data/theoriesData.js";
 
@@ -66,7 +73,7 @@ export function setupFacultySelects(state, onStateChange) {
       }
     }
 
-    // Actualizar selector de Marcos Teóricos en Pestaña 01
+    // Actualizar selector de Marcos Teóricos en Módulo 01
     if (teoSelect) {
       const currentTeoVal = teoSelect.value;
       teoSelect.innerHTML = `<option value="">${isEn ? "Select Theory or Model…" : "Seleccione Teoría o Modelo…"}</option>`;
@@ -138,12 +145,12 @@ export function setupFacultySelects(state, onStateChange) {
 }
 
 /**
- * Evalúa los 6 eslabones de la cadena de coherencia con soporte bilingüe (ES / EN)
+ * Evalúa los 6 eslabones de la cadena de coherencia epistemológica con soporte bilingüe (ES / EN)
  * @param {Object} data Datos del proyecto
  * @param {string} [lang] Idioma opcional ("es" | "en")
  */
 export function evaluateCoherenceChain(data = {}, lang = null) {
-  const currentLang = lang || data.lang || window.nexoState?.lang || "es";
+  const currentLang = lang || data.lang || window.proyectoTesisState?.lang || window.nexoState?.lang || "es";
   const isEn = currentLang === "en";
 
   const {
@@ -382,7 +389,7 @@ export function evaluateCoherenceChain(data = {}, lang = null) {
 export function renderCoherenceChainUI(links, containerEl, scoreBarEl, scoreSummaryEl) {
   if (!containerEl) return;
 
-  const isEn = window.nexoState?.lang === "en";
+  const isEn = (window.proyectoTesisState?.lang || window.nexoState?.lang) === "en";
 
   containerEl.innerHTML = "";
   if (scoreBarEl) scoreBarEl.innerHTML = "";

@@ -1,3 +1,9 @@
+/**
+ * Proyecto Tesis - Estación de Redacción y Auditoría de Secciones (16 Semanas)
+ * Archivo: js/sectionStudio.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
 
 import { SECTIONS_DATA } from "../data/sectionsData.js";
 import { MODELS_DATA } from "../data/modelsData.js";
@@ -27,7 +33,7 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
       currentModelView = btn.getAttribute("data-mv");
       modelBtns.forEach(b => b.setAttribute("aria-pressed", "false"));
       btn.setAttribute("aria-pressed", "true");
-      renderModelView(currentSectionId, currentModelView);
+      renderModelView(currentSectionId, currentModelView, state);
     });
   });
 
@@ -40,7 +46,7 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
       
       if (onDraftChange) onDraftChange(currentSectionId, text);
       const sec = SECTIONS_DATA.find(s => s.id === currentSectionId);
-      analyzeDraftSignals(text, sec);
+      analyzeDraftSignals(text, sec, state);
     });
   }
 
@@ -51,10 +57,11 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
       const dictMsgEl = document.getElementById("dictmsg");
       const dictOutEl = document.getElementById("dictout");
       const tutorStateEl = document.getElementById("tutorstate");
+      const isEn = (state.lang || window.proyectoTesisState?.lang) === "en";
 
       if (!trespEl || !trespEl.value.trim()) {
         if (dictMsgEl) {
-          dictMsgEl.textContent = "Pegue primero la respuesta de ChatGPT con el dictamen.";
+          dictMsgEl.textContent = isEn ? "Please paste the ChatGPT response containing the evaluation dictamen first." : "Pegue primero la respuesta de ChatGPT con el dictamen.";
           dictMsgEl.className = "text-xs font-mono text-rose-500 font-semibold";
         }
         return;
@@ -66,7 +73,7 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
       const secTitle = secObj ? `[${secObj.code}] ${secObj.title}` : currentSectionId;
 
       // Generar cadena de dictamen legible
-      let dictamenStr = "Dictamen procesado";
+      let dictamenStr = isEn ? "Dictamen Processed" : "Dictamen procesado";
       if (dictamenData) {
         dictamenStr = Object.entries(dictamenData).map(([k, v]) => `${k}=${v}`).join("; ");
       } else {
@@ -74,24 +81,24 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
         if (match) dictamenStr = match[1].trim();
       }
 
-      // REGISTRO UNIFICADO EN STATE.LOG (Pestaña 05 + Reporte Word)
+      // REGISTRO UNIFICADO EN STATE.LOG (Bitácora + Reporte Word)
       if (!state.log) state.log = [];
 
       const logEntry = {
         tipo: "ia",
         id: `ia_${Date.now()}`,
-        fecha: new Date().toLocaleDateString("es-PE") + " " + new Date().toLocaleTimeString("es-PE", { hour: '2-digit', minute: '2-digit' }),
+        fecha: new Date().toLocaleDateString(isEn ? "en-US" : "es-PE") + " " + new Date().toLocaleTimeString(isEn ? "en-US" : "es-PE", { hour: '2-digit', minute: '2-digit' }),
         timestamp: new Date().toISOString(),
         seccionId: currentSectionId,
         seccion: secTitle,
         sec: secTitle,
         herramienta: "ChatGPT (Tutor IA)",
-        tool: "ChatGPT (Tutor IA)",
+        tool: "ChatGPT (AI Tutor)",
         dictamen: dictamenStr,
         ai: rawText,
-        decision: "Dictamen auditado e incorporado al borrador de investigación.",
-        dec: "Auditoría Aceptada",
-        why: "Evaluación procesada desde la Estación de Redacción"
+        decision: isEn ? "Dictamen audited and incorporated into project draft." : "Dictamen auditado e incorporado al borrador de investigación.",
+        dec: isEn ? "Audit Accepted" : "Auditoría Aceptada",
+        why: isEn ? "Evaluation processed from Writing Station" : "Evaluación procesada desde la Estación de Redacción"
       };
 
       // Reemplazar si ya existía registro de esta sección o añadir
@@ -104,19 +111,19 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
 
       // Actualizar pastilla de estado (#tutorstate)
       if (tutorStateEl) {
-        tutorStateEl.textContent = `Calibrado (${dictamenStr})`;
+        tutorStateEl.textContent = isEn ? `Calibrated (${dictamenStr})` : `Calibrado (${dictamenStr})`;
         tutorStateEl.className = "px-3 py-1 bg-emerald-600 text-white text-xs font-mono rounded-full font-bold shadow-sm";
       }
 
       if (dictMsgEl) {
-        dictMsgEl.textContent = "¡Dictamen calibrado y registrado en bitácora!";
+        dictMsgEl.textContent = isEn ? "Dictamen calibrated and logged in audit history!" : "¡Dictamen calibrado y registrado en bitácora!";
         dictMsgEl.className = "text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold";
       }
 
       if (dictOutEl) {
         dictOutEl.innerHTML = `
           <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 rounded-xl text-xs space-y-1 mt-2">
-            <strong class="text-emerald-900 dark:text-emerald-200 block">Resultado de la Auditoría Registrado:</strong>
+            <strong class="text-emerald-900 dark:text-emerald-200 block">${isEn ? 'Audit Result Logged:' : 'Resultado de la Auditoría Registrado:'}</strong>
             <p class="font-mono text-emerald-800 dark:text-emerald-300">${dictamenStr}</p>
           </div>
         `;
@@ -135,11 +142,14 @@ export function initSectionStudio(state, onDraftChange, onCheckChange) {
  * Renderiza la lista lateral de la Ruta de 16 Semanas
  */
 export function renderRouteList(sections, activeId, listEl, selectEl, onSelect) {
+  const isEn = (window.proyectoTesisState?.lang || window.nexoState?.lang) === "en";
+
   if (listEl) {
     listEl.innerHTML = "";
     sections.forEach(sec => {
       const li = document.createElement("li");
       const isActive = sec.id === activeId;
+      const titleText = isEn && sec.title_en ? sec.title_en : sec.title;
       
       li.className = `p-2.5 rounded-xl cursor-pointer transition border text-xs flex items-center justify-between ${
         isActive 
@@ -152,7 +162,7 @@ export function renderRouteList(sections, activeId, listEl, selectEl, onSelect) 
           <span class="font-mono text-[10px] px-1.5 py-0.5 rounded ${isActive ? "bg-nexo-gold text-slate-900 font-bold" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"}">
             ${sec.code}
           </span>
-          <span class="truncate">${sec.title}</span>
+          <span class="truncate">${escapeHtml(titleText)}</span>
         </div>
         ${sec.ra ? `<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">${sec.ra}</span>` : ""}
       `;
@@ -171,7 +181,8 @@ export function renderRouteList(sections, activeId, listEl, selectEl, onSelect) 
     sections.forEach(sec => {
       const opt = document.createElement("option");
       opt.value = sec.id;
-      opt.textContent = `[${sec.code}] ${sec.wk} - ${sec.title}`;
+      const titleText = isEn && sec.title_en ? sec.title_en : sec.title;
+      opt.textContent = `[${sec.code}] ${sec.wk} - ${titleText}`;
       if (sec.id === activeId) opt.selected = true;
       selectEl.appendChild(opt);
     });
@@ -190,6 +201,8 @@ export function renderSectionDetails(secId, state, onCheckChange) {
   const sec = SECTIONS_DATA.find(s => s.id === secId);
   if (!sec) return;
 
+  const isEn = (state.lang || window.proyectoTesisState?.lang) === "en";
+
   const wkEl = document.getElementById("s-wk");
   const titleEl = document.getElementById("s-title");
   const extEl = document.getElementById("s-ext");
@@ -199,29 +212,35 @@ export function renderSectionDetails(secId, state, onCheckChange) {
   const checksEl = document.getElementById("checks");
   const tutorStateEl = document.getElementById("tutorstate");
 
-  if (wkEl) wkEl.textContent = `${sec.wk} · Código ${sec.code}`;
-  if (titleEl) titleEl.textContent = sec.title;
+  const titleText = isEn && sec.title_en ? sec.title_en : sec.title;
+  const prodText = isEn && sec.prod_en ? sec.prod_en : sec.prod;
+  const testText = isEn && sec.test_en ? sec.test_en : sec.prueba;
+
+  if (wkEl) wkEl.textContent = `${sec.wk} · ${isEn ? 'Code' : 'Código'} ${sec.code}`;
+  if (titleEl) titleEl.textContent = titleText;
   
   if (extEl) {
     if (sec.ext) {
-      extEl.textContent = `Extensión esperada: ${sec.ext[0]} - ${sec.ext[1]} palabras`;
+      extEl.textContent = isEn 
+        ? `Expected length: ${sec.ext[0]} - ${sec.ext[1]} words`
+        : `Extensión esperada: ${sec.ext[0]} - ${sec.ext[1]} palabras`;
       extEl.classList.remove("hidden");
     } else {
       extEl.classList.add("hidden");
     }
   }
 
-  if (prodEl) prodEl.textContent = sec.prod;
-  if (pruebaEl) pruebaEl.textContent = sec.prueba;
+  if (prodEl) prodEl.textContent = prodText;
+  if (pruebaEl) pruebaEl.textContent = testText;
 
   // Actualizar pastilla #tutorstate si ya existe dictamen para esta sección
   const secTitle = `[${sec.code}] ${sec.title}`;
   const existingLog = (state.log || []).find(l => l.seccionId === secId || l.sec === secTitle || l.seccion === secTitle);
   if (existingLog && tutorStateEl) {
-    tutorStateEl.textContent = `Calibrado ✓`;
+    tutorStateEl.textContent = isEn ? "Calibrated ✓" : "Calibrado ✓";
     tutorStateEl.className = "px-3 py-1 bg-emerald-600 text-white text-xs font-mono rounded-full font-bold shadow-sm";
   } else if (tutorStateEl) {
-    tutorStateEl.textContent = "Sin dictamen";
+    tutorStateEl.textContent = isEn ? "No dictamen" : "Sin dictamen";
     tutorStateEl.className = "px-3 py-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-mono rounded-full text-slate-500";
   }
 
@@ -229,18 +248,19 @@ export function renderSectionDetails(secId, state, onCheckChange) {
   const savedDraft = (state.drafts && state.drafts[secId]) || "";
   if (draftEl) {
     draftEl.value = savedDraft;
-    analyzeDraftSignals(savedDraft, sec);
+    analyzeDraftSignals(savedDraft, sec, state);
   }
 
   // Renderizar modelo metodológico
-  renderModelView(secId, currentModelView);
+  renderModelView(secId, currentModelView, state);
 
   // Renderizar checklist de autoevaluación
   if (checksEl) {
     checksEl.innerHTML = "";
     const savedChecks = (state.checks && state.checks[secId]) || [];
+    const criteriaArr = isEn && sec.crit_en ? sec.crit_en : sec.crit;
 
-    sec.crit.forEach((critText, idx) => {
+    criteriaArr.forEach((critText, idx) => {
       const isChecked = savedChecks.includes(idx);
       const li = document.createElement("li");
       li.className = "flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition";
@@ -248,7 +268,7 @@ export function renderSectionDetails(secId, state, onCheckChange) {
       li.innerHTML = `
         <input type="checkbox" id="chk-${secId}-${idx}" ${isChecked ? "checked" : ""} class="mt-0.5 rounded border-slate-300 text-nexo-navy focus:ring-nexo-gold cursor-pointer">
         <label for="chk-${secId}-${idx}" class="text-xs text-slate-700 dark:text-slate-300 cursor-pointer leading-normal flex-1">
-          ${critText}
+          ${escapeHtml(critText)}
         </label>
       `;
 
@@ -273,13 +293,15 @@ export function renderSectionDetails(secId, state, onCheckChange) {
 /**
  * Renderiza el modelo de redacción según el modo activo
  */
-export function renderModelView(secId, mode) {
+export function renderModelView(secId, mode, state = {}) {
   const mbodyEl = document.getElementById("mbody");
   if (!mbodyEl) return;
 
+  const isEn = (state.lang || window.proyectoTesisState?.lang) === "en";
   const modelData = MODELS_DATA ? MODELS_DATA[secId] : null;
+
   if (!modelData) {
-    mbodyEl.innerHTML = `<p class="text-xs text-slate-400 italic">No hay un modelo específico registrado para esta sección. Siga las pautas institucionales del docente.</p>`;
+    mbodyEl.innerHTML = `<p class="text-xs text-slate-400 italic">${isEn ? 'No specific model registered for this section. Follow institutional guidelines.' : 'No hay un modelo específico registrado para esta sección. Siga las pautas institucionales del docente.'}</p>`;
     return;
   }
 
@@ -291,7 +313,7 @@ export function renderModelView(secId, mode) {
     modelData.steps.forEach(([stepTitle, stepDesc]) => {
       const li = document.createElement("li");
       li.className = "text-xs leading-relaxed";
-      li.innerHTML = `<strong class="text-slate-800 dark:text-slate-200">${stepTitle}:</strong> ${stepDesc}`;
+      li.innerHTML = `<strong class="text-slate-800 dark:text-slate-200">${escapeHtml(stepTitle)}:</strong> ${escapeHtml(stepDesc)}`;
       ol.appendChild(li);
     });
     mbodyEl.appendChild(ol);
@@ -302,9 +324,9 @@ export function renderModelView(secId, mode) {
       const card = document.createElement("div");
       card.className = "p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1";
       card.innerHTML = `
-        <span class="text-[10px] font-mono uppercase font-bold text-nexo-gold block">${partTitle}</span>
-        <p class="text-xs text-slate-800 dark:text-slate-200">${partText}</p>
-        ${partNote ? `<p class="text-[11px] text-slate-500 italic border-l-2 border-slate-300 dark:border-slate-700 pl-2 mt-1">${partNote}</p>` : ""}
+        <span class="text-[10px] font-mono uppercase font-bold text-nexo-gold block">${escapeHtml(partTitle)}</span>
+        <p class="text-xs text-slate-800 dark:text-slate-200">${escapeHtml(partText)}</p>
+        ${partNote ? `<p class="text-[11px] text-slate-500 italic border-l-2 border-slate-300 dark:border-slate-700 pl-2 mt-1">${escapeHtml(partNote)}</p>` : ""}
       `;
       div.appendChild(card);
     });
@@ -312,13 +334,13 @@ export function renderModelView(secId, mode) {
   } else if (mode === "plantilla") {
     const pre = document.createElement("pre");
     pre.className = "tpl text-xs font-mono bg-slate-900 text-slate-100 p-3 rounded-lg overflow-x-auto whitespace-pre-wrap";
-    pre.textContent = modelData.formula || "Fórmula no especificada.";
+    pre.textContent = modelData.formula || (isEn ? "Formula not specified." : "Fórmula no especificada.");
     mbodyEl.appendChild(pre);
 
     if (modelData.rules && modelData.rules.length > 0) {
       const rulesBox = document.createElement("div");
       rulesBox.className = "mt-3 space-y-1";
-      rulesBox.innerHTML = `<span class="text-[10px] font-mono uppercase font-bold text-amber-500 block">Reglas Críticas:</span>`;
+      rulesBox.innerHTML = `<span class="text-[10px] font-mono uppercase font-bold text-amber-500 block">${isEn ? 'Critical Rules:' : 'Reglas Críticas:'}</span>`;
       const ul = document.createElement("ul");
       ul.className = "list-disc list-inside text-xs text-slate-600 dark:text-slate-400 space-y-0.5";
       modelData.rules.forEach(r => {
@@ -335,9 +357,11 @@ export function renderModelView(secId, mode) {
 /**
  * Analiza el borrador en tiempo real y muestra señales/alertas
  */
-export function analyzeDraftSignals(draftText, sec) {
+export function analyzeDraftSignals(draftText, sec, state = {}) {
   const signalsEl = document.getElementById("signals");
   if (!signalsEl) return;
+
+  const isEn = (state.lang || window.proyectoTesisState?.lang) === "en";
 
   signalsEl.innerHTML = "";
   if (!draftText || !draftText.trim()) return;
@@ -347,7 +371,7 @@ export function analyzeDraftSignals(draftText, sec) {
 
   const countBadge = document.createElement("span");
   countBadge.className = "px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700";
-  countBadge.textContent = `${wordCount} palabras`;
+  countBadge.textContent = `${wordCount} ${isEn ? 'words' : 'palabras'}`;
   signalsEl.appendChild(countBadge);
 
   if (sec && sec.ext) {
@@ -355,23 +379,23 @@ export function analyzeDraftSignals(draftText, sec) {
     const extBadge = document.createElement("span");
     if (wordCount < minW) {
       extBadge.className = "px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800";
-      extBadge.textContent = `Por debajo de la extensión sugerida (Mín. ${minW})`;
+      extBadge.textContent = isEn ? `Below suggested length (Min. ${minW})` : `Por debajo de la extensión sugerida (Mín. ${minW})`;
     } else if (wordCount > maxW) {
       extBadge.className = "px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800";
-      extBadge.textContent = `Supera el rango recomendado (Máx. ${maxW})`;
+      extBadge.textContent = isEn ? `Exceeds recommended range (Max. ${maxW})` : `Supera el rango recomendado (Máx. ${maxW})`;
     } else {
       extBadge.className = "px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800";
-      extBadge.textContent = `Extensión en el rango óptimo (${minW}-${maxW})`;
+      extBadge.textContent = isEn ? `Optimal length range (${minW}-${maxW})` : `Extensión en el rango óptimo (${minW}-${maxW})`;
     }
     signalsEl.appendChild(extBadge);
   }
 
-  const subjectiveWords = ["grave", "alarmante", "preocupante", "pésimo", "terrible", "desastroso", "increíble"];
+  const subjectiveWords = ["grave", "alarmante", "preocupante", "pésimo", "terrible", "desastroso", "increíble", "alarmingly", "terrible", "disastrous"];
   const foundSubj = subjectiveWords.filter(sw => draftText.toLowerCase().includes(sw));
   if (foundSubj.length > 0) {
     const subjBadge = document.createElement("span");
     subjBadge.className = "px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800";
-    subjBadge.textContent = `Detectado lenguaje subjetivo/valorativo (${foundSubj.join(", ")})`;
+    subjBadge.textContent = isEn ? `Subjective language detected (${foundSubj.join(", ")})` : `Detectado lenguaje subjetivo/valorativo (${foundSubj.join(", ")})`;
     signalsEl.appendChild(subjBadge);
   }
 }
@@ -396,4 +420,13 @@ export function parseAIDictamen(text) {
   });
 
   return Object.keys(results).length > 0 ? results : null;
+}
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&apos;");
 }

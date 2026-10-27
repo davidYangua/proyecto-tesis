@@ -1,5 +1,5 @@
 /**
- * Laboratorio del Anteproyecto - Simulador de Jurado Evaluador y Defensa Oral
+ * Proyecto Tesis - Simulador de Jurado Evaluador y Defensa Epistemológica Oral
  * Archivo: js/jurySimulator.js
  * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
  * Institución: Universidad Señor de Sipán
@@ -34,7 +34,7 @@ export function initJurySimulator(state, onSaveJuryLog) {
 
   if (copyBtn) {
     copyBtn.addEventListener("click", () => {
-      const isEn = (state?.lang === "en" || document.documentElement.lang === "en");
+      const isEn = (state?.lang || window.proyectoTesisState?.lang) === "en";
       const promptText = buildJuryPrompt(state);
       navigator.clipboard.writeText(promptText).then(() => {
         const origText = copyBtn.textContent;
@@ -48,7 +48,7 @@ export function initJurySimulator(state, onSaveJuryLog) {
 
   if (saveBtn) {
     saveBtn.onclick = () => {
-      const isEn = (state?.lang === "en" || document.documentElement.lang === "en");
+      const isEn = (state?.lang || window.proyectoTesisState?.lang) === "en";
       const question = qEl ? qEl.value.trim() : "";
       const answer = aEl ? aEl.value.trim() : "";
       const valuation = vEl ? vEl.value : "";
@@ -112,20 +112,20 @@ export function initJurySimulator(state, onSaveJuryLog) {
 }
 
 /**
- * Puebla el elemento select con todas las secciones evaluables del anteproyecto
+ * Puebla el elemento select con todas las secciones evaluables de la investigación
  * @param {HTMLSelectElement} selectEl 
  * @param {Object} state
  */
 export function populateJuryFocusOptions(selectEl, state = {}) {
   if (!selectEl) return;
 
-  const isEn = (state?.lang === "en" || document.documentElement.lang === "en");
+  const isEn = (state?.lang || window.proyectoTesisState?.lang) === "en";
   selectEl.innerHTML = "";
 
   const optAll = document.createElement("option");
   optAll.value = "all";
   optAll.textContent = isEn
-    ? "Full Anteproject Defense (Complete Coherence Chain)"
+    ? "Full Defense (Complete Epistemological Chain)"
     : "Defensa Integral (Todo el Hilo de Coherencia)";
   selectEl.appendChild(optAll);
 
@@ -146,7 +146,7 @@ export function populateJuryFocusOptions(selectEl, state = {}) {
  * @returns {string} Prompt completo formateado
  */
 export function buildJuryPrompt(state = {}) {
-  const isEn = (state?.lang === "en" || document.documentElement.lang === "en");
+  const isEn = (state?.lang || window.proyectoTesisState?.lang) === "en";
   const focusSelectEl = document.getElementById("jfocus");
   const levelSelectEl = document.getElementById("jlevel");
 
@@ -172,7 +172,7 @@ export function buildJuryPrompt(state = {}) {
       }
     }
 
-    return `Act as a METHODOLOGICAL JURY EVALUATOR for thesis and scientific research anteprojects at Señor de Sipán University (Peru).
+    return `Act as a METHODOLOGICAL JURY EVALUATOR for thesis projects at Señor de Sipán University (Peru).
 
 REQUIREMENT LEVEL: ${levelDirective}
 EVALUATION FOCUS: ${focusContext}
@@ -214,7 +214,7 @@ Begin by briefly introducing yourself as the Jury Evaluator and start with your 
     }
   }
 
-  return `Actúa como JURADO EVALUADOR de tesis y anteproyectos de investigación científica de la Universidad Señor de Sipán (Perú).
+  return `Actúa como JURADO EVALUADOR de proyectos de tesis e investigación científica de la Universidad Señor de Sipán (Perú).
 
 NIVEL DE EXIGENCIA: ${levelDirective}
 FOCO DE LA EVALUACIÓN: ${focusContext}

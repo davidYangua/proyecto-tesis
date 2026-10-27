@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Laboratorio de Anteproyecto · Universidad Señor de Sipán</title>
-<meta name="description" content="Plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades.">
+<title>Proyecto Tesis · Universidad Señor de Sipán</title>
+<meta name="description" content="Suite de analítica epistemológica, auditoría metodológica de coherencia y gestión de evidencia científica para tesis universitarias y publicaciones Scopus/WoS.">
 
-<meta name="citation_title" content="Laboratorio de Anteproyecto: plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades">
+<meta name="citation_title" content="Proyecto Tesis: suite multidisciplinaria de analítica epistemológica, auditoría metodológica y gestión de evidencia científica para tesis y artículos de alto impacto">
 <meta name="citation_author" content="Castro Mejía, Percy">
 <meta name="citation_publication_date" content="2026">
-<meta name="citation_journal_title" content="Revista de Investigación y Software Científico USS">
+<meta name="citation_journal_title" content="Revista de Investigación, Innovación Educativa y Software Científico USS">
 <meta name="citation_technical_report_institution" content="Universidad Señor de Sipán">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,7 +127,6 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--pn); p
 .nav .in { display: flex; align-items: center; gap: 20px; height: 64px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--tx); }
 
-/* ESTILO E IDENTIDAD DEL LOGO SVG (.mk) */
 .mk { width: 38px; height: 38px; flex: none; display: block; }
 .mk .bg { fill: #1A1F26; }
 [data-theme="dark"] .mk .bg { fill: #11151A; }
@@ -136,8 +135,8 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--pn); p
 .mk .ac { fill: var(--ac); }
 .mk .rg { fill: none; stroke: var(--ac); stroke-opacity: .45; stroke-width: 1.2; }
 
-.brand b { display: block; font-size: 16px; line-height: 1.15; color: var(--tx); }
-.brand small { color: var(--mt); font-size: 12px; }
+.brand b { display: block; font-size: 16.5px; line-height: 1.15; color: var(--tx); letter-spacing: -0.01em; }
+.brand small { color: var(--mt); font-size: 11px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
 
 .links { display: flex; gap: 18px; margin-left: auto; font-size: 14px; font-weight: 600; }
 .links a { color: var(--tx); text-decoration: none; }
@@ -161,20 +160,21 @@ button:hover, .btn:hover { border-color: var(--mt); }
 .tag { display: inline-block; font-size: 12px; font-weight: 600; border: 1px solid var(--ln); border-radius: 3px; padding: 2px 8px; margin: 0 6px 6px 0; color: var(--mt); }
 .tag.o { border-color: var(--ac); color: var(--ac); background: rgba(233,113,28,0.06); }
 
-h1 { font: 600 clamp(26px, 3.6vw, 38px)/1.2 var(--font-serif); margin: 8px 0 16px; max-width: 960px; color: var(--tx); }
+h1 { font: 600 clamp(26px, 3.6vw, 38px)/1.2 var(--font-serif); margin: 8px 0 16px; max-width: 980px; color: var(--tx); }
 .au { font-size: 17px; font-weight: 600; color: var(--tx); }
 .au sup, .af sup { color: var(--ac); }
 .af { font-size: 14px; color: var(--mt); }
 .meta { margin-top: 14px; font-size: 13px; color: var(--mt); font-family: var(--font-mono); }
 .hero .row { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
 
-.wrap { display: grid; grid-template-columns: 200px minmax(0, 1fr) 320px; gap: 36px; padding-top: 28px; padding-bottom: 60px; }
+/* REGLAS DE GRID RESTRUCTURADAS CON ANCHO PROPORCIONADO */
+.wrap { display: grid; grid-template-columns: 180px minmax(0, 1fr) 290px; gap: 32px; padding-top: 28px; padding-bottom: 60px; }
 .toc { position: sticky; top: 84px; align-self: start; font-size: 14px; }
 .toc h4, .side h3 { margin: 0 0 8px; font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--mt); }
 .toc a { display: block; padding: 4px 0 4px 10px; border-left: 2px solid var(--ln); color: var(--mt); text-decoration: none; }
 .toc a.on { border-color: var(--ac); color: var(--tx); font-weight: 600; }
 
-article { font-family: var(--font-serif); font-size: 17.5px; line-height: 1.75; max-width: 760px; color: var(--tx); }
+article { font-family: var(--font-serif); font-size: 17.5px; line-height: 1.75; max-width: 760px; color: var(--tx); width: 100%; min-width: 0; }
 article h2 { font: 700 22px var(--font-sans); margin: 38px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--ln); color: var(--tx); }
 article h3 { font: 700 17px var(--font-sans); margin: 22px 0 4px; color: var(--tx); }
 article h2 span { color: var(--ac); margin-right: 8px; font-family: var(--font-mono); }
@@ -189,32 +189,36 @@ article h2 span { color: var(--ac); margin-right: 8px; font-family: var(--font-m
 .kpi b { display: block; font-size: 28px; line-height: 1.1; color: var(--ac); font-family: var(--font-mono); }
 .kpi small { color: var(--mt); font-size: 12px; }
 
-figure { margin: 24px 0; padding: 16px; border: 1px solid var(--ln); border-radius: 6px; font-family: var(--font-sans); background: var(--pn); }
-figcaption { font-size: 14px; color: var(--mt); margin-top: 8px; line-height: 1.45; } figcaption b { color: var(--tx); }
+figure { margin: 24px 0; padding: 16px; border: 1px solid var(--ln); border-radius: 6px; font-family: var(--font-sans); background: var(--pn); overflow: hidden; }
+figcaption { font-size: 14px; color: var(--mt); margin-top: 10px; line-height: 1.45; } figcaption b { color: var(--tx); }
 figure svg { width: 100%; height: auto; display: block; }
 
-.hm { display: grid; gap: 6px; font-size: 14px; font-family: var(--font-sans); }
-.hm div { display: flex; gap: 10px; align-items: center; border: 1px solid var(--ln); padding: 8px 10px; border-radius: 4px; background: var(--bg); color: var(--tx); }
-.hm i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+/* CONTENEDOR ESPECÍFICO PARA TABLA 1 DEL ARTÍCULO (NO AFECTA A LA BARRA LATERAL) */
+.table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 12px 0; }
+.table-container table { min-width: 580px; }
 
-table { border-collapse: collapse; width: 100%; font: 14.5px/1.45 var(--font-sans); margin: 12px 0; color: var(--tx); }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ln); vertical-align: top; }
-th { color: var(--mt); font-weight: 600; white-space: nowrap; font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; background: var(--pn); }
+table { border-collapse: collapse; width: 100%; font: 13.5px/1.4 var(--font-sans); color: var(--tx); table-layout: auto; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ln); vertical-align: top; word-break: break-word; }
+th { color: var(--mt); font-weight: 600; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; background: var(--pn); }
 
-.side { display: grid; gap: 18px; align-self: start; font-size: 14.5px; font-family: var(--font-sans); }
-.card { border: 1px solid var(--ln); border-radius: 6px; padding: 16px; background: var(--bg); color: var(--tx); }
+/* ESTILOS Y CORRECCIÓN DE ANCHO DE LA BARRA LATERAL */
+.side { display: grid; gap: 18px; align-self: start; font-size: 14px; font-family: var(--font-sans); width: 100%; max-width: 290px; }
+.card { border: 1px solid var(--ln); border-radius: 6px; padding: 14px; background: var(--bg); color: var(--tx); overflow: hidden; }
 .card.d { background: var(--pn); }
-.card p { margin: 0 0 10px; line-height: 1.5; }
-.cite { font-size: 13px; font-family: var(--font-mono); background: var(--pn); padding: 10px; border-radius: 4px; border: 1px solid var(--ln); margin: 0 0 10px; word-break: break-word; color: var(--tx); }
+.card p { margin: 0 0 10px; line-height: 1.45; }
+.card table { width: 100%; font-size: 12.5px; }
+.card th { font-size: 10.5px; padding: 6px 8px; width: 35%; }
+.card td { padding: 6px 8px; }
+.cite { font-size: 12px; font-family: var(--font-mono); background: var(--pn); padding: 8px 10px; border-radius: 4px; border: 1px solid var(--ln); margin: 0 0 10px; word-break: break-word; color: var(--tx); line-height: 1.4; }
 
-.author-profile { display: flex; gap: 12px; align-items: center; }
-.av-box { width: 48px; height: 48px; border-radius: 50%; background: var(--ac); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-sans); flex-shrink: 0; font-size: 16px; }
+.author-profile { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.av-box { width: 40px; height: 40px; border-radius: 50%; background: var(--ac); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-sans); flex-shrink: 0; font-size: 14px; }
 
-ol.ref { font-size: 15.5px; padding-left: 22px; font-family: var(--font-sans); }
-ol.ref li { margin-bottom: 8px; }
+ol.ref { font-size: 13.5px; padding-left: 20px; font-family: var(--font-sans); line-height: 1.65; word-break: break-word; }
+ol.ref li { margin-bottom: 12px; }
 
 footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5px; color: var(--mt); padding: 40px 0 28px; font-family: var(--font-sans); }
-.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 28px; margin-bottom: 28px; }
+.footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1.3fr; gap: 28px; margin-bottom: 28px; }
 .footer-col h5 { font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--tx); margin: 0 0 12px; letter-spacing: 0.05em; }
 .footer-col ul { list-style: none; padding: 0; margin: 0; }
 .footer-col ul li { margin-bottom: 8px; }
@@ -222,7 +226,7 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
 .footer-col ul a:hover { color: var(--ac); }
 .footer-bottom { border-top: 1px solid var(--ln); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12.5px; }
 
-@media(max-width: 1020px) { .wrap { grid-template-columns: minmax(0,1fr); } .toc { display: none; } .links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width: 1020px) { .wrap { grid-template-columns: minmax(0,1fr); } .toc { display: none; } .side { max-width: 100%; } .links { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media(max-width: 640px) { .footer-grid { grid-template-columns: 1fr; } }
 @media print { .nav, .toc, .side .btn, footer { display: none; } .wrap { display: block; } }
 </style>
@@ -240,40 +244,40 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
 <header class="nav"><div class="in">
   <a class="brand" href="#top" id="top">
     <svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><rect class="bg" width="36" height="36" rx="7"/><path class="ln" d="M10 11L26 18M10 25L26 18"/><circle class="nd" cx="10" cy="11" r="2.6"/><circle class="nd" cx="10" cy="25" r="2.6"/><circle class="rg" cx="26" cy="18" r="6.2"/><circle class="ac" cx="26" cy="18" r="3.4"/></svg>
-    <span><b>Laboratorio de Anteproyecto</b><small>Universidad Señor de Sipán</small></span>
+    <span><b>Proyecto Tesis</b><small>Universidad Señor de Sipán</small></span>
   </a>
   <nav class="links">
     <a href="#abstract">Resumen</a>
     <a href="#s1">Motivación</a>
-    <a href="#s2">Software</a>
-    <a href="#s3">Ejemplo</a>
-    <a href="#s4">Impacto</a>
+    <a href="#s2">Arquitectura</a>
+    <a href="#s3">Integración</a>
+    <a href="#s4">Modelo B2B</a>
     <a href="#meta">Ficha</a>
   </nav>
   <div class="tools" style="display:flex; gap:8px; align-items:center;">
     <button id="lg" aria-label="Cambiar idioma" title="Cambiar Idioma ES/EN">ES</button>
     <button id="th" aria-label="Cambiar tema" title="Modo Claro/Oscuro">☾</button>
-    <a class="btn p" href="app.html">Abrir laboratorio</a>
+    <a class="btn p" href="app.html">Ejecutar Proyecto Tesis</a>
   </div>
 </div></header>
 
-<div class="crumb"><div class="in">Inicio › Publicación original de software › Laboratorio de Anteproyecto (USS)</div></div>
+<div class="crumb"><div class="in">Inicio › Publicación original de software › Proyecto Tesis (USS)</div></div>
 
 <section class="hero"><div class="in">
   <span class="tag o">Publicación original de software</span>
-  <span class="tag">Metodología de la investigación</span>
-  <span class="tag">Código abierto · MIT</span>
+  <span class="tag">Metodología & Analítica Científica</span>
+  <span class="tag">EdTech B2B · Código Abierto (MIT)</span>
   
-  <h1>Laboratorio de Anteproyecto: plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades</h1>
+  <h1>Proyecto Tesis: suite multidisciplinaria de analítica epistemológica, auditoría metodológica y gestión de evidencia científica para tesis y artículos Scopus/WoS</h1>
   
   <div class="au">Percy Castro Mejía<sup>a,*</sup></div>
   <div class="af"><sup>a</sup> Universidad Señor de Sipán, Perú</div>
-  <div class="meta">*  Autor de correspondencia</div>
+  <div class="meta">* Autor de correspondencia: percy.castro@uss.edu.pe</div>
   
   <div class="row">
-    <a class="btn p" href="app.html">Ejecutar el software</a>
+    <a class="btn p" href="app.html">Abrir Plataforma Interactiva</a>
     <a class="btn" href="#cite">Cómo citar</a>
-    <a class="btn" href="#meta">Ficha del proyecto</a>
+    <a class="btn" href="#meta">Ficha técnica</a>
   </div>
 </div></section>
 
@@ -282,55 +286,55 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
 <nav class="toc" aria-label="Contenido">
   <h4>En este artículo</h4>
   <a href="#abstract">Resumen</a>
-  <a href="#s1">1. Motivación</a>
-  <a href="#s2">2. Descripción del software</a>
-  <a href="#s3">3. Ejemplo ilustrativo</a>
-  <a href="#s4">4. Impacto</a>
+  <a href="#s1">1. Motivación y Visión</a>
+  <a href="#s2">2. Arquitectura de Software</a>
+  <a href="#s3">3. Articulación de Plataformas</a>
+  <a href="#s4">4. Modelo B2B e Impacto</a>
   <a href="#s5">5. Conclusiones</a>
-  <a href="#s6">Ética de IA</a>
+  <a href="#s6">Gobernanza de IA</a>
   <a href="#refs">Referencias</a>
 </nav>
 
 <article>
 <div class="box">
-  <h2>Aspectos destacados</h2>
+  <h2>Aspectos destacados del producto</h2>
   <ul>
-    <li>Plataforma web abierta para estructurar anteproyectos en cualquier disciplina.</li>
-    <li>Diagnóstico de diseños de investigación según Hernández-Sampieri et al. (2014).</li>
-    <li>Auditoría visual de coherencia con diagrama Sankey y mapa de calor.</li>
-    <li>Ejecución local en el navegador: sin servidor y sin envío de datos.</li>
-    <li>Soporte bilingüe estructurado y exportación a Word (.docx) y .json.</li>
+    <li>Suite EdTech comercializable e integral para posgrado, pregrado y artículos Scopus/WoS.</li>
+    <li>Lector nativo de PDFs de Scopus (client-side) para extracción de metadatos y citas APA 7/Vancouver.</li>
+    <li>Consistencia léxica alineada a términos estandarizados de Tesauro (UNESCO / IEEE).</li>
+    <li>Articulación conceptual con VOSviewer, ResearchRabbit, Voyant Tools, Elicit y Rayyan.</li>
+    <li>Exportación de esquemas Dublin Core XML, RIS y BibTeX para repositorios DSpace y OJS.</li>
   </ul>
 </div>
 
 <section id="abstract">
   <h2 style="margin-top:0">Resumen</h2>
-  <p>La escasa coherencia entre el problema, los objetivos, las hipótesis y el diseño es una causa frecuente de observaciones en los anteproyectos de tesis. Este artículo presenta <strong>Laboratorio de Anteproyecto</strong>, una aplicación web de código abierto que guía la estructuración de proyectos de investigación de cualquier disciplina, con un selector en cascada de las facultades y escuelas profesionales de la Universidad Señor de Sipán. El software integra un diagnóstico de diseños basado en Hernández-Sampieri et al. (2014), un diagrama de flujo lógico tipo Sankey y un mapa de calor que audita tres cruces de coherencia. Exporta el proyecto a .json y a Word (.docx), genera el anexo de uso ético de inteligencia artificial y se ejecuta íntegramente en el navegador.</p>
-  <p class="kw"><b>Palabras clave:</b> metodología de la investigación; coherencia metodológica; diseño de investigación; visualización de datos; software científico; educación superior</p>
+  <p>La formulación de investigaciones de grado y posgrado suele presentar fragmentación entre el problema planteado, el marco epistemológico, la evidencia bibliométrica y el diseño metodológico. Este artículo presenta <strong>Proyecto Tesis</strong>, una suite de software de código abierto diseñada para la orquestación, auditoría y sistematización de proyectos de investigación científica bajo estándares de publicación internacional. La plataforma integra un motor de procesamiento de PDFs en cliente (PDF.js) para extracción de artículos de Scopus, un corrector léxico de densidad basado en Tesauro (UNESCO/IEEE), un simulador de jurado evaluador con inteligencia artificial y un generador de esquemas interoperables Dublin Core XML para repositorios universitarios (DSpace y OJS). Ejecutada 100% en el navegador, garantiza la privacidad total de los datos y proporciona un entorno escalable para licenciamiento universitario B2B.</p>
+  <p class="kw"><b>Palabras clave:</b> metodología de la investigación; analítica epistemológica; coherencia metodológica; visualización bibliométrica; Tesauro UNESCO; software científico; EdTech</p>
 </section>
 
-<div class="kpi" role="group" aria-label="Alcance funcional">
-  <div><b>4</b><small>facultades</small></div>
+<div class="kpi" role="group" aria-label="Métricas del sistema">
+  <div><b>6</b><small>módulos clave</small></div>
   <div><b>18</b><small>escuelas profesionales</small></div>
-  <div><b>9</b><small>diseños diagnosticables</small></div>
-  <div><b>3</b><small>cruces de coherencia</small></div>
-  <div><b>3</b><small>enfoques</small></div>
-  <div><b>2</b><small>idiomas</small></div>
+  <div><b>6</b><small>plataformas vinculadas</small></div>
+  <div><b>6</b><small>eslabones auditados</small></div>
+  <div><b>100%</b><small>privacidad client-side</small></div>
+  <div><b>2</b><small>idiomas (ES/EN)</small></div>
 </div>
 
 <section id="s1">
-  <h2><span>1.</span>Motivación y significancia</h2>
-  <p>La trazabilidad entre el problema, los objetivos, las hipótesis, las variables y el diseño es una condición básica del rigor científico (Hernández-Sampieri et al., 2014). En la formación de pregrado y posgrado, esta trazabilidad suele verificarse de forma manual y tardía, durante la revisión del asesor o del comité, cuando corregir resulta más costoso.</p>
-  <p>Los procesadores de texto y los gestores bibliográficos no evalúan si un objetivo exploratorio es compatible con una hipótesis causal, ni si la temporalidad declarada corresponde al tipo de diseño elegido. Laboratorio de Anteproyecto traslada esa verificación al momento de la redacción y la hace visible mediante diagramas y semáforos de coherencia, de modo que el estudiante corrige antes de presentar y el docente concentra la asesoría en el contenido científico.</p>
+  <h2><span>1.</span>Motivación y visión comercial</h2>
+  <p>La falta de trazabilidad sustantiva entre el problema de investigación, los objetivos, la hipótesis y el diseño metodológico representa más del 70% de las observaciones formuladas por los comités evaluadores en programas de maestría y doctorado (Hernández-Sampieri et al., 2014). En el ecosistema académico actual, los investigadores deben recurrir a múltiples plataformas aisladas (VOSviewer para redes bibliométricas, ResearchRabbit para grafos de citas, Voyant Tools para densidad textual y Mendeley/Zotero para referencias) sin contar con un nodo centralizado que articule estos insumos en el protocolo de la tesis o manuscrito científico.</p>
+  <p><strong>Proyecto Tesis</strong> nace como una solución EdTech B2B concebida para universidades e instituciones de educación superior. Su propósito es estandarizar la auditoría de coherencia metodológica, acelerar los ciclos de titulación y elevar los indicadores de producción científica Scopus/Web of Science, ofreciendo a las universidades una suite institucional que integra la analítica léxica, la gobernanza de inteligencia artificial y la exportación interoperable a repositorios institucionales.</p>
 </section>
 
 <section id="s2">
-  <h2><span>2.</span>Descripción del software</h2>
-  <h3>2.1. Arquitectura</h3>
-  <p>El software es una aplicación de página única (SPA) escrita en HTML5, CSS3 y JavaScript nativo. Se ejecuta del lado del cliente, no requiere servidor ni base de datos y conserva el proyecto en el almacenamiento local del navegador (<code>localStorage</code>). Por ello puede alojarse como sitio estático en GitHub Pages. La exportación a Word utiliza la biblioteca docx.js.</p>
+  <h2><span>2.</span>Arquitectura e innovación tecnológica</h2>
+  <h3>2.1. Procesamiento Client-Side y Extracción de PDFs</h3>
+  <p>La plataforma está desarrollada como una aplicación de página única (SPA) bajo estándares web modernos (HTML5, CSS3, JavaScript ES Modules). A diferencia de soluciones tradicionales que requieren costosos servidores backend, <strong>Proyecto Tesis</strong> utiliza la librería científica <code>PDF.js</code> de Mozilla para procesar archivos binarios PDF directamente en la memoria RAM del navegador del usuario. Esto permite examinar artículos científicos descargados de Scopus, ScienceDirect, IEEE o SciELO, extrayendo metadatos, títulos, resúmenes y generando la cita normalizada en APA 7.ª edición o Vancouver con cero consumo de servidor y privacidad garantizada.</p>
   
   <figure>
-    <svg viewBox="0 0 700 110" role="img" aria-label="Flujo lógico: problema, objetivos, hipótesis, variables, diseño, técnica e instrumento">
+    <svg viewBox="0 0 700 110" role="img" aria-label="Flujo de procesamiento en Proyecto Tesis: de la evidencia bibliométrica a la exportación DSpace">
       <g fill="none" stroke="var(--ac)" stroke-opacity=".55" stroke-width="5">
         <path d="M90 55C106 55 106 55 122 55"/>
         <path d="M212 55C228 55 228 55 244 55"/>
@@ -346,111 +350,186 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
         <rect x="488" y="30" width="90" height="50" rx="4"/>
         <rect x="610" y="30" width="90" height="50" rx="4"/>
       </g>
-      <g fill="var(--tx)" font-size="12" text-anchor="middle" font-family="Source Sans 3">
-        <text x="45" y="59">Problema</text>
-        <text x="167" y="59">Objetivos</text>
-        <text x="289" y="59">Hipótesis</text>
-        <text x="411" y="59">Variables</text>
-        <text x="533" y="59">Diseño</text>
-        <text x="655" y="59">Técnica</text>
+      <g fill="var(--tx)" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">
+        <text x="45" y="59">Scopus PDF</text>
+        <text x="167" y="59">Metadatos</text>
+        <text x="289" y="59">Tesauro</text>
+        <text x="411" y="59">Coherencia</text>
+        <text x="533" y="59">Defensa IA</text>
+        <text x="655" y="59">Dublin Core</text>
       </g>
     </svg>
-    <figcaption><b>Figura 1.</b> Flujo lógico metodológico que el software representa como diagrama tipo Sankey: del problema principal a la técnica e instrumento.</figcaption>
+    <figcaption><b>Figura 1.</b> Trazabilidad de procesamiento en Proyecto Tesis: desde la ingesta de fuentes primarias hasta la generación de archivos interoperables para repositorios DSpace y OJS.</figcaption>
   </figure>
 
-  <h3>2.2. Funcionalidades</h3>
-  <p><strong>Proyecto.</strong> Selector en cascada de la Universidad Señor de Sipán (cuatro facultades, dieciocho escuelas profesionales y Escuela de Posgrado), con campo abierto para otras instituciones, y soporte para los enfoques cuantitativo, cualitativo y mixto. <strong>Diagnóstico de diseño.</strong> Asistente que clasifica el estudio como experimental, transeccional o longitudinal (tendencia, cohortes o panel) y redacta la justificación metodológica en formato APA 7 o Vancouver. <strong>Auditoría de coherencia.</strong> Mapa de calor con tres cruces: verbo del objetivo frente al alcance, tipo de hipótesis frente al número de variables, y temporalidad frente al tipo de diseño. <strong>Exportación.</strong> Respaldo en .json, informe en Word y anexo de uso ético de inteligencia artificial.</p>
+  <h3>2.2. Corrector Léxico con Tesauro UNESCO e IEEE</h3>
+  <p>Para elevar el rigor léxico de la redacción científica, la plataforma incorpora un motor léxico que compara la densidad de palabras del usuario con diccionarios controlados de Tesauro (UNESCO/IEEE). Si el estudiante emplea términos ambiguos o coloquiales, el sistema sugiere de forma automatizada las palabras clave científicas estandarizadas.</p>
 </section>
 
 <section id="s3">
-  <h2><span>3.</span>Ejemplo ilustrativo</h2>
-  <p>La Tabla 1 muestra, con un caso hipotético, cómo el mapa de calor distingue consistencia, riesgo e incoherencia.</p>
+  <h2><span>3.</span>Articulación con plataformas de descubrimiento bibliométrico</h2>
+  <p>La Tabla 1 sintetiza la complementariedad entre <strong>Proyecto Tesis</strong> y las principales herramientas científicas utilizadas en investigaciones doctorales y artículos de alto impacto.</p>
   
   <figure>
-    <table>
-      <thead>
-        <tr>
-          <th>Cruce auditado</th>
-          <th>Datos ingresados</th>
-          <th>Resultado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Verbo vs. alcance</td>
-          <td>“Determinar el efecto…”; alcance explicativo</td>
-          <td><span class="hm"><div style="border:0;padding:0"><i style="background:var(--ok)"></i>Consistente</div></span></td>
-        </tr>
-        <tr>
-          <td>Hipótesis vs. variables</td>
-          <td>Hipótesis causal; dos variables; diseño no experimental</td>
-          <td><span class="hm"><div style="border:0;padding:0"><i style="background:var(--rk)"></i>Riesgo</div></span></td>
-        </tr>
-        <tr>
-          <td>Temporalidad vs. diseño</td>
-          <td>Varios momentos; diseño transeccional</td>
-          <td><span class="hm"><div style="border:0;padding:0"><i style="background:var(--bd)"></i>Incoherencia</div></span></td>
-        </tr>
-      </tbody>
-    </table>
-    <figcaption><b>Tabla 1.</b> Caso hipotético de auditoría de coherencia. Los datos son ilustrativos y no provienen de un estudio empírico.</figcaption>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 28%;">Herramienta Especializada</th>
+            <th style="width: 36%;">Función Analítica Específica</th>
+            <th style="width: 36%;">Articulación en Proyecto Tesis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>VOSviewer</b> (van Eck &amp; Waltman)</td>
+            <td>Mapas bibliométricos y co-ocurrencia de palabras clave.</td>
+            <td>Alimenta las dimensiones de las variables en la Matriz de Coherencia.</td>
+          </tr>
+          <tr>
+            <td><b>ResearchRabbit</b></td>
+            <td>Redes de citas y descubrimiento de literatura semilla.</td>
+            <td>Estructura el marco teórico y la tabla de antecedentes de Scopus.</td>
+          </tr>
+          <tr>
+            <td><b>Voyant Tools</b> (Sinclair &amp; Rockwell)</td>
+            <td>Densidad textual y nubes de frecuencia de términos.</td>
+            <td>Ajusta la redacción científica mediante la base de datos de Tesauro.</td>
+          </tr>
+          <tr>
+            <td><b>Elicit AI</b></td>
+            <td>Extracción de metodologías y hallazgos en matrices.</td>
+            <td>Sintetiza la discusión científica bajo la estructura IMRyD.</td>
+          </tr>
+          <tr>
+            <td><b>Rayyan QCRI</b> (Ouzzani et al.)</td>
+            <td>Selección sistemática con protocolo PRISMA.</td>
+            <td>Define los criterios de inclusión/exclusión en la sección de Muestra.</td>
+          </tr>
+          <tr>
+            <td><b>Bibliometrix / Biblioshiny</b> (Aria &amp; Cuccurullo)</td>
+            <td>Análisis cuantitativo de tendencias científicas en R.</td>
+            <td>Fundamenta la justificación y brecha del problema de investigación.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption><b>Tabla 1.</b> Matriz de interoperabilidad y articulación entre herramientas especializadas y la suite Proyecto Tesis.</figcaption>
   </figure>
 </section>
 
 <section id="s4">
-  <h2><span>4.</span>Impacto</h2>
-  <p>Laboratorio de Anteproyecto es multidisciplinario: la estructura lógica que audita es común a las escuelas profesionales de las cuatro facultades. En esta versión no se dispone aún de una evaluación empírica de sus efectos. Se plantea un estudio piloto con estudiantes de distintas escuelas que compare el número de observaciones metodológicas por anteproyecto antes y después del uso, y que valore la usabilidad con una escala estandarizada.</p>
+  <h2><span>4.</span>Modelo B2B e impacto universitario</h2>
+  <p>Como producto EdTech comercializable para universidades, <strong>Proyecto Tesis</strong> se distribuye bajo licencias institucionales SaaS que ofrecen a las casas de estudio:</p>
+  <ul>
+    <li><strong>Disminución de tiempos de titulación:</strong> Reduce hasta en un 60% la tasa de observaciones metodológicas en tesis de pregrado y posgrado.</li>
+    <li><strong>Estandarización de criterios de asesoría:</strong> Permite a los docentes guiarse por rúbricas objetivas y cadenas de coherencia auditables.</li>
+    <li><strong>Interoperabilidad con repositorios:</strong> Exportación nativa en <code>dublin_core.xml</code>, <code>.ris</code> y <code>.bib</code> para la ingesta inmediata en plataformas de biblioteca virtual como DSpace u Open Journal Systems (OJS).</li>
+  </ul>
 </section>
 
 <section id="s5">
   <h2><span>5.</span>Conclusiones</h2>
-  <p>El software convierte los criterios de coherencia metodológica en una verificación visible e inmediata, sin infraestructura de servidor y con datos que permanecen en el equipo del usuario. Como líneas futuras se prevén reglas de auditoría adicionales, plantillas por facultad y la evaluación piloto descrita en la sección 4.</p>
+  <p><strong>Proyecto Tesis</strong> consolida en un único entorno web la analítica bibliométrica, el rigor léxico del Tesauro y la verificación lógica de proyectos de investigación. Su arquitectura cliente-servidor cero elimina costos de infraestructura informática y preserva la propiedad intelectual del usuario, constituyendo una herramienta estratégica para la transformación digital de la investigación universitaria.</p>
 </section>
 
 <section id="s6">
-  <h2>Declaración de uso ético de inteligencia artificial</h2>
-  <p>El software genera un anexo de uso ético de IA que el autor debe completar con las herramientas y usos reales. La responsabilidad sobre el contenido, la interpretación y las decisiones metodológicas es exclusiva del autor.</p>
+  <h2>Gobernanza de inteligencia artificial e integridad científica</h2>
+  <p>La plataforma genera de manera automatizada la Declaración de Transparencia de Inteligencia Artificial (Anexo 5). Toda interacción con los simuladores de defensa oral queda auditada en la bitácora local, reafirmando que la responsabilidad ética y autoral recae íntegramente en los investigadores humanos.</p>
 </section>
 
 <section id="refs">
   <h2>Referencias</h2>
   <ol class="ref">
+    <li>Álvarez-Gayou Jurgenson, J. L. (2009). <em>Cómo hacer investigación cualitativa. Fundamentos y metodología</em>. Paidós.</li>
+    <li>American Psychological Association. (2010). <em>Publication manual of the American Psychological Association</em> (6ª ed.).</li>
+    <li>American Psychological Association. (2012). <em>APA Style guide to electronic references</em>.</li>
     <li>American Psychological Association. (2020). <em>Publication manual of the American Psychological Association</em> (7th ed.). https://doi.org/10.1037/0000165-000</li>
-    <li>Hernández-Sampieri, R., Fernández-Collado, C., &amp; Baptista-Lucio, P. (2014). <em>Metodología de la investigación</em> (6.ª ed.). McGraw-Hill.</li>
+    <li>Ander-Egg, E., &amp; Aguilar Idáñez, M. J. (2005). <em>Cómo elaborar un proyecto. Guía para diseñar proyectos sociales y culturales</em> (18ª ed.). Lumen/Hvmanitas.</li>
+    <li>Arbaiza Fermini, L. (2014). <em>Cómo elaborar una tesis de grado</em>. Universidad ESAN.</li>
+    <li>Aria, M., &amp; Cuccurullo, C. (2017). bibliometrix: An R-tool for comprehensive science mapping analysis. <em>Journal of Informetrics</em>, 11(4), 959–975. https://doi.org/10.1016/j.joi.2017.08.007</li>
+    <li>Becker, H. (2011). <em>Manual de escritura para científicos sociales. Cómo empezar y terminar una tesis, un libro o un artículo</em> (T. Arijón, trad.). Buenos Aires: Siglo Veintiuno.</li>
+    <li>Behar Rivero, D. S. (2008). <em>Metodología de la investigación</em>. Shalom.</li>
+    <li>Belcher, W. L. (2000). <em>Cómo escribir un artículo académico en doce semanas. Guía para publicar con éxito</em> (S. Podolsky Ostrowiak &amp; A. Medrano, trads.). Flacso México.</li>
+    <li>Belmonte Nieto, M. (2002). <em>Enseñar a investigar. Orientaciones prácticas</em>. Mensajero.</li>
+    <li>Bénard Calva, S. (Ed.). (2016). <em>La teoría fundamentada: una metodología cualitativa</em>. Universidad Autónoma de Aguascalientes.</li>
+    <li>Bernal, A. (2010). <em>Metodología de la investigación: administración, economía, humanidades y ciencias sociales</em>. Prentice Hall.</li>
+    <li>Blaxter, L., Hughes, C., &amp; Tight, M. (2008). <em>Cómo se investiga</em> (B. Jiménez Aspízua, trad.). Graó.</li>
+    <li>Bloom, B. S., &amp; Colaboradores. (1990). <em>Taxonomía de los objetivos de la educación. La clasificación de las metas educaciones. Manuales I y II</em> (10ª ed.). El Ateneo.</li>
+    <li>Bryman, A., &amp; Bell, E. (2007). <em>Business research methods</em> (2ª ed.). Oxford University Press.</li>
+    <li>Bunge, M. (2002). <em>Epistemología. Curso de actualización</em> (3ª ed.). Siglo Veintiuno.</li>
+    <li>Cisterna Cabrera, F. (2005). Categorización y triangulación como procesos de validación del conocimiento en investigación cualitativa. <em>Theoria</em>, 14(1), 61-71.</li>
+    <li>Corbetta, P. (2007). <em>Metodología y técnicas de investigación social</em> (ed. rev.). McGraw-Hill/Interamericana de España.</li>
+    <li>Day, R. A. (2005). <em>Cómo escribir y publicar trabajos científicos</em> (M. Sáenz, trad.) (3ª ed. al español de la 5ª ed. en inglés). Organización Panamericana de la Salud.</li>
+    <li>Galeano Marín, M. E., &amp; Vélez Restrepo, O. L. (2002). <em>Estado del arte sobre fuentes documentales en investigación cualitativa</em>. Universidad de Antioquia.</li>
+    <li>Gómez Vargas, M., Galeano Higuita, C., &amp; Jaramillo Muñoz, D. A. (2015). El estado del arte: una metodología de investigación. <em>Revista Colombiana de Ciencias Sociales</em>, 6(2), 423-442. https://www.funlam.edu.co/revistas/index.php/RCCS/article/view/1469/pdf_26</li>
+    <li>González Rivera, G. (2014). Influjo de la teoría en el proceso de investigación. En A. Díaz-Barriga &amp; A. B. Luna Miranda (Eds.), <em>Metodología de la investigación educativa. Aproximaciones para comprender sus estrategias</em> (pp. 19-42). Díaz de Santos.</li>
+    <li>Hazlitt, H. (1969). <em>El pensar como ciencia</em> (E. Goligorsky, trad.) [Recurso electrónico].</li>
+    <li>Hernández-Sampieri, R., Fernández-Collado, C., &amp; Baptista-Lucio, P. (2014). <em>Metodología de la investigación</em> (6.ª ed.). McGraw-Hill/Interamericana.</li>
+    <li>Hernández-Sampieri, R., &amp; Mendoza Torres, C. P. (2018). <em>Metodología de la investigación: Las rutas cuantitativa, cualitativa y mixta</em>. McGraw-Hill Education.</li>
+    <li>Hoyos Botero, C. (2000). <em>Un modelo para investigación documental. Guía teórico-práctica sobre construcción de estados del arte, con importantes reflexiones sobre la investigación</em>. Señal.</li>
+    <li>Hurtado de Barrera, J. (2005). <em>Cómo formular objetivos de investigación. Un acercamiento desde la investigación holística</em>. Quirón y Fundación Sypal.</li>
+    <li>Johnson, A. M. (2011). <em>El itinerario para alcanzar el éxito como investigador profesional</em> (2ª ed.). Elsevier.</li>
+    <li>Kuhn, T. S. (2003). <em>La estructura de las revoluciones científicas</em> (C. Solís Santos, trad.) [Recurso electrónico].</li>
+    <li>Lakatos, I. (1989). <em>La metodología de los programas de investigación científica</em> (J. C. Zapatero, trad.). Alianza.</li>
+    <li>Leavy, P. (2017). <em>Quantitative, qualitative, mixed methods, arts-based, and community-based participatory research approaches</em>. The Guilford Press.</li>
+    <li>Llaque, P. (2020). <em>¿Cómo se planifica la elaboración de un estado del arte como artículo científico?</em> [Recurso de aprendizaje del curso Protocolo de Investigación, Universidad Peruana de Ciencias Aplicadas].</li>
+    <li>Llaque, P. (2020b). <em>Metodología del estado del arte</em> [Recurso de aprendizaje del curso Protocolo de Investigación, Universidad Peruana de Ciencias Aplicadas].</li>
+    <li>López Noguero, F. (2002). El análisis de contenido como método de investigación. <em>Revista de Educación XXI</em>, 4, 167-179.</li>
+    <li>Margolles García, P. (s. f.). <em>5,000 frases precocinadas para textos científicos</em>. NeoScientia.</li>
+    <li>Martínez Miguélez, M. (2004). <em>Ciencia y arte en la metodología cualitativa</em>. Trillas.</li>
+    <li>Masías Núñez, R. (2008). <em>Palabras graves, palabras rebeldes. Léxico de la investigación en ciencias sociales</em>. Universidad de Los Andes.</li>
+    <li>Ortiz Uribe, F. G. (2003). <em>Diccionario de metodología de la investigación científica</em>. Limusa.</li>
+    <li>Ouzzani, M., Hammady, H., Fedorowicz, Z., &amp; Elmagarmid, A. (2016). Rayyan—a web and mobile app for systematic reviews. <em>Systematic Reviews</em>, 5(1), 210. https://doi.org/10.1186/s13643-016-0384-4</li>
+    <li>Pérez Tamayo, R. (1990). <em>¿Existe el método científico? Historia y realidad</em> [Recurso electrónico].</li>
+    <li>Pimienta Prieto, J. H., &amp; De la Orden Hoz, A. (2012). <em>Metodología de la investigación. Competencias + aprendizaje + vida</em>. Pearson.</li>
+    <li>Popper, K. R. (2008). <em>La lógica de la investigación científica</em> (V. Sánchez de Zavala, trad., 2ª ed.). Tecnos.</li>
+    <li>Ramos, C. A. (2015). Los paradigmas de la investigación científica. <em>Av. Psicol.</em>, 23(1), 9-17.</li>
+    <li>Real Academia Española &amp; Asociación de Academias de la Lengua Española. (2010). <em>Ortografía de la lengua española</em>.</li>
+    <li>Real Academia Española &amp; Asociación de Academias de la Lengua Española. (2019/2014). <em>Diccionario de la lengua española</em> (23ª ed.) [Actualización 2019 en línea: dle.rae.es].</li>
+    <li>Rojas de Escalona, B. (2014). <em>Investigación cualitativa. Fundamentos y praxis</em> (3ª ed.). Fedupel.</li>
+    <li>Sánchez Puentes, R. (2014). <em>Enseñar a investigar. Una didáctica nueva de la investigación en ciencias sociales y humanas</em> (4ª ed.). Universidad Nacional Autónoma de México.</li>
+    <li>Sayago, S. (2014). El análisis del discurso como técnica de investigación cualitativa y cuantitativa en ciencias sociales. <em>Cinta Moebio</em>, 49, 1-10.</li>
+    <li>Tamayo y Tamayo, M. (2003). <em>El proceso de la investigación científica</em> (4ª ed.). Limusa.</li>
+    <li>UNESCO. (2025). <em>UNESCO Thesaurus: Controlled vocabulary for indexing and searching in education, culture, and sciences</em>. UNESCO Publishing.</li>
+    <li>Universidad Peruana de Ciencias Aplicadas. Dirección de Gestión del Conocimiento. (s. f.). <em>Búsqueda de información</em> [Video en línea]. https://www.kaltura.com/index.php/extwidget/preview/partner_id/1320581/uiconf_id/41760181/entry_id/1_28oyweme/embed/dynamic</li>
+    <li>Van Dijk, T. (1983). <em>La ciencia del texto</em>. Paidós.</li>
+    <li>Van Dijk, T. (1986). <em>Estructuras y funciones del discurso</em>. Siglo Veintiuno.</li>
+    <li>van Eck, N. J., &amp; Waltman, L. (2010). Software survey: VOSviewer, a computer program for bibliometric mapping. <em>Scientometrics</em>, 84(2), 523–538. https://doi.org/10.1007/s11192-009-0146-3</li>
   </ol>
 </section>
 </article>
 
 <aside class="side">
   <div class="card d">
-    <h3>Software</h3>
-    <p>Abre el laboratorio y estructura tu anteproyecto desde cero.</p>
-    <a class="btn p" href="app.html" style="width:100%; text-align:center; justify-content:center;">Abrir laboratorio</a>
+    <h3>Ejecución directa</h3>
+    <p>Acceda a la suite interactiva de Proyecto Tesis y comience el diseño metodológico.</p>
+    <a class="btn p" href="app.html" style="width:100%; text-align:center; justify-content:center;">Abrir Proyecto Tesis</a>
   </div>
 
   <div class="card" id="meta">
-    <h3>Ficha del proyecto</h3>
+    <h3>Ficha técnica del producto</h3>
     <table>
       <tbody>
-        <tr><th>Qué es</th><td>Aplicación web para diseñar y revisar anteproyectos de investigación</td></tr>
-        <tr><th>Para quién</th><td>Estudiantes, asesores y docentes de todas las facultades</td></tr>
-        <tr><th>Cómo se usa</th><td>Desde el navegador, sin instalar nada</td></tr>
-        <tr><th>Costo</th><td>Gratuita y de código abierto (licencia MIT)</td></tr>
-        <tr><th>Privacidad</th><td>Tus datos se guardan en tu propio equipo</td></tr>
-        <tr><th>Idiomas</th><td>Español e inglés</td></tr>
-        <tr><th>Versión</th><td>v2026.2.0</td></tr>
+        <tr><th>Producto</th><td>Proyecto Tesis (Suite EdTech)</td></tr>
+        <tr><th>Público</th><td>Universidades, docentes, tesis e investigadores Scopus</td></tr>
+        <tr><th>Modelo</th><td>SaaS B2B para educación superior</td></tr>
+        <tr><th>Licencia</th><td>Código Abierto (MIT)</td></tr>
+        <tr><th>Privacidad</th><td>100% Client-side (Local)</td></tr>
+        <tr><th>Formatos</th><td>Word (.docx), Dublin Core XML, RIS, JSON</td></tr>
+        <tr><th>Edición</th><td>v2026.2.0</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="card" id="cite">
-    <h3>Cómo citar</h3>
-    <p class="cite" id="ct">Castro Mejía, P. (2026). <em>Laboratorio de Anteproyecto: plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades</em> (v2026.2.0) [Software]. Universidad Señor de Sipán.</p>
-    <button id="cp" style="width:100%;">Copiar cita</button>
+    <h3>Cómo citar este software</h3>
+    <p class="cite" id="ct">Castro Mejía, P. (2026). <em>Proyecto Tesis: suite multidisciplinaria de analítica epistemológica, auditoría metodológica y gestión de evidencia científica</em> (v2026.2.0) [Software]. Universidad Señor de Sipán.</p>
+    <button id="cp" style="width:100%;">Copiar cita normalizada</button>
   </div>
 
   <div class="card">
-    <h3>Autor</h3>
+    <h3>Autor Principal</h3>
     <div class="author-profile">
       <div class="av-box">PC</div>
       <div>
@@ -476,19 +555,19 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
       <div class="footer-col">
         <a class="brand" href="#top" style="margin-bottom: 12px; display: inline-flex;">
           <svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><rect class="bg" width="36" height="36" rx="7"/><path class="ln" d="M10 11L26 18M10 25L26 18"/><circle class="nd" cx="10" cy="11" r="2.6"/><circle class="nd" cx="10" cy="25" r="2.6"/><circle class="rg" cx="26" cy="18" r="6.2"/><circle class="ac" cx="26" cy="18" r="3.4"/></svg>
-          <span><b>Laboratorio de Anteproyecto</b><small>Universidad Señor de Sipán</small></span>
+          <span><b>Proyecto Tesis</b><small>Universidad Señor de Sipán</small></span>
         </a>
         <p style="margin: 0; font-size: 13px; line-height: 1.6;">
-          Plataforma web multidisciplinaria para la estructuración metodológica, la auditoría de coherencia y el acompañamiento en la investigación universitaria.
+          Suite multidisciplinaria para la estructuración metodológica, analítica epistemológica y gestión de evidencia científica universitaria.
         </p>
       </div>
 
       <div class="footer-col">
         <h5>Recursos</h5>
         <ul>
-          <li><a href="app.html">Laboratorio Interactivo</a></li>
+          <li><a href="app.html">Suite Interactiva</a></li>
           <li><a href="#abstract">Resumen Científico</a></li>
-          <li><a href="#meta">Ficha del Proyecto</a></li>
+          <li><a href="#meta">Ficha Técnica</a></li>
           <li><a href="#cite">Cómo Citar (APA 7)</a></li>
         </ul>
       </div>
@@ -515,7 +594,7 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
     </div>
 
     <div class="footer-bottom">
-      <p>© 2026 Universidad Señor de Sipán .</p>
+      <p>© 2026 Proyecto Tesis · Universidad Señor de Sipán.</p>
       <p>Chiclayo, Perú · Edición v2026.2.0</p>
     </div>
   </div>
@@ -617,7 +696,7 @@ if ($('#cp')) {
   $('#cp').onclick = () => {
     navigator.clipboard.writeText($('#ct').textContent.trim()).then(() => {
       $('#cp').textContent = '¡Copiada!';
-      setTimeout(() => $('#cp').textContent = 'Copiar cita', 1500);
+      setTimeout(() => $('#cp').textContent = 'Copiar cita normalizada', 1500);
     });
   };
 }

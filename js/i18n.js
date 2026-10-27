@@ -1,47 +1,57 @@
+/**
+ * Proyecto Tesis - Diccionario de Internacionalización (i18n)
+ * Archivo: js/i18n.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
 
 export const TRANSLATIONS = {
   es: {
-    title: "NEXO | Research Studio",
-    subtitle: "Plataforma multidisciplinaria de diseño metodológico, auditoría de coherencia y gestión de investigación científica por facultades.",
-    tab1: "Hilo de Coherencia",
-    tab2: "Estación de Redacción",
-    tab3: "Marcos Teóricos",
-    tab4: "Jurado Simulado",
-    tab5: "Bitácora e Informe",
+    title: "Proyecto Tesis | Universidad Señor de Sipán",
+    subtitle: "Suite multidisciplinaria de analítica epistemológica, auditoría metodológica y gestión de evidencia científica.",
+    tab1: "Coherencia Epistemológica",
+    tab_pdf: "Gestor de PDF & Citas Scopus",
+    tab2: "Sistematización Metodológica",
+    tab3: "Marcos Teóricos & Tesauros",
+    tab4: "Defensa Epistemológica",
+    tab5: "Bitácora & Gobernanza IA",
     faculty: "Facultad USS",
-    school: "Escuela Profesional",
+    school: "Escuela Profesional / Posgrado",
     approach: "Enfoque Metodológico",
-    title_label: "Título preliminar del trabajo de investigación",
+    title_label: "Título preliminar de la investigación / Manuscrito",
     v1_label: "Variable 1 (Asociada / Independiente)",
     v2_label: "Variable 2 (De resultado / Dependiente)",
-    sankey_title: "Trazabilidad del Flujo Metodológico (Matriz Sankey Proporcional)",
-    sankey_subtitle: "Conservación de masa operativa: Indicadores → Marco Teórico → Diseño → Coherencia",
+    sankey_title: "Matriz de Operacionalización y Conservación de Flujo",
+    sankey_subtitle: "Desagregación proporcional: Variables / Categorías ➔ Dimensiones / Subcategorías ➔ Ítems / Indicadores",
     export_docx: "Exportar Informe en Word (.docx)",
+    export_dublincore: "Dublin Core (XML)",
     audit_chatgpt: "Auditar Coherencia en ChatGPT"
   },
   en: {
-    title: "NEXO | Research Studio",
-    subtitle: "Multidisciplinary platform for methodological design, coherence audit, and scientific research management by faculties.",
-    tab1: "Coherence Chain",
-    tab2: "Drafting Station",
-    tab3: "Theoretical Frameworks",
-    tab4: "Simulated Jury",
-    tab5: "Log & Report",
+    title: "Thesis Project | Señor de Sipán University",
+    subtitle: "Multidisciplinary suite for epistemological analytics, methodological audit, and scientific evidence management.",
+    tab1: "Epistemological Coherence",
+    tab_pdf: "PDF Manager & Scopus Citations",
+    tab2: "Methodological Systematization",
+    tab3: "Theoretical Frameworks & Thesauri",
+    tab4: "Epistemological Defense",
+    tab5: "Log & AI Governance",
     faculty: "USS Faculty",
-    school: "Professional School",
+    school: "Professional School / Graduate Program",
     approach: "Methodological Approach",
-    title_label: "Preliminary Research Title",
+    title_label: "Preliminary Research Title / Manuscript",
     v1_label: "Variable 1 (Associated / Independent)",
     v2_label: "Variable 2 (Outcome / Dependent)",
-    sankey_title: "Methodological Flow Traceability (Proportional Sankey Diagram)",
-    sankey_subtitle: "Operational mass conservation: Indicators → Theory → Design → Coherence",
+    sankey_title: "Operationalization Matrix & Flow Conservation",
+    sankey_subtitle: "Proportional breakdown: Variables / Categories ➔ Dimensions / Subcategories ➔ Items / Indicators",
     export_docx: "Export Report to Word (.docx)",
+    export_dublincore: "Dublin Core (XML)",
     audit_chatgpt: "Audit Coherence in ChatGPT"
   }
 };
 
 /**
- * Actualiza dinámicamente los textos traducibles de la interfaz
+ * Actualiza dinámicamente los textos traducibles de la interfaz según el idioma seleccionado
  * @param {string} lang Código del idioma ("es" | "en")
  */
 export function updateI18nUI(lang = "es") {
@@ -53,7 +63,7 @@ export function updateI18nUI(lang = "es") {
       if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
         el.placeholder = dict[key];
       } else {
-        // Preservar íconos de Lucide o elementos secundarios si existen dentro del contenedor
+        // Preservar íconos de Lucide si existen dentro del elemento
         const icon = el.querySelector("i[data-lucide]");
         if (icon) {
           const iconHTML = icon.outerHTML;

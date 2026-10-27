@@ -1,7 +1,8 @@
 /**
- * Laboratorio del Anteproyecto - Generador de Prompts Bilingües de IA (ChatGPT)
+ * Proyecto Tesis - Generador de Prompts Bilingües de IA (ChatGPT)
  * Archivo: js/aiPrompts.js
  * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
  */
 
 import { SECTIONS_DATA } from "../data/sectionsData.js";
@@ -30,14 +31,14 @@ export function isEnglish(state = {}) {
   }
 
   // 3. Estado local o global del sistema
-  const currentLang = state?.lang || window.nexoState?.lang || (typeof document !== "undefined" && document.documentElement.lang) || "es";
+  const currentLang = state?.lang || window.proyectoTesisState?.lang || window.nexoState?.lang || (typeof document !== "undefined" && document.documentElement.lang) || "es";
   return currentLang === "en";
 }
 
 // ==========================================
 // ROLES DEL TUTOR IA (SISTEMA) EN ES / EN
 // ==========================================
-const SYSTEM_ROLE_ES = `Actúa como tutor de metodología de la investigación científica de la Universidad Señor de Sipán (Perú). Tu objetivo es fomentar el pensamiento crítico y la rigurosidad científica en el estudiante, evaluando objetivamente su trabajo.
+const SYSTEM_ROLE_ES = `Actúa como tutor de metodología de la investigación científica de la Universidad Señor de Sipán (Perú). Tu objetivo es fomentar el pensamiento crítico, la rigurosidad epistemológica y la integridad científica en el estudiante, evaluando objetivamente su trabajo.
 
 REGLAS DE EVALUACIÓN:
 - No reescribas la sección ni entregues párrafos listos para copiar y pegar. Señala, cita textualmente y explica.
@@ -45,7 +46,7 @@ REGLAS DE EVALUACIÓN:
 - Respeta los criterios del manual metodológico y los productos esperados.
 - Responde siempre en español, con un trato profesional y académico.`;
 
-const SYSTEM_ROLE_EN = `Act as a scientific research methodology tutor at Señor de Sipán University (Peru). Your goal is to foster critical thinking and scientific rigor in the student by objectively evaluating their work.
+const SYSTEM_ROLE_EN = `Act as a scientific research methodology tutor at Señor de Sipán University (Peru). Your goal is to foster critical thinking, epistemological rigor, and scientific integrity in the student by objectively evaluating their work.
 
 EVALUATION RULES:
 - Do not rewrite the section or provide ready-made copy-paste paragraphs. Point out, quote textually, and explain.
@@ -62,11 +63,12 @@ export function buildMetadataJSON(state = {}) {
   const isEn = isEnglish(state);
   const student = state.student || {};
   const project = state.project || {};
+  const pdfSources = state.pdfSources || [];
 
   if (isEn) {
     return {
       institution: "Señor de Sipán University (USS)",
-      course: "Scientific Research Methodology",
+      course: "Scientific Research Methodology - Thesis Project",
       student: {
         name: student.nombre || "Not specified",
         faculty: student.facultad || "Not specified",
@@ -89,13 +91,14 @@ export function buildMetadataJSON(state = {}) {
         instrument_v1: project.i1 || "Not declared",
         instrument_v2: project.i2 || "Not declared"
       },
+      scopus_evidence_count: pdfSources.length,
       evaluation_date: new Date().toLocaleDateString("en-US")
     };
   }
 
   return {
     institucion: "Universidad Señor de Sipán (USS)",
-    curso: "Metodología de la Investigación Científica",
+    curso: "Metodología de la Investigación Científica - Proyecto Tesis",
     estudiante: {
       nombre: student.nombre || "No especificado",
       facultad: student.facultad || "No especificada",
@@ -118,12 +121,13 @@ export function buildMetadataJSON(state = {}) {
       instrumento_v1: project.i1 || "No declarado",
       instrumento_v2: project.i2 || "No declarado"
     },
+    evidencia_scopus_cargada: pdfSources.length,
     fecha_evaluacion: new Date().toLocaleDateString("es-PE")
   };
 }
 
 /**
- * Genera el prompt para auditar el Hilo de Coherencia (Pestaña 01)
+ * Genera el prompt para auditar la Coherencia Epistemológica (Módulo 01)
  * @param {Object} state 
  * @returns {string}
  */
@@ -136,7 +140,7 @@ export function buildHiloPrompt(state = {}) {
   if (isEn) {
     return `${systemRole}
 
-TASK: Audit the internal coherence of the core elements of the research anteproject.
+TASK: Audit the internal epistemological coherence of the core elements of the research protocol.
 
 PROJECT METADATA AND CORE ELEMENTS (JSON):
 ${JSON.stringify(metadata, null, 2)}
@@ -152,7 +156,7 @@ STRUCTURE OF YOUR RESPONSE:
 
   return `${systemRole}
 
-TAREA: Audita la coherencia interna de los elementos núcleo del anteproyecto de investigación.
+TAREA: Audita la coherencia epistemológica interna de los elementos núcleo del protocolo de investigación.
 
 METADATOS Y ELEMENTOS NÚCLEO (JSON):
 ${JSON.stringify(metadata, null, 2)}
@@ -167,7 +171,7 @@ ESTRUCTURA DE TU RESPUESTA:
 }
 
 /**
- * Genera el prompt para auditar una sección específica de la ruta (Pestaña 02)
+ * Genera el prompt para auditar una sección específica de la ruta de redacción (Módulo 03)
  * @param {string} secId 
  * @param {Object} state 
  * @returns {string}
@@ -244,7 +248,7 @@ DICTAMEN: 1=C; 2=P; 3=N... (Un valor por cada uno de los ${criteriaArr.length} c
 }
 
 /**
- * Genera el prompt para consultar teorías/autores sobre una variable sin coincidencias (Pestaña 03)
+ * Genera el prompt para consultar teorías y términos de Tesauro sobre una variable (Módulo 04)
  * @param {string} variableName 
  * @param {Object} state 
  * @returns {string}
@@ -259,7 +263,7 @@ export function buildTheoryQueryPrompt(variableName, state = {}) {
   if (isEn) {
     return `${systemRole}
 
-TASK: Suggest scientific theories and seminal authors for a research anteproject variable.
+TASK: Suggest scientific theories, UNESCO/IEEE thesaurus terms, and seminal authors for a research variable.
 
 TARGET VARIABLE: "${targetVar}"
 FACULTY / SCHOOL: ${faculty} - ${school}
@@ -267,13 +271,14 @@ FACULTY / SCHOOL: ${faculty} - ${school}
 Please provide:
 1. Top 3-4 recognized scientific theories or explanatory conceptual models for this variable.
 2. Seminal Author(s) and seminal publication year for each theory.
-3. Main dimensions or components measured by each model.
-4. Recommendation on how to operationalize this variable in an empirical study.`;
+3. Recommended UNESCO/IEEE thesaurus terms and descriptors.
+4. Main dimensions or components measured by each model.
+5. Recommendation on how to operationalize this variable in an empirical study.`;
   }
 
   return `${systemRole}
 
-TAREA: Recomienda teorías científicas y autores fundamentales para la siguiente variable de investigación.
+TAREA: Recomienda teorías científicas, términos de Tesauro (UNESCO/IEEE) y autores fundamentales para la siguiente variable.
 
 VARIABLE DE INTERÉS: "${targetVar}"
 FACULTAD / ESCUELA: ${faculty} - ${school}
@@ -281,12 +286,13 @@ FACULTAD / ESCUELA: ${faculty} - ${school}
 Por favor proporciona:
 1. Las 3 a 4 principales teorías científicas o modelos conceptuales reconocidos que sustenten esta variable.
 2. Autores principales y año de publicación seminal para cada teoría.
-3. Dimensiones o componentes clave que componen cada modelo.
-4. Recomendación sobre cómo operacionalizar esta variable en un estudio empírico.`;
+3. Descriptores y términos de Tesauro recomendados (UNESCO/IEEE).
+4. Dimensiones o componentes clave que componen cada modelo.
+5. Recomendación sobre cómo operacionalizar esta variable en un estudio empírico.`;
 }
 
 /**
- * Genera el prompt para iniciar la simulación del Jurado Evaluador (Pestaña 04)
+ * Genera el prompt para la Defensa Epistemológica con Jurado Simulado (Módulo 05)
  * @param {string} focus 
  * @param {string} level 
  * @param {Object} state 
@@ -297,7 +303,7 @@ export function buildJuryPrompt(focus = "general", level = "exigente", state = {
   const metadata = buildMetadataJSON(state);
 
   const focusMapEn = {
-    "Coherencia General": "General Anteproject Coherence",
+    "Coherencia General": "General Epistemological Coherence",
     "Planteamiento del Problema": "Problem Statement & Contextualization",
     "Marco Teórico": "Theoretical Framework & Conceptual Models",
     "Metodología y Diseño": "Methodology, Design & Sampling",
@@ -327,7 +333,7 @@ INSTRUCTIONS FOR THE JURY SIMULATION:
 Nivel de exigencia: ${levelText}.
 Foco prioritario de evaluación: ${focus}.
 
-METADATOS DEL ANTEPROYECTO (JSON):
+METADATOS DEL PROYECTO (JSON):
 ${JSON.stringify(metadata, null, 2)}
 
 INSTRUCCIONES PARA LA SIMULACIÓN:
@@ -337,7 +343,7 @@ INSTRUCCIONES PARA LA SIMULACIÓN:
 }
 
 /**
- * Genera el prompt para la auditoría completa del informe (Pestaña 05)
+ * Genera el prompt para la auditoría integral y gobernanza de IA (Módulo 06)
  * @param {Object} state 
  * @returns {string}
  */
@@ -346,38 +352,43 @@ export function buildReportPrompt(state = {}) {
   const systemRole = isEn ? SYSTEM_ROLE_EN : SYSTEM_ROLE_ES;
   const metadata = buildMetadataJSON(state);
   const drafts = state.drafts || {};
+  const pdfSources = state.pdfSources || [];
 
   if (isEn) {
     return `${systemRole}
 
-TASK: Perform a comprehensive audit of the entire presented research anteproject.
+TASK: Perform a comprehensive audit and governance evaluation of the entire research project.
 
 PROJECT METADATA (JSON):
 ${JSON.stringify(metadata, null, 2)}
+
+SCOPUS PDF EVIDENCE COUNT: ${pdfSources.length}
 
 AVAILABLE DRAFTS:
 ${JSON.stringify(drafts, null, 2)}
 
 STRUCTURE OF YOUR EVALUATION:
-1. General Anteproject Diagnosis: Overall methodological strengths and weaknesses.
-2. Alignment and Traceability: Correspondence between Chapter I and Chapter II.
-3. Prioritized Correction Plan: Urgent recommended actions ordered by impact.`;
+1. General Project Diagnosis: Epistemological strengths and methodological gaps.
+2. Traceability and Flow Conservation: Correspondence between Problem, Theory, and Design.
+3. Prioritized Action Plan: Urgent recommendations ordered by academic impact.`;
   }
 
   return `${systemRole}
 
-TAREA: Realiza una auditoría integral de todo el anteproyecto de investigación presentado.
+TAREA: Realiza una auditoría integral y evaluación de gobernanza de todo el proyecto de investigación.
 
 METADATOS DEL PROYECTO (JSON):
 ${JSON.stringify(metadata, null, 2)}
+
+EVIDENCIA PDF SCOPUS CARGADA: ${pdfSources.length} artículo(s)
 
 BORRADORES DISPONIBLES:
 ${JSON.stringify(drafts, null, 2)}
 
 ESTRUCTURA DE TU EVALUACIÓN:
-1. Diagnóstico General del Anteproyecto: Fortalezas y debilidades metodológicas globales.
-2. Alineación y Trazabilidad: Correspondencia entre el Capítulo I y Capítulo II.
-3. Plan Prioritizado de Correcciones: Acciones urgentes recomendadas ordenadas por impacto.`;
+1. Diagnóstico General del Proyecto: Fortalezas epistemológicas y brechas metodológicas.
+2. Trazabilidad y Conservación de Flujo: Correspondencia entre Problema, Teoría y Diseño.
+3. Plan Prioritizado de Correcciones: Acciones urgentes recomendadas ordenadas por impacto académico.`;
 }
 
 /**

@@ -1,3 +1,10 @@
+/**
+ * Proyecto Tesis - Módulo de Exportación de Informes y Gestión de Respaldo
+ * Archivo: js/reportExporter.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
+
 import { THEORIES_DATA } from "../data/theoriesData.js";
 import { evaluateCoherenceChain } from "./coherenceChain.js";
 
@@ -40,6 +47,7 @@ export async function exportToWord(state) {
 
   const student = state.student || {};
   const project = state.project || {};
+  const pdfSources = state.pdfSources || [];
   const drafts = state.drafts || {};
   const log = state.log || [];
   const customTheories = state.customTheories || [];
@@ -48,7 +56,7 @@ export async function exportToWord(state) {
   const allTheories = [...THEORIES_DATA, ...customTheories];
   const assignedTheory = allTheories.find(t => t.nombre === project.teo) || null;
 
-  // 2. Evaluar Coherencia en el idioma activo
+  // 2. Evaluar Coherencia Epistemológica
   const coherenceLinks = evaluateCoherenceChain(project, state.lang);
   const okCount = coherenceLinks.filter(l => l.status === "ok").length;
 
@@ -146,8 +154,8 @@ export async function exportToWord(state) {
       alignment: AlignmentType.CENTER,
       children: [new TextRun({ 
         text: isEn 
-          ? "VICE-RECTORATE FOR RESEARCH · NEXO RESEARCH STUDIO PLATFORM" 
-          : "VICERRECTORADO DE INVESTIGACIÓN · PLATAFORMA NEXO RESEARCH STUDIO", 
+          ? "VICE-RECTORATE FOR RESEARCH · PROYECTO TESIS SUITE" 
+          : "VICERRECTORADO DE INVESTIGACIÓN · SUITE PROYECTO TESIS", 
         size: 16, color: "64748B", font: "Arial" 
       })],
       space: { after: 100 }
@@ -156,15 +164,15 @@ export async function exportToWord(state) {
       alignment: AlignmentType.CENTER,
       children: [new TextRun({ 
         text: isEn 
-          ? "CONSOLIDATED PROGRESS AND ANTEPROJECT AUDIT REPORT" 
-          : "INFORME CONSOLIDADO DE AVANCE Y AUDITORÍA DE ANTEPROYECTO", 
+          ? "CONSOLIDATED PROGRESS, EPISTEMOLOGICAL AUDIT & SCOPUS EVIDENCE REPORT" 
+          : "INFORME CONSOLIDADO DE AVANCE, AUDITORÍA EPISTEMOLÓGICA Y EVIDENCIA SCOPUS", 
         bold: true, size: 20, color: "C5A059", font: "Arial" 
       })],
       space: { after: 300 }
     })
   );
 
-  // SECCIÓN 1: DATOS
+  // SECCIÓN 1: DATOS DEL INVESTIGADOR
   docChildren.push(
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
@@ -180,20 +188,20 @@ export async function exportToWord(state) {
       rows: [
         new TableRow({ children: [createStyledCell(isEn ? "Student / Researcher" : "Estudiante / Investigador", true, 35), createStyledCell(student.nombre, false, 65)] }),
         new TableRow({ children: [createStyledCell(isEn ? "USS Faculty" : "Facultad USS", true, 35), createStyledCell(student.facultad, false, 65, "F8FAFC")] }),
-        new TableRow({ children: [createStyledCell(isEn ? "Professional School" : "Escuela Profesional", true, 35), createStyledCell(student.escuela, false, 65)] }),
-        new TableRow({ children: [createStyledCell(isEn ? "Class Section / Group" : "Sección / Grupo de Clase", true, 35), createStyledCell(student.seccion, false, 65, "F8FAFC")] }),
-        new TableRow({ children: [createStyledCell(isEn ? "Anteproject Title" : "Título del Anteproyecto", true, 35), createStyledCell(student.titulo, false, 65)] })
+        new TableRow({ children: [createStyledCell(isEn ? "Professional School / Graduate" : "Escuela Profesional / Posgrado", true, 35), createStyledCell(student.escuela, false, 65)] }),
+        new TableRow({ children: [createStyledCell(isEn ? "Class Section / Program" : "Sección / Programa", true, 35), createStyledCell(student.seccion, false, 65, "F8FAFC")] }),
+        new TableRow({ children: [createStyledCell(isEn ? "Research Title / Manuscript" : "Título de la Investigación", true, 35), createStyledCell(student.titulo, false, 65)] })
       ]
     }),
     new Paragraph({ text: "", space: { after: 250 } })
   );
 
-  // SECCIÓN 2: MÉTRICAS
+  // SECCIÓN 2: MÉTRICAS Y RESUMEN EJECUTIVO
   docChildren.push(
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
       children: [new TextRun({ 
-        text: isEn ? "2. Executive Summary Metrics and Drafting Progress" : "2. Resumen Ejecutivo de Métricas y Progreso de Redacción", 
+        text: isEn ? "2. Executive Summary Metrics and Progress" : "2. Resumen Ejecutivo de Métricas y Progreso", 
         bold: true, size: 22, color: "0A2540", font: "Arial" 
       })],
       space: { after: 150 }
@@ -205,16 +213,16 @@ export async function exportToWord(state) {
         new TableRow({
           children: [
             createStyledCell(isEn ? "Coherence Chain" : "Cadena de Coherencia", true, 25),
+            createStyledCell(isEn ? "Scopus PDFs Loaded" : "PDFs Scopus Cargados", true, 25),
             createStyledCell(isEn ? "Total Drafted Words" : "Total Palabras Redactadas", true, 25),
-            createStyledCell(isEn ? "Drafted Sections" : "Secciones Redactadas", true, 25),
             createStyledCell(isEn ? "Estimated Progress" : "Avance Estimado", true, 25)
           ]
         }),
         new TableRow({
           children: [
             createStyledCell(isEn ? `${okCount} of 6 Links OK` : `${okCount} de 6 Eslabones OK`, false, 25, "F8FAFC", AlignmentType.CENTER),
-            createStyledCell(isEn ? `${totalWords} words` : `${totalWords} palabras`, false, 25, "FFFFFF", AlignmentType.CENTER),
-            createStyledCell(isEn ? `${draftedSections} of 16 weeks` : `${draftedSections} de 16 semanas`, false, 25, "F8FAFC", AlignmentType.CENTER),
+            createStyledCell(isEn ? `${pdfSources.length} articles` : `${pdfSources.length} artículos`, false, 25, "FFFFFF", AlignmentType.CENTER),
+            createStyledCell(isEn ? `${totalWords} words` : `${totalWords} palabras`, false, 25, "F8FAFC", AlignmentType.CENTER),
             createStyledCell(`${Math.round((draftedSections / 16) * 100)}%`, false, 25, "FFFFFF", AlignmentType.CENTER)
           ]
         })
@@ -223,12 +231,12 @@ export async function exportToWord(state) {
     new Paragraph({ text: "", space: { after: 250 } })
   );
 
-  // SECCIÓN 3: NÚCLEO
+  // SECCIÓN 3: NÚCLEO Y COHERENCIA EPISTEMOLÓGICA
   docChildren.push(
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
       children: [new TextRun({ 
-        text: isEn ? "3. Core Elements Matrix (Methodological Coherence Thread)" : "3. Matriz de Elementos Núcleo (Hilo de Coherencia Metodológica)", 
+        text: isEn ? "3. Core Elements Matrix (Epistemological Coherence Thread)" : "3. Matriz de Elementos Núcleo (Hilo de Coherencia Epistemológica)", 
         bold: true, size: 22, color: "0A2540", font: "Arial" 
       })],
       space: { after: 150 }
@@ -241,56 +249,77 @@ export async function exportToWord(state) {
         new TableRow({ children: [createStyledCell(isEn ? "Variable 2 (Outcome / DV)" : "Variable 2 (Resultado / VD)", true, 35), createStyledCell(project.v2, false, 65, "F8FAFC")] }),
         new TableRow({ children: [createStyledCell(isEn ? "Population and Scope" : "Población y Ámbito", true, 35), createStyledCell(`${project.pob || "—"} ${isEn ? "in" : "en"} ${project.amb || "—"} (${project.per || "—"})`, false, 65)] }),
         new TableRow({ children: [createStyledCell(isEn ? "Methodological Approach" : "Enfoque Metodológico", true, 35), createStyledCell(project.enf ? project.enf.toUpperCase() : "—", false, 65, "F8FAFC")] }),
-        new TableRow({ children: [createStyledCell(isEn ? "Scope and Design (2.1)" : "Alcance y Diseño (2.1)", true, 35), createStyledCell(project.dis ? project.dis.toUpperCase() : "—", false, 65)] }),
-        new TableRow({ children: [createStyledCell(isEn ? "General Question (1.3)" : "Pregunta General (1.3)", true, 35), createStyledCell(project.preg, false, 65, "F8FAFC")] }),
-        new TableRow({ children: [createStyledCell(isEn ? "Main Theory (1.4)" : "Teoría Principal (1.4)", true, 35), createStyledCell(project.teo, false, 65)] }),
-        new TableRow({ children: [createStyledCell(isEn ? "General Objective (1.5)" : "Objetivo General (1.5)", true, 35), createStyledCell(project.obj, false, 65, "F8FAFC")] }),
-        new TableRow({ children: [createStyledCell(isEn ? "Alternative Hypothesis, Hi (1.6)" : "Hipótesis Alterna, Hi (1.6)", true, 35), createStyledCell(project.hip, false, 65)] }),
+        new TableRow({ children: [createStyledCell(isEn ? "Scope and Design" : "Alcance y Diseño", true, 35), createStyledCell(project.dis ? project.dis.toUpperCase() : "—", false, 65)] }),
+        new TableRow({ children: [createStyledCell(isEn ? "General Question" : "Pregunta General", true, 35), createStyledCell(project.preg, false, 65, "F8FAFC")] }),
+        new TableRow({ children: [createStyledCell(isEn ? "Main Theory" : "Teoría Principal", true, 35), createStyledCell(project.teo, false, 65)] }),
+        new TableRow({ children: [createStyledCell(isEn ? "General Objective" : "Objetivo General", true, 35), createStyledCell(project.obj, false, 65, "F8FAFC")] }),
+        new TableRow({ children: [createStyledCell(isEn ? "Alternative Hypothesis, Hi" : "Hipótesis Alterna, Hi", true, 35), createStyledCell(project.hip, false, 65)] }),
         new TableRow({ children: [createStyledCell(isEn ? "Measurement Instruments" : "Instrumentos de Medición", true, 35), createStyledCell(`V1: ${project.i1 || "—"} | V2: ${project.i2 || "—"}`, false, 65, "F8FAFC")] })
       ]
     }),
     new Paragraph({ text: "", space: { after: 250 } })
   );
 
-  // SECCIÓN 4: OPERACIONALIZACIÓN
+  // SECCIÓN 4: EVIDENCIA CIENTÍFICA Y ANTECEDENTES EXTRAÍDOS DE SCOPUS / WOS (CORREGIDO)
   docChildren.push(
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
       children: [new TextRun({ 
-        text: isEn ? "4. Operationalization and Flow Traceability Matrix" : "4. Matriz de Operacionalización y Conservación de Flujo (Trazabilidad)", 
+        text: isEn ? "4. Extracted Scopus / WoS Scientific Evidence & Antecedents" : "4. Evidencia Científica y Antecedentes Extraídos de Scopus / WoS", 
         bold: true, size: 22, color: "0A2540", font: "Arial" 
       })],
       space: { after: 150 }
-    }),
-    new Table({
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      borders: mainBorders,
-      rows: [
+    })
+  );
+
+  if (pdfSources.length === 0) {
+    docChildren.push(
+      new Paragraph({
+        children: [new TextRun({ 
+          text: isEn ? "No Scopus/WoS PDF scientific articles imported into the manager." : "No se han importado artículos científicos en PDF de Scopus/WoS en el gestor de evidencia.", 
+          italic: true, size: 18, font: "Arial" 
+        })]
+      })
+    );
+  } else {
+    const pdfRows = [
+      new TableRow({
+        children: [
+          createStyledCell(isEn ? "File / Source" : "Archivo / Fuente", true, 25),
+          createStyledCell(isEn ? "Estimated Title" : "Título Estimado", true, 40),
+          createStyledCell(isEn ? "Generated Citation (APA 7)" : "Cita Generada (APA 7)", true, 35)
+        ]
+      })
+    ];
+
+    pdfSources.forEach((src, i) => {
+      // Búsqueda flexible de campos para garantizar el nombre exacto y la cita completa
+      const fileName = src.filename || src.fileName || src.name || src.archivo || `PDF #${i + 1}`;
+      const titleText = src.title || src.titulo || "—";
+      const yearText = src.year || "2025";
+      const citationText = src.apaCitation || src.citation || src.cita || (src.title ? `${titleText}. (${yearText}). Revista Científica Indizada Scopus / WoS.` : "—");
+
+      pdfRows.push(
         new TableRow({
           children: [
-            createStyledCell(isEn ? "Macro Level (Variable)" : "Nivel Macro (Variable)", true, 30),
-            createStyledCell(isEn ? "Meso Level (Dimensions)" : "Nivel Meso (Dimensiones)", true, 40),
-            createStyledCell(isEn ? "Micro Level (Items / Instrument)" : "Nivel Micro (Ítems / Instrumento)", true, 30)
-          ]
-        }),
-        new TableRow({
-          children: [
-            createStyledCell(project.v1 || (isEn ? "Variable 1" : "Variable 1"), false, 30, "F8FAFC"),
-            createStyledCell(isEn ? "Dimensions of V1 Instrument" : "Dimensiones del Instrumento V1", false, 40, "F8FAFC"),
-            createStyledCell(project.i1 || "V1 Items", false, 30, "F8FAFC")
-          ]
-        }),
-        new TableRow({
-          children: [
-            createStyledCell(project.v2 || (isEn ? "Variable 2" : "Variable 2"), false, 30),
-            createStyledCell(isEn ? "Dimensions of V2 Instrument" : "Dimensiones del Instrumento V2", false, 40),
-            createStyledCell(project.i2 || "V2 Items", false, 30)
+            createStyledCell(fileName, false, 25, i % 2 === 0 ? "F8FAFC" : "FFFFFF"),
+            createStyledCell(titleText, false, 40, i % 2 === 0 ? "F8FAFC" : "FFFFFF"),
+            createStyledCell(citationText, false, 35, i % 2 === 0 ? "F8FAFC" : "FFFFFF")
           ]
         })
-      ]
-    }),
-    new Paragraph({ text: "", space: { after: 250 } })
-  );
+      );
+    });
+
+    docChildren.push(
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: mainBorders,
+        rows: pdfRows
+      })
+    );
+  }
+
+  docChildren.push(new Paragraph({ text: "", space: { after: 250 } }));
 
   // SECCIÓN 5: MARCO TEÓRICO
   docChildren.push(
@@ -313,7 +342,7 @@ export async function exportToWord(state) {
           new TableRow({ children: [createStyledCell(isEn ? "Theoretical Framework Name" : "Nombre del Marco Teórico", true, 35), createStyledCell(assignedTheory.nombre, false, 65)] }),
           new TableRow({ children: [createStyledCell(isEn ? "Author and Year" : "Autor y Año", true, 35), createStyledCell(`${assignedTheory.autor || '—'} (${assignedTheory.anio || '—'})`, false, 65, "F8FAFC")] }),
           new TableRow({ children: [createStyledCell(isEn ? "Core Postulate" : "Postulado Central", true, 35), createStyledCell(assignedTheory.postulado || assignedTheory.resumen, false, 65)] }),
-          new TableRow({ children: [createStyledCell(isEn ? "Constructs / Dimensions" : "Constructos / Dimensiones", true, 35), createStyledCell(Array.isArray(assignedTheory.constructos) ? assignedTheory.constructos.join(", ") : "—", false, 65, "F8FAFC")] }),
+          new TableRow({ children: [createStyledCell(isEn ? "Constructs / Dimensions" : "Constructos / Dimensiones", true, 35), createStyledCell(Array.isArray(assignedTheory.constructos) ? assignedTheory.constructos.join(", ") : (assignedTheory.constructos || "—"), false, 65, "F8FAFC")] }),
           new TableRow({ children: [createStyledCell(isEn ? "Theoretical Prediction" : "Predicción Teórica", true, 35), createStyledCell(assignedTheory.predice || "—", false, 65)] }),
           new TableRow({ children: [createStyledCell(isEn ? "Suggested Citation (APA 7)" : "Cita Sugerida (APA 7)", true, 35), createStyledCell(assignedTheory.ejemploCita || "—", false, 65, "F8FAFC")] }),
           new TableRow({ children: [createStyledCell(isEn ? "Full Reference" : "Referencia Completa", true, 35), createStyledCell(assignedTheory.ref || "—", false, 65)] })
@@ -333,12 +362,12 @@ export async function exportToWord(state) {
 
   docChildren.push(new Paragraph({ text: "", space: { after: 250 } }));
 
-  // SECCIÓN 6: AUDITORÍA
+  // SECCIÓN 6: AUDITORÍA DE ESLABONES
   docChildren.push(
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
       children: [new TextRun({ 
-        text: isEn ? "6. Automated Coherence Chain Audit (6 Links)" : "6. Auditoría Autómata de la Cadena de Coherencia (6 Eslabones)", 
+        text: isEn ? "6. Automated Epistemological Coherence Audit (6 Links)" : "6. Auditoría Autómata de Coherencia Epistemológica (6 Eslabones)", 
         bold: true, size: 22, color: "0A2540", font: "Arial" 
       })],
       space: { after: 150 }
@@ -349,13 +378,14 @@ export async function exportToWord(state) {
     const isOk = link.status === "ok";
     const isWarn = link.status === "warn";
     const badgeColor = isOk ? "059669" : isWarn ? "D97706" : "DC2626";
+    const statusText = link.msg || (isOk ? (isEn ? "FIRME" : "FIRME") : isWarn ? (isEn ? "ADVERTENCIA" : "ADVERTENCIA") : (isEn ? "OBSERVADO" : "OBSERVADO"));
 
     docChildren.push(
       new Paragraph({
         children: [
           new TextRun({ text: `• ${link.title}: `, bold: true, size: 18, font: "Arial" }),
-          new TextRun({ text: `[${link.msg.toUpperCase()}] — `, bold: true, color: badgeColor, size: 18, font: "Arial" }),
-          new TextRun({ text: link.detail, size: 18, font: "Arial" })
+          new TextRun({ text: `[${statusText.toUpperCase()}] — `, bold: true, color: badgeColor, size: 18, font: "Arial" }),
+          new TextRun({ text: link.detail || "", size: 18, font: "Arial" })
         ],
         space: { after: 120 }
       })
@@ -364,7 +394,7 @@ export async function exportToWord(state) {
 
   docChildren.push(new Paragraph({ text: "", space: { after: 250 } }));
 
-  // SECCIÓN 7: BORRADORES
+  // SECCIÓN 7: BORRADORES REDACTADOS
   docChildren.push(
     new Paragraph({
       heading: HeadingLevel.HEADING_2,
@@ -464,7 +494,7 @@ export async function exportToWord(state) {
 
   docChildren.push(new Paragraph({ text: "", space: { after: 250 } }));
 
-  // SECCIÓN 9: BITÁCORA DE IA
+  // SECCIÓN 9: BITÁCORA DE DECLARACIÓN DE IA Y GOBERNANZA
   const aiEntries = log.filter(e => e.tipo === "ia" || e.herramienta || e.dictamen || e.tool || e.sec);
 
   docChildren.push(
@@ -515,7 +545,7 @@ export async function exportToWord(state) {
 
   docChildren.push(new Paragraph({ text: "", space: { after: 300 } }));
 
-  // SECCIÓN 10: ANEXO 5
+  // SECCIÓN 10: ANEXO 5 DE DECLARACIÓN JURADA
   const dateStr = new Date().toLocaleDateString(isEn ? "en-US" : "es-PE", { year: "numeric", month: "long", day: "numeric" });
 
   docChildren.push(
@@ -532,8 +562,8 @@ export async function exportToWord(state) {
       children: [
         new TextRun({
           text: isEn
-            ? `I, ${student.nombre || "________________________________________"}, student of the Professional School of ${student.escuela || "____________________"} at Señor de Sipán University, declare under oath that:`
-            : `Yo, ${student.nombre || "________________________________________"}, estudiante de la Escuela Profesional de ${student.escuela || "____________________"} de la Universidad Señor de Sipán, declaro bajo juramento que:`,
+            ? `I, ${student.nombre || "________________________________________"}, student of ${student.escuela || "____________________"} at Señor de Sipán University, declare under oath that:`
+            : `Yo, ${student.nombre || "________________________________________"}, estudiante de ${student.escuela || "____________________"} de la Universidad Señor de Sipán, declaro bajo juramento que:`,
           size: 18,
           font: "Arial"
         })
@@ -545,8 +575,8 @@ export async function exportToWord(state) {
       children: [
         new TextRun({
           text: isEn
-            ? `1. I have used Generative Artificial Intelligence tools (ChatGPT, OpenAI) exclusively as tutoring, methodological review, and coherence audit support for drafting my research anteproject entitled: "${student.titulo || "________________________________________________________________________________________"}".`
-            : `1. He utilizado herramientas de Inteligencia Artificial Generativa (ChatGPT, OpenAI) exclusivamente como soporte de tutoría, revisión metodológica y auditoría de coherencia para la redacción de mi anteproyecto de investigación titulado: "${student.titulo || "________________________________________________________________________________________"}".`,
+            ? `1. I have used Generative Artificial Intelligence tools (ChatGPT, OpenAI) exclusively as tutoring, methodological review, and coherence audit support for drafting my research project entitled: "${student.titulo || "________________________________________________________________________________________"}".`
+            : `1. He utilizado herramientas de Inteligencia Artificial Generativa (ChatGPT, OpenAI) exclusivamente como soporte de tutoría, revisión metodológica y auditoría de coherencia para la redacción de mi proyecto de investigación titulado: "${student.titulo || "________________________________________________________________________________________"}".`,
           size: 18,
           font: "Arial"
         })
@@ -571,8 +601,8 @@ export async function exportToWord(state) {
       children: [
         new TextRun({
           text: isEn
-            ? `3. A total of ${log.length} audit interactions were conducted and recorded in the NEXO Research Studio platform logbook.`
-            : `3. Se realizaron un total de ${log.length} interacciones de auditoría registradas en la bitácora de la plataforma NEXO Research Studio.`,
+            ? `3. A total of ${log.length} audit interactions were conducted and recorded in the Proyecto Tesis suite logbook.`
+            : `3. Se realizaron un total de ${log.length} interacciones de auditoría registradas en la bitácora de la suite Proyecto Tesis.`,
           size: 18,
           font: "Arial"
         })
@@ -624,10 +654,9 @@ export async function exportToWord(state) {
   const blob = await Packer.toBlob(doc);
   const studentSlug = getCleanStudentFilename(student.nombre, isEn);
   
-  // Nombre del archivo traducido dinámicamente según idioma
   const fileName = isEn 
-    ? `Anteproject_Report_${studentSlug}.docx` 
-    : `Informe_Anteproyecto_${studentSlug}.docx`;
+    ? `Thesis_Project_Report_${studentSlug}.docx` 
+    : `Informe_ProyectoTesis_${studentSlug}.docx`;
 
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -646,8 +675,8 @@ export function exportStateToJSON(state) {
   dlAnchor.setAttribute("href", dataStr);
   
   const jsonName = isEn 
-    ? `NEXO_Backup_${studentSlug}.json` 
-    : `Respaldo_NEXO_${studentSlug}.json`;
+    ? `ProyectoTesis_Backup_${studentSlug}.json` 
+    : `Respaldo_ProyectoTesis_${studentSlug}.json`;
 
   dlAnchor.setAttribute("download", jsonName);
   document.body.appendChild(dlAnchor);

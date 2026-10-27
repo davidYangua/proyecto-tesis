@@ -1,3 +1,9 @@
+/**
+ * Proyecto Tesis - Diagrama de Operacionalización y Conservación de Flujo (Matriz Sankey)
+ * Archivo: js/sankeyChart.js
+ * Autor / Dirección Metodológica: Ing. Percy Castro Mejía
+ * Institución: Universidad Señor de Sipán
+ */
 
 let googleChartsLoaded = false;
 
@@ -34,21 +40,22 @@ function loadGoogleCharts() {
 }
 
 /**
- * Genera la matriz de relaciones [Origen, Destino, Peso] respetando la jerarquía V -> D -> I
+ * Genera la matriz de relaciones [Origen, Destino, Peso] respetando la jerarquía Variable ➔ Dimensiones ➔ Ítems
  * @param {Object} state Estado global de la aplicación
  * @returns {Array<Array>} Filas de datos para el gráfico Sankey
  */
 export function buildSankeyDataFromState(state = {}) {
   const project = state.project || {};
+  const isEn = (state.lang || window.proyectoTesisState?.lang) === "en";
 
-  const v1Name = project.v1 ? project.v1.trim() : "Variable 1";
-  const v2Name = project.v2 ? project.v2.trim() : "Variable 2";
+  const v1Name = project.v1 ? project.v1.trim() : (isEn ? "Variable 1" : "Variable 1");
+  const v2Name = project.v2 ? project.v2.trim() : (isEn ? "Variable 2" : "Variable 2");
 
-  // Intentar parsear número total de ítems de las variables o asignar pesos base
+  // Parsear número total estimado de ítems o asignar pesos base
   const itemsV1Total = parseInt(project.i1, 10) || 12;
   const itemsV2Total = parseInt(project.i2, 10) || 12;
 
-  // Estructura de dimensiones por variable (usada si el usuario no tiene operacionalización personalizada)
+  // Estructura de dimensiones por variable (desagregación proporcional)
   const operData = project.operacionalizacion || {
     v1: {
       nombre: `V1: ${v1Name}`,
@@ -69,24 +76,24 @@ export function buildSankeyDataFromState(state = {}) {
 
   const rows = [];
 
-  // Mapear Variable 1 -> Dimensiones -> Ítems
+  // Mapear Variable 1 ➔ Dimensiones ➔ Ítems / Indicadores
   if (operData.v1 && operData.v1.dimensiones) {
     operData.v1.dimensiones.forEach(dim => {
-      const itemLabel = `${dim.peso} Ítem(s) [${dim.nombre.split(' ')[0]}]`;
-      // Enlace 1: Variable -> Dimensión
+      const itemLabel = `${dim.peso} ${isEn ? 'Item(s)' : 'Ítem(s)'} [${dim.nombre.split(' ')[0]}]`;
+      // Enlace 1: Variable ➔ Dimensión
       rows.push([operData.v1.nombre, dim.nombre, dim.peso]);
-      // Enlace 2: Dimensión -> Indicadores / Ítems
+      // Enlace 2: Dimensión ➔ Indicadores / Ítems
       rows.push([dim.nombre, itemLabel, dim.peso]);
     });
   }
 
-  // Mapear Variable 2 -> Dimensiones -> Ítems
+  // Mapear Variable 2 ➔ Dimensiones ➔ Ítems / Indicadores
   if (operData.v2 && operData.v2.dimensiones) {
     operData.v2.dimensiones.forEach(dim => {
-      const itemLabel = `${dim.peso} Ítem(s) [${dim.nombre.split(' ')[0]}]`;
-      // Enlace 1: Variable -> Dimensión
+      const itemLabel = `${dim.peso} ${isEn ? 'Item(s)' : 'Ítem(s)'} [${dim.nombre.split(' ')[0]}]`;
+      // Enlace 1: Variable ➔ Dimensión
       rows.push([operData.v2.nombre, dim.nombre, dim.peso]);
-      // Enlace 2: Dimensión -> Indicadores / Ítems
+      // Enlace 2: Dimensión ➔ Indicadores / Ítems
       rows.push([dim.nombre, itemLabel, dim.peso]);
     });
   }
@@ -106,6 +113,8 @@ export async function renderSankeyChart(containerSelector, state = {}) {
 
   if (!container) return;
 
+  const isEn = (state.lang || window.proyectoTesisState?.lang) === "en";
+
   try {
     await loadGoogleCharts();
 
@@ -114,16 +123,16 @@ export async function renderSankeyChart(containerSelector, state = {}) {
     if (!dataRows || dataRows.length === 0) {
       container.innerHTML = `
         <div class="p-6 text-center text-xs font-mono text-slate-400">
-          Ingrese las variables en la Pestaña 01 para visualizar la matriz de operacionalización.
+          ${isEn ? 'Enter variables in Module 01 to generate the operationalization matrix.' : 'Ingrese las variables en el Módulo 01 para visualizar la matriz de operacionalización.'}
         </div>
       `;
       return;
     }
 
     const dataTable = new window.google.visualization.DataTable();
-    dataTable.addColumn("string", "Origen");
-    dataTable.addColumn("string", "Destino");
-    dataTable.addColumn("number", "Cantidad de Ítems / Indicadores");
+    dataTable.addColumn("string", isEn ? "Source" : "Origen");
+    dataTable.addColumn("string", isEn ? "Target" : "Destino");
+    dataTable.addColumn("number", isEn ? "Items / Indicators Count" : "Cantidad de Ítems / Indicadores");
     dataTable.addRows(dataRows);
 
     const isDark = document.documentElement.classList.contains("dark");
@@ -134,9 +143,9 @@ export async function renderSankeyChart(containerSelector, state = {}) {
       sankey: {
         node: {
           colors: [
-            "#0A2540", // NEXO Navy
+            "#0A2540", // USS Navy
             "#1E3A8A", // Deep Blue
-            "#C5A059", // NEXO Gold
+            "#C5A059", // Gold
             "#059669", // Emerald
             "#0284C7", // Sky Blue
             "#D97706", // Amber
@@ -167,7 +176,7 @@ export async function renderSankeyChart(containerSelector, state = {}) {
     console.error("Error al renderizar la Matriz Sankey:", err);
     container.innerHTML = `
       <div class="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-rose-600 dark:text-rose-300">
-        Error al generar el gráfico de operacionalización.
+        ${isEn ? 'Error generating operationalization chart.' : 'Error al generar el gráfico de operacionalización.'}
       </div>
     `;
   }
