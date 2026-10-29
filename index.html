@@ -6,6 +6,9 @@
 <title>Proyecto Tesis · Universidad Señor de Sipán</title>
 <meta name="description" content="Suite de analítica epistemológica, auditoría metodológica de coherencia y gestión de evidencia científica para tesis universitarias y publicaciones Scopus/WoS.">
 
+<!-- Favicon de pestaña con el isotipo oficial -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect fill='%231A1F26' width='36' height='36' rx='7'/><path stroke='%23FFF' stroke-opacity='.5' stroke-width='1.6' fill='none' stroke-linecap='round' d='M10 11L26 18M10 25L26 18'/><circle fill='%23FFF' cx='10' cy='11' r='2.6'/><circle fill='%23FFF' cx='10' cy='25' r='2.6'/><circle fill='none' stroke='%23E9711C' stroke-opacity='.45' stroke-width='1.2' cx='26' cy='18' r='6.2'/><circle fill='%23E9711C' cx='26' cy='18' r='3.4'/></svg>">
+
 <meta name="citation_title" content="Proyecto Tesis: suite multidisciplinaria de analítica epistemológica, auditoría metodológica y gestión de evidencia científica para tesis y artículos de alto impacto">
 <meta name="citation_author" content="Castro Mejía, Percy">
 <meta name="citation_publication_date" content="2026">
@@ -219,10 +222,11 @@ ol.ref li { margin-bottom: 12px; }
 
 footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5px; color: var(--mt); padding: 40px 0 28px; font-family: var(--font-sans); }
 .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1.3fr; gap: 28px; margin-bottom: 28px; }
-.footer-col h5 { font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--tx); margin: 0 0 12px; letter-spacing: 0.05em; }
+.footer-col h5 { font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--tx); margin: 0 0 14px; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
+.footer-col h5::before { content: ""; display: inline-block; width: 14px; height: 2.5px; background: var(--ac); border-radius: 1px; }
 .footer-col ul { list-style: none; padding: 0; margin: 0; }
-.footer-col ul li { margin-bottom: 8px; }
-.footer-col ul a { text-decoration: none; color: var(--mt); transition: color 0.15s ease; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul a { text-decoration: none; color: var(--mt); transition: color 0.15s ease; font-size: 13.5px; }
 .footer-col ul a:hover { color: var(--ac); }
 .footer-bottom { border-top: 1px solid var(--ln); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12.5px; }
 
@@ -563,32 +567,32 @@ footer { background: var(--pn); border-top: 1px solid var(--ln); font-size: 13.5
       </div>
 
       <div class="footer-col">
-        <h5>Recursos</h5>
+        <h5>PRODUCTO</h5>
         <ul>
-          <li><a href="app.html">Suite Interactiva</a></li>
-          <li><a href="#abstract">Resumen Científico</a></li>
-          <li><a href="#meta">Ficha Técnica</a></li>
-          <li><a href="#cite">Cómo Citar (APA 7)</a></li>
+          <li><a href="app.html">Plataforma interactiva</a></li>
+          <li><a href="#s2">Arquitectura</a></li>
+          <li><a href="#s3">Herramientas bibliométricas</a></li>
+          <li><a href="#s4">Propuesta para universidades</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h5>Facultades USS</h5>
+        <h5>RIGOR CIENTÍFICO</h5>
         <ul>
-          <li><a href="#s2">Ciencias de la Salud</a></li>
-          <li><a href="#s2">Ingeniería, Arq. y Urb.</a></li>
-          <li><a href="#s2">Ciencias Empresariales</a></li>
-          <li><a href="#s2">Derecho y Humanidades</a></li>
+          <li><a href="#refs">Referencias</a></li>
+          <li><a href="#s2">Control léxico y tesauro</a></li>
+          <li><a href="#cite">Cómo citar</a></li>
+          <li><a href="#meta">Ficha técnica</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h5>Transparencia</h5>
+        <h5>TRANSPARENCIA</h5>
         <ul>
-          <li><a href="#s6">Declaración de Ética e IA</a></li>
-          <li><a href="#meta">Código Abierto (Licencia MIT)</a></li>
-          <li><a href="#meta">Privacidad Local (Client-Side)</a></li>
-          <li><a href="mailto:percy.castro@uss.edu.pe">Contacto con el Autor</a></li>
+          <li><a href="#s6">Ética y uso de la IA</a></li>
+          <li><a href="#abstract">Tratamiento de los datos</a></li>
+          <li><a href="#meta">Autoría</a></li>
+          <li><a href="mailto:percy.castro@uss.edu.pe">Contacto</a></li>
         </ul>
       </div>
     </div>

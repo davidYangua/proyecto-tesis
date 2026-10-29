@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Proyecto Tesis | Universidad Señor de Sipán</title>
 
+  <!-- Favicon de pestaña con el isotipo oficial -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect fill='%231A1F26' width='36' height='36' rx='7'/><path stroke='%23FFF' stroke-opacity='.5' stroke-width='1.6' fill='none' stroke-linecap='round' d='M10 11L26 18M10 25L26 18'/><circle fill='%23FFF' cx='10' cy='11' r='2.6'/><circle fill='%23FFF' cx='10' cy='25' r='2.6'/><circle fill='none' stroke='%23E9711C' stroke-opacity='.45' stroke-width='1.2' cx='26' cy='18' r='6.2'/><circle fill='%23E9711C' cx='26' cy='18' r='3.4'/></svg>">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -358,6 +361,17 @@
       letter-spacing: .08em;
       text-transform: uppercase;
       color: var(--tx);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ft h4::before {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 2.5px;
+      background: var(--ac);
+      border-radius: 1px;
     }
     .ft p { margin: 0; line-height: 1.55; font-size: 12.5px; }
     .ft .nm {
@@ -1203,32 +1217,32 @@
         </div>
 
         <div>
-          <h4>Recursos</h4>
+          <h4>PRODUCTO</h4>
           <ul>
-            <li><a href="index.html#app">Suite Interactiva</a></li>
-            <li><a href="index.html#abstract">Resumen Científico</a></li>
-            <li><a href="index.html#meta">Ficha Técnica</a></li>
-            <li><a href="index.html#cite">Cómo Citar (APA 7)</a></li>
+            <li><a href="app.html">Plataforma interactiva</a></li>
+            <li><a href="index.html#s2">Arquitectura</a></li>
+            <li><a href="index.html#s3">Herramientas bibliométricas</a></li>
+            <li><a href="index.html#s4">Propuesta para universidades</a></li>
           </ul>
         </div>
 
         <div>
-          <h4>Facultades USS</h4>
+          <h4>RIGOR CIENTÍFICO</h4>
           <ul>
-            <li><a href="index.html#s2">Ciencias de la Salud</a></li>
-            <li><a href="index.html#s2">Ingeniería, Arq. y Urb.</a></li>
-            <li><a href="index.html#s2">Ciencias Empresariales</a></li>
-            <li><a href="index.html#s2">Derecho y Humanidades</a></li>
+            <li><a href="index.html#refs">Referencias</a></li>
+            <li><a href="index.html#s2">Control léxico y tesauro</a></li>
+            <li><a href="index.html#cite">Cómo citar</a></li>
+            <li><a href="index.html#meta">Ficha técnica</a></li>
           </ul>
         </div>
 
         <div>
-          <h4>Transparencia</h4>
+          <h4>TRANSPARENCIA</h4>
           <ul>
-            <li><a href="index.html#s6">Declaración de Ética e IA</a></li>
-            <li><a href="index.html#meta">Código Abierto (Licencia MIT)</a></li>
-            <li><a href="index.html#meta">Privacidad Local (Client-Side)</a></li>
-            <li><a href="mailto:percy.castro@uss.edu.pe">Contacto con el Autor</a></li>
+            <li><a href="index.html#s6">Ética y uso de la IA</a></li>
+            <li><a href="index.html#abstract">Tratamiento de los datos</a></li>
+            <li><a href="index.html#meta">Autoría</a></li>
+            <li><a href="mailto:percy.castro@uss.edu.pe">Contacto</a></li>
           </ul>
         </div>
       </div>
