@@ -20,6 +20,7 @@ import { initPdfExtractor, renderPdfList, exportToVOSviewerCSV } from "./pdfExtr
 // ESTADO GLOBAL DE LA APLICACIÓN
 // ==========================================
 const STORAGE_KEY = "proyecto_tesis_state_v2026";
+const sectionOrdenCache = {};
 
 export let state = {
   theme: "light",
@@ -54,6 +55,28 @@ export let state = {
 };
 
 // ==========================================
+// DEDUPLICACIÓN DE BITÁCORA DE IA
+// ==========================================
+function deduplicateLog(logList) {
+  if (!Array.isArray(logList)) return [];
+  const seen = new Set();
+  return logList.filter((item) => {
+    if (!item || typeof item !== "object") return false;
+    const signature = JSON.stringify({
+      fecha: item.fecha || item.date || "",
+      seccion: item.seccion || item.section || "",
+      herramienta: item.herramienta || item.tool || "",
+      dictamen: item.dictamen || item.verdict || "",
+      decision: item.decision || "",
+      justificacion: item.justificacion || item.rationale || ""
+    });
+    if (seen.has(signature)) return false;
+    seen.add(signature);
+    return true;
+  });
+}
+
+// ==========================================
 // INICIALIZACIÓN PRINCIPAL
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
@@ -82,10 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
     (secId, draftText) => {
       saveState();
       renderReportView(state);
+      syncSectionAuditPrompt();
     },
     (secId, checksArr) => {
       saveState();
       renderReportView(state);
+      syncSectionAuditPrompt();
     }
   );
 
@@ -99,7 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // 5. Inicializar Módulo 05: Defensa Epistemológica (Jurado Simulado)
   initJurySimulator(state, (juryEntry) => {
     if (!state.log) state.log = [];
-    state.log.push(juryEntry);
+    if (juryEntry && !state.log.includes(juryEntry)) {
+      state.log.push(juryEntry);
+    }
+    state.log = deduplicateLog(state.log);
     saveState();
     renderReportView(state);
   });
@@ -109,6 +137,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 7. Configurar eventos de exportación (Word, Dublin Core XML, VOSviewer CSV, Sello B2B, JSON)
   initExporterEvents();
+
+  // 8. Sincronización dedicada del Prompt de Auditoría por Sección (16 Semanas)
+  initSectionPromptSync();
 
   // Renderizado e iconografía inicial
   refreshAllViews();
@@ -120,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 export function saveState() {
   try {
+    state.log = deduplicateLog(state.log);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {
     console.warn("No se pudo guardar el estado en localStorage", e);
@@ -133,6 +165,7 @@ function loadSavedState() {
       const parsed = JSON.parse(raw);
       state = { ...state, ...parsed };
       if (!state.pdfSources) state.pdfSources = [];
+      state.log = deduplicateLog(state.log);
       populateFormFromState();
     }
   } catch (e) {
@@ -156,6 +189,7 @@ function populateFormFromState() {
 // REFRESCO GLOBAL DE VISTAS Y COMPONENTES
 // ==========================================
 function refreshAllViews() {
+  state.log = deduplicateLog(state.log);
   window.proyectoTesisState = state;
 
   // Actualizar atributo global de idioma del HTML
@@ -222,9 +256,280 @@ function updateAIPromptsAndLinks() {
   if (pvHiloEl) pvHiloEl.textContent = hiloPrompt;
   if (gptHiloBtn) gptHiloBtn.href = formatPromptForChatGPT(hiloPrompt);
 
+  // Actualizar prompt específico de la sección activa (Módulo 03 - 16 Semanas)
+  syncSectionAuditPrompt();
+
   const reportPrompt = buildReportPrompt(state);
   const gptInfBtn = document.getElementById("gpt-inf");
   if (gptInfBtn) gptInfBtn.href = formatPromptForChatGPT(reportPrompt);
+}
+
+// ==========================================
+// PROMPT DE AUDITORÍA POR SECCIÓN (16 SEMANAS - BILINGÜE ES/EN CON DICTAMEN)
+// ==========================================
+function getSelectDisplayText(id, fallback = "") {
+  const el = document.getElementById(id);
+  if (!el) return fallback;
+  if (el.tagName === "SELECT") {
+    const opt = el.options[el.selectedIndex];
+    return opt && opt.value ? opt.text.trim() : fallback;
+  }
+  return el.value.trim() || fallback;
+}
+
+function captureCurrentSectionOrden(sectionKey) {
+  const ordenBtn = document.querySelector('#model button[data-mv="orden"]');
+  const mbody = document.getElementById("mbody");
+  if (ordenBtn && ordenBtn.getAttribute("aria-pressed") === "true" && mbody) {
+    const txt = mbody.innerText.trim();
+    if (txt) sectionOrdenCache[sectionKey] = txt;
+  }
+  return sectionOrdenCache[sectionKey] || (mbody ? mbody.innerText.trim() : "");
+}
+
+function buildSectionAuditPrompt() {
+  const isEn = state.lang === "en";
+  const investigador = state.student?.nombre?.trim() || null;
+  const facultadTxt = getSelectDisplayText("st-fac", state.student?.facultad || "");
+  const escuelaTxt = getSelectDisplayText("st-esc", state.student?.escuela || "");
+  const grupoTxt = getSelectDisplayText("st-sec", state.student?.seccion || "");
+  const tituloTxt = state.student?.titulo?.trim() || null;
+
+  const secTitle = (document.getElementById("s-title")?.textContent || "").trim();
+  const secWeek = (document.getElementById("s-wk")?.textContent || "").trim();
+  const secExt = (document.getElementById("s-ext")?.textContent || "").trim();
+  const secProd = (document.getElementById("s-prod")?.textContent || "").trim();
+  const secPrueba = (document.getElementById("s-prueba")?.textContent || "").trim();
+  const draftText = (document.getElementById("draft")?.value || "").trim();
+
+  const wordCount = draftText ? draftText.split(/\s+/).filter(Boolean).length : 0;
+  const ordenParrafos = captureCurrentSectionOrden(`${secWeek}|${secTitle}`);
+
+  // Leer criterios del manual y autoevaluación marcada en pantalla
+  const checkItems = [...document.querySelectorAll("#checks li")];
+  const criteriosList = [];
+  const cumplidosNums = [];
+
+  checkItems.forEach((li, idx) => {
+    const num = idx + 1;
+    const cb = li.querySelector('input[type="checkbox"]');
+    const rawText = li.textContent.replace(/^\s*\d+[\.\)\-:]\s*/, "").trim();
+    if (rawText) {
+      criteriosList.push(`${num}. ${rawText}`);
+      if (cb && cb.checked) cumplidosNums.push(num);
+    }
+  });
+
+  const totalCriterios = criteriosList.length || 6;
+  const autoevalTexto = isEn
+    ? (cumplidosNums.length > 0 ? `criteria ${cumplidosNums.join(", ")}` : "none")
+    : (cumplidosNums.length > 0 ? `los criterios ${cumplidosNums.join(", ")}` : "ninguno");
+
+  // Obtener diagnóstico automático de coherencia
+  let coherenciaAuto = [];
+  try {
+    coherenciaAuto = evaluateCoherenceChain(state.project, state.lang) || [];
+  } catch (e) {
+    coherenciaAuto = [];
+  }
+
+  // Resumen de secciones con avance
+  const seccionesResumen = Object.entries(state.drafts || {})
+    .filter(([, txt]) => typeof txt === "string" && txt.trim().length > 0)
+    .map(([secKey, txt]) => ({
+      section: secKey,
+      words: txt.trim().split(/\s+/).filter(Boolean).length,
+      self_assessment_checked: state.checks?.[secKey] || []
+    }));
+
+  const contextoAcademico = [escuelaTxt, facultadTxt, grupoTxt].filter(Boolean).join(" · ")
+    || (isEn ? "Undergraduate / Graduate Research" : "Pregrado / Posgrado");
+
+  const ejemploDictamen = Array.from(
+    { length: totalCriterios },
+    (_, i) => `${i + 1}=${["C", "P", "N"][i % 3]}`
+  ).join("; ");
+
+  if (isEn) {
+    const metadataEn = {
+      program: `${contextoAcademico} · Universidad Señor de Sipán · 2026`,
+      researcher: investigador,
+      active_section: secTitle || null,
+      title: tituloTxt,
+      project: {
+        variable_1: state.project?.v1 || "",
+        outcome_variable: state.project?.v2 || "",
+        population: state.project?.pob || "",
+        setting: state.project?.amb || "",
+        timeframe: state.project?.per || "",
+        approach: getSelectDisplayText("f-enf", state.project?.enf || ""),
+        scope_design: getSelectDisplayText("f-dis", state.project?.dis || ""),
+        general_question: state.project?.preg || "",
+        general_objective: state.project?.obj || "",
+        alternative_hypothesis: state.project?.hip || "",
+        instrument_v1: state.project?.i1 || "",
+        instrument_v2: state.project?.i2 || ""
+      },
+      main_theory: getSelectDisplayText("f-teo", state.project?.teo || ""),
+      automated_coherence_check: coherenciaAuto,
+      sections_progress: seccionesResumen,
+      logged_decisions: Array.isArray(state.log) ? state.log.length : 0,
+      date: new Date().toLocaleDateString("en-US")
+    };
+
+    return `Act as a scientific research methodology tutor for a researcher at Universidad Señor de Sipán (Peru) (${contextoAcademico}). Your goal is to foster critical thinking and improve the methodological rigor of their research proposal or scientific manuscript.
+
+RULES
+- Do not rewrite the section or provide ready-to-copy paragraphs. Point out, quote, and explain. If you give an example, use a structural template with [brackets].
+- Support every judgment with a brief verbatim quote from the draft.
+- Do not invent data, figures, authors, or references. If evidence is missing, indicate what type of source should be searched.
+- Apply the manual criteria provided below. Respond in formal academic English.
+
+PROJECT METADATA (JSON)
+${JSON.stringify(metadataEn)}
+
+SECTION TO AUDIT: ${secTitle} (${secWeek})
+EXPECTED DELIVERABLE: ${secProd}
+EXPECTED LENGTH: ${secExt} (current draft has ${wordCount} words)
+EXPECTED PARAGRAPH STRUCTURE:
+${ordenParrafos || "Follow the standard methodological structure for this section."}
+
+MANUAL CRITERIA:
+${criteriosList.length ? criteriosList.join("\n") : "1. Methodological coherence with the study variables and objectives."}
+
+CRITICAL VALIDATION TEST: ${secPrueba}
+RESEARCHER SELF-ASSESSMENT: marked as met: ${autoevalTexto}.
+
+RESEARCHER'S DRAFT
+"""
+${draftText || "(The draft is still empty)"}
+"""
+
+DELIVERABLE, USING THESE EXACT HEADINGS
+1. Audit by criterion: table with No. | Criterion | Met / Partial / Not met | Evidence (quote) | Question for the researcher.
+2. Structure map: which step of the expected order each paragraph fulfills; missing or out-of-order steps.
+3. Project coherence: cross-check the section against the metadata (variable names, population, approach, theory, objective).
+4. Priority corrections (maximum 3): location, issue, and what the researcher must do, without writing it for them.
+5. Improvement suggestions and one critical-thinking question based on the critical validation test.
+6. Calibration: compare your verdict against their self-assessment and explain any discrepancies.
+End with a single line, using this exact format so the researcher can paste it back into the system:
+DICTAMEN: ${ejemploDictamen} (C = met, P = partial, N = not met; one value for each of the ${totalCriterios} criteria)`;
+  }
+
+  const metadataEs = {
+    curso: `${contextoAcademico} · Universidad Señor de Sipán · 2026`,
+    investigador: investigador,
+    seccion_activa: secTitle || null,
+    titulo: tituloTxt,
+    proyecto: {
+      variable_1: state.project?.v1 || "",
+      variable_resultado: state.project?.v2 || "",
+      poblacion: state.project?.pob || "",
+      ambito: state.project?.amb || "",
+      periodo: state.project?.per || "",
+      enfoque: getSelectDisplayText("f-enf", state.project?.enf || ""),
+      alcance_diseno: getSelectDisplayText("f-dis", state.project?.dis || ""),
+      pregunta_general: state.project?.preg || "",
+      objetivo_general: state.project?.obj || "",
+      hipotesis_alterna: state.project?.hip || "",
+      instrumento_v1: state.project?.i1 || "",
+      instrumento_v2: state.project?.i2 || ""
+    },
+    teoria_principal: getSelectDisplayText("f-teo", state.project?.teo || ""),
+    coherencia_automatica: coherenciaAuto,
+    secciones: seccionesResumen.map(s => ({
+      seccion: s.section,
+      palabras: s.words,
+      autoevaluacion_cumplidos: s.self_assessment_checked
+    })),
+    decisiones_registradas: Array.isArray(state.log) ? state.log.length : 0,
+    fecha: new Date().toLocaleDateString("es-PE")
+  };
+
+  return `Actúa como tutor de metodología de la investigación científica para un(a) investigador(a) de la Universidad Señor de Sipán (Perú) (${contextoAcademico}). Tu objetivo es que desarrolle pensamiento crítico y mejore el rigor metodológico de su anteproyecto o manuscrito científico.
+
+REGLAS
+- No reescribas la sección ni redactes párrafos listos para copiar. Señala, cita y explica. Si das un ejemplo, que sea una estructura con [corchetes].
+- Apoya cada juicio en una cita textual breve de su borrador.
+- No inventes datos, cifras, autores ni referencias. Si falta evidencia, indica qué tipo de fuente debe buscar.
+- Usa los criterios del manual que te doy. Responde en español, con trato de usted.
+
+METADATOS DEL PROYECTO (JSON)
+${JSON.stringify(metadataEs)}
+
+SECCIÓN A AUDITAR: ${secTitle} (${secWeek})
+PRODUCTO ESPERADO: ${secProd}
+EXTENSIÓN ESPERADA: ${secExt} (el borrador tiene ${wordCount} palabras)
+ORDEN ESPERADO DE LOS PÁRRAFOS:
+${ordenParrafos || "Seguir la estructura metodológica estándar de la sección."}
+
+CRITERIOS DEL MANUAL:
+${criteriosList.length ? criteriosList.join("\n") : "1. Coherencia metodológica con las variables y objetivos del estudio."}
+
+PRUEBA CRÍTICA: ${secPrueba}
+AUTOEVALUACIÓN DEL INVESTIGADOR: marcó como cumplidos ${autoevalTexto}.
+
+BORRADOR DEL INVESTIGADOR
+"""
+${draftText || "(El borrador aún está vacío)"}
+"""
+
+ENTREGA, CON ESTOS TÍTULOS
+1. Auditoría por criterio: tabla con N.º | Criterio | Cumple / Parcial / No cumple | Evidencia (cita) | Pregunta para el investigador.
+2. Mapa de estructura: qué paso del orden esperado cumple cada párrafo; pasos ausentes o desordenados.
+3. Coherencia con el proyecto: contrasta la sección con los metadatos (nombres de variables, población, enfoque, teoría, objetivo).
+4. Correcciones prioritarias (máximo 3): ubicación, problema y qué debe hacer, sin redactarlo por el investigador.
+5. Sugerencias de mejora y una pregunta de pensamiento crítico sobre la prueba crítica.
+6. Calibración: compara tu dictamen con su autoevaluación y explica las diferencias.
+Termina con una única línea, exactamente con este formato, para que la copie al Laboratorio:
+DICTAMEN: ${ejemploDictamen} (C = cumple, P = parcial, N = no cumple; un valor por cada uno de los ${totalCriterios} criterios)`;
+}
+
+function syncSectionAuditPrompt() {
+  const pvSecEl = document.getElementById("pv-sec");
+  const gptSecBtn = document.getElementById("gpt-sec");
+  if (!pvSecEl || !gptSecBtn) return;
+
+  const sectionPrompt = buildSectionAuditPrompt();
+  pvSecEl.textContent = sectionPrompt;
+  gptSecBtn.href = formatPromptForChatGPT(sectionPrompt);
+}
+
+function initSectionPromptSync() {
+  document.addEventListener("input", (e) => {
+    if (e.target.matches("#draft, [data-st], [data-k]")) {
+      setTimeout(syncSectionAuditPrompt, 20);
+    }
+  });
+
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("#checks input, #routeselect, [data-st], [data-k]")) {
+      setTimeout(syncSectionAuditPrompt, 30);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("#routelist button, #routelist li, #model button[data-mv], #tab-est, #lang-toggle")) {
+      setTimeout(syncSectionAuditPrompt, 60);
+    }
+
+    const gptSecBtn = e.target.closest("#gpt-sec");
+    if (gptSecBtn) {
+      syncSectionAuditPrompt();
+      const promptText = document.getElementById("pv-sec")?.textContent || "";
+      if (navigator.clipboard && promptText) {
+        navigator.clipboard.writeText(promptText).catch(() => {});
+      }
+      const msgSecEl = document.getElementById("msg-sec");
+      if (msgSecEl) {
+        msgSecEl.textContent = state.lang === "en"
+          ? "Section audit prompt generated and copied. Paste ChatGPT's response below to calibrate the verdict."
+          : "Prompt de auditoría de sección generado y copiado. Pegue la respuesta de ChatGPT abajo para calibrar el dictamen.";
+      }
+    }
+  });
+
+  setTimeout(syncSectionAuditPrompt, 200);
 }
 
 // ==========================================
@@ -525,6 +830,7 @@ function initFormListeners() {
       const key = e.target.getAttribute("data-st");
       state.student[key] = e.target.value;
       saveState();
+      syncSectionAuditPrompt();
     });
   });
 
@@ -596,6 +902,7 @@ function initExporterEvents() {
       importStateFromJSON(file, 
         (importedState) => {
           state = { ...state, ...importedState };
+          state.log = deduplicateLog(state.log);
           saveState();
           populateFormFromState();
           refreshAllViews();
@@ -619,10 +926,11 @@ function initExporterEvents() {
  * Genera y despliega en ventana imprimible/descargable el Certificado B2B de Integridad Metodológica
  */
 async function generateIntegrityCertificate(appState) {
-  const studentName = appState.student?.nombre || "Investigador Desconocido";
+  const isEn = appState.lang === "en";
+  const studentName = appState.student?.nombre || (isEn ? "Unknown Researcher" : "Investigador Desconocido");
   const faculty = appState.student?.facultad || "Universidad Señor de Sipán";
-  const school = appState.student?.escuela || "Escuela Profesional";
-  const title = appState.student?.titulo || appState.project?.preg || "Proyecto de Investigación Sin Título";
+  const school = appState.student?.escuela || (isEn ? "Academic School" : "Escuela Profesional");
+  const title = appState.student?.titulo || appState.project?.preg || (isEn ? "Untitled Research Project" : "Proyecto de Investigación Sin Título");
 
   const totalPdfs = appState.pdfSources ? appState.pdfSources.length : 0;
   const verifiedPdfs = appState.pdfSources ? appState.pdfSources.filter(p => p.verified).length : 0;
@@ -650,19 +958,21 @@ async function generateIntegrityCertificate(appState) {
 
   const certWindow = window.open("", "_blank");
   if (!certWindow) {
-    alert("Por favor permita las ventanas emergentes en su navegador para visualizar el certificado.");
+    alert(isEn
+      ? "Please allow pop-ups in your browser to view the certificate."
+      : "Por favor permita las ventanas emergentes en su navegador para visualizar el certificado.");
     return;
   }
 
-  const currentDate = new Date().toLocaleDateString("es-ES", {
+  const currentDate = new Date().toLocaleDateString(isEn ? "en-US" : "es-ES", {
     year: "numeric", month: "long", day: "numeric"
   });
 
   const certHtml = `<!DOCTYPE html>
-<html lang="es">
+<html lang="${isEn ? "en" : "es"}">
 <head>
   <meta charset="UTF-8">
-  <title>Certificado de Integridad Metodológica - B2B USS</title>
+  <title>${isEn ? "Certificate of Methodological Integrity - B2B USS" : "Certificado de Integridad Metodológica - B2B USS"}</title>
   <style>
     body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 40px; }
     .cert-card { max-width: 800px; margin: 0 auto; background: #ffffff; border: 2px solid #0f172a; padding: 50px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; }
@@ -673,7 +983,7 @@ async function generateIntegrityCertificate(appState) {
     .badge-box { background: #f1f5f9; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; font-family: monospace; font-size: 12px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; font-size: 13px; }
     .grid-item { background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; }
-    .footer { margin-top: 40px; pt-20 border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; font-family: monospace; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; font-family: monospace; }
     .stamp { display: inline-block; padding: 8px 16px; background: #0f172a; color: #ffffff; font-weight: bold; font-size: 11px; border-radius: 4px; letter-spacing: 1px; }
     @media print { body { background: none; padding: 0; } .cert-card { box-shadow: none; border-width: 1px; } }
   </style>
@@ -682,50 +992,54 @@ async function generateIntegrityCertificate(appState) {
   <div class="cert-card">
     <div class="header">
       <h1>Universidad Señor de Sipán</h1>
-      <h2>Certificado de Integridad Metodológica & Auditoría de IA</h2>
+      <h2>${isEn ? "Certificate of Methodological Integrity & AI Audit" : "Certificado de Integridad Metodológica & Auditoría de IA"}</h2>
     </div>
 
     <div class="content">
-      <p>Se certifica que el protocolo / manuscrito de investigación titulado:</p>
+      <p>${isEn ? "This certifies that the research protocol / manuscript entitled:" : "Se certifica que el protocolo / manuscrito de investigación titulado:"}</p>
       <p style="font-weight: bold; font-size: 16px; color: #0f172a; text-align: center; margin: 15px 0; font-style: italic;">
         "${escapeXml(title)}"
       </p>
-      <p>Presentado por el/la estudiante <strong>${escapeXml(studentName)}</strong>, perteneciente a la <strong>${escapeXml(faculty)}</strong> (${escapeXml(school)}), ha sido sometido a la Suite de Analítica Epistemológica y Gobernanza de Inteligencia Artificial.</p>
+      <p>${isEn
+        ? `Submitted by <strong>${escapeXml(studentName)}</strong>, affiliated with <strong>${escapeXml(faculty)}</strong> (${escapeXml(school)}), has been audited through the Epistemological Analytics & AI Governance Suite.`
+        : `Presentado por el/la estudiante <strong>${escapeXml(studentName)}</strong>, perteneciente a la <strong>${escapeXml(faculty)}</strong> (${escapeXml(school)}), ha sido sometido a la Suite de Analítica Epistemológica y Gobernanza de Inteligencia Artificial.`}</p>
 
       <div class="grid">
         <div class="grid-item">
-          <strong>Artículos Evidencia Cargados:</strong> ${totalPdfs}<br>
-          <strong>Indexación DOI Verificada (Crossref):</strong> ${verifiedPdfs} de ${totalPdfs} fuentes
+          <strong>${isEn ? "Uploaded Evidence Articles:" : "Artículos Evidencia Cargados:"}</strong> ${totalPdfs}<br>
+          <strong>${isEn ? "Verified DOI Indexing (Crossref):" : "Indexación DOI Verificada (Crossref):"}</strong> ${verifiedPdfs} / ${totalPdfs}
         </div>
         <div class="grid-item">
-          <strong>Auditoría de Tesauro Controlado:</strong> UNESCO / MeSH<br>
-          <strong>Sustento de Coherencia:</strong> Eslabones Evaluados y Firmes
+          <strong>${isEn ? "Controlled Thesaurus Audit:" : "Auditoría de Tesauro Controlado:"}</strong> UNESCO / MeSH<br>
+          <strong>${isEn ? "Coherence Sustentation:" : "Sustento de Coherencia:"}</strong> ${isEn ? "Evaluated & Verified Links" : "Eslabones Evaluados y Firmes"}
         </div>
       </div>
 
       <div class="badge-box">
-        <strong>FIRMA DIGITAL DE TRAZABILIDAD (SHA-256):</strong><br>
+        <strong>${isEn ? "DIGITAL TRACEABILITY SIGNATURE (SHA-256):" : "FIRMA DIGITAL DE TRAZABILIDAD (SHA-256):"}</strong><br>
         <span style="word-break: break-all; color: #0284c7;">${shaHash}</span>
       </div>
 
       <p style="font-size: 12px; color: #475569;">
-        * Este certificado garantiza la ausencia de alucinaciones bibliográficas mediante la resolución activa de DOI en APIs abiertas públicas y respalda el cumplimiento de la Declaración de Ética e Integridad Académica Institucional.
+        ${isEn
+          ? "* This certificate verifies the absence of bibliographic hallucinations through active DOI resolution against open public APIs and supports compliance with the Institutional Academic Ethics & Integrity Declaration."
+          : "* Este certificado garantiza la ausencia de alucinaciones bibliográficas mediante la resolución activa de DOI en APIs abiertas públicas y respalda el cumplimiento de la Declaración de Ética e Integridad Académica Institucional."}
       </p>
     </div>
 
     <div class="footer">
       <div>
-        <span>Fecha de Emisión: ${currentDate}</span><br>
-        <span>Código de Verificación: USS-2026-NEXO-${Math.floor(100000 + Math.random() * 900000)}</span>
+        <span>${isEn ? "Issue Date:" : "Fecha de Emisión:"} ${currentDate}</span><br>
+        <span>${isEn ? "Verification Code:" : "Código de Verificación:"} USS-2026-NEXO-${Math.floor(100000 + Math.random() * 900000)}</span>
       </div>
       <div class="stamp">
-        SELLO INSTITUCIONAL OK
+        ${isEn ? "INSTITUTIONAL SEAL OK" : "SELLO INSTITUCIONAL OK"}
       </div>
     </div>
   </div>
   <script>
     window.onload = function() { window.print(); };
-  </script>
+  <\/script>
 </body>
 </html>`;
 
